@@ -1,0 +1,102 @@
+<view>
+    <view class="jm-header">
+        <view class="flex">
+            <view class="left" bind:tap="BackPage">
+                <t-icon size="20" bind:tap="onBack" aria-role="button" aria-label="返回" name="chevron-left" class="custom-capsule__icon" />
+                <text>返回</text>
+            </view>
+            <view class="content">
+                {{readonly ? '':'新建'}}整改通知
+            </view>
+            <view class="right"></view>
+        </view>
+    </view>
+
+    <view class="jm-container bg-white margin-top">
+        <view class="{{'jm-form' + (readonly?' readonly':'')}}">
+            <view class="jm-form-title">
+                基本信息
+            </view>
+            <!-- <view class="jm-formitem2" wx:if="{{readonly}}">
+                <text>序号</text>
+                <input disabled="{{readonly}}" model:value="{{formData.ordinal}}" bind:change="changeForm" data-key="ordinal" type="number" placeholder="请输入" />
+            </view> -->
+            <view class="jm-formitem2">
+                <text>检查单位</text>
+                <input disabled="{{readonly}}" model:value="{{formData.inspectionUnit}}" bind:change="changeForm" data-key="inspectionUnit" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2">
+                <text>检查日期</text>
+                <picker disabled="{{readonly}}" mode="date" bind:change="changeForm" data-key="inspectionTime" :start="new Date().toDateString()">
+                    <view class="picker">{{formData.inspectionTime || "请选择日期"}}</view>
+                </picker>
+            </view>
+            <!-- <view class="jm-formitem2">
+                <text>检查时间</text>
+                <picker disabled="{{readonly}}" mode="time" bind:change="changeForm" data-key="date1">
+                    <view class="picker">{{formData.date1 || "请选择时间"}}</view>
+                </picker>
+            </view> -->
+            <view class="jm-formitem2">
+                <text>用户户名</text>
+                <input disabled="{{readonly}}" model:value="{{formData.username}}" bind:change="changeForm" data-key="username" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2">
+                <text>隐患情况</text>
+                <input disabled="{{readonly}}" model:value="{{formData.hazardDescription}}" bind:change="changeForm" data-key="hazardDescription" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2">
+                <text>整改日期</text>
+                <picker disabled="{{readonly}}" mode="date" bind:change="changeForm" data-key="plannedRectificationDate" :start="new Date().toDateString()">
+                    <view class="picker">{{formData.plannedRectificationDate || "请选择日期"}}</view>
+                </picker>
+            </view>
+            <!-- <view class="jm-formitem2">
+                <text>计划整改时间</text>
+                <picker disabled="{{readonly}}" mode="time" bind:change="changeForm" data-key="date3">
+                    <view class="picker">{{formData.date3 || "请选择时间"}}</view>
+                </picker>
+            </view> -->
+            <sign readonly="{{readonly}}" title="用户签字" bind:setSign="signChange" data-signkey="userSignatureList">
+                <view class="jm-imageList">
+                    <view wx:for="{{formData.userSignatureList}}" wx:for-index="index" wx:for-item="item" wx:key="index" class="jm-image">
+                        <image src="{{item.url}}" bind:tap="downloadFile" data-downloadurl="{{item.url}}" />
+                        <t-icon wx:if="{{!readonly}}" size="20" class="t-icon-close" bind:tap="removeFile" data-filekey="userSignatureList" data-index="{{index}}" />
+                    </view>
+                </view>
+            </sign>
+            <sign readonly="{{readonly}}" title="检查人员签字" bind:setSign="signChange" data-signkey="inspectorSignatureList">
+                <view class="jm-imageList">
+                    <view wx:for="{{formData.inspectorSignatureList}}" wx:for-index="index" wx:for-item="item" wx:key="index" class="jm-image">
+                        <image src="{{item.url}}" bind:tap="downloadFile" data-downloadurl="{{item.url}}" />
+                        <t-icon wx:if="{{!readonly}}" size="20" class="t-icon-close" bind:tap="removeFile" data-filekey="inspectorSignatureList" data-index="{{index}}" />
+                    </view>
+                </view>
+            </sign>
+            <view class="jm-formitem2 flex-wrap">
+                <text>抄送</text>
+                <view>
+                    <textarea disabled="{{readonly}}" value="{{formData.cc}}" bind:blur="changeForm" data-key="cc" />
+                </view>
+            </view>
+            <view class="jm-formitem2 flex-wrap">
+                <text>隐患照片</text>
+                <view class="jm-imageList">
+                    <view wx:for="{{formData.hazardPhotoList}}" wx:for-index="index" wx:for-item="item" wx:key="index" class="jm-image">
+                        <image src="{{item.url}}" bind:tap="downloadFile" data-downloadurl="{{item.url}}" />
+                        <t-icon wx:if="{{!readonly}}" size="20" class="t-icon-close" bind:tap="removeFile" data-filekey="hazardPhotoList" data-index="{{index}}" />
+                    </view>
+                    <view wx:if="{{!readonly}}">
+                        <button class="upload-btn" bind:tap="chooseImage" data-imagekey="hazardPhotoList">+</button>
+                    </view>
+                </view>
+            </view>
+        </view>
+
+        <view class="btn-group" style="padding-bottom: 40rpx;">
+            <button plain primary bind:tap="BackPage">返回</button>
+            <button wx:if="{{!readonly}}" class="primary" bind:tap="saveData">确认</button>
+            <button wx:else plain primary bind:tap="exportFile">生成PDF</button>
+        </view>
+    </view>
+</view>

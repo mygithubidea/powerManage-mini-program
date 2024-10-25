@@ -1,0 +1,245 @@
+<view class="container bg-white margin-top">
+    <view class="jm-header">
+        <view class="flex">
+            <view class="left" bind:tap="BackPage">
+                <t-icon size="20" bind:tap="onBack" aria-role="button" aria-label="返回" name="chevron-left" class="custom-capsule__icon" />
+                <text>返回</text>
+            </view>
+            <view class="content">
+                检查记录列表
+            </view>
+            <view class="right"></view>
+        </view>
+    </view>
+
+    <scroll-view scroll-x enable-flex class="bg-white nav">
+        <view class="flex text-center">
+            <view wx:if="{{showMenu[0]}}" class="{{'cu-item flex-sub ' + (0==TabCur?'text-blue cur':'')}}" bind:tap="tabSelect" data-id="0">
+                上级检查
+            </view>
+            <view wx:if="{{showMenu[1]}}" class="{{'cu-item flex-sub ' + (1==TabCur?'text-blue cur':'')}}" bind:tap="tabSelect" data-id="1">
+                公司检查
+            </view>
+            <view wx:if="{{showMenu[2]}}" class="{{'cu-item flex-sub ' + (2==TabCur?'text-blue cur':'')}}" bind:tap="tabSelect" data-id="2">
+                所站检查
+            </view>
+            <view wx:if="{{showMenu[3]}}" class="{{'cu-item flex-sub ' + (3==TabCur?'text-blue cur':'')}}" bind:tap="tabSelect" data-id="3">
+                其他检查
+            </view>
+            <view wx:if="{{showMenu[4]}}" class="{{'cu-item flex-sub ' + (4==TabCur?'text-blue cur':'')}}" bind:tap="tabSelect" data-id="4">
+                草稿管理
+            </view>
+        </view>
+    </scroll-view>
+            <view class="fix-button" bind:tap="gotoAdd" wx:if="{{showBtn[TabCur] && TabCur != 4}}">
+                <text class="t-icon-add-circle t-icon" style="font-size: 60rpx;line-height: 90rpx;color: #0066FF;"></text>
+            </view>
+    <view wx:if="{{TabCur==0}}">
+        <scroll-view scroll-y class="list-box" bindscrolltolower="nextPage" refresher-enabled bindrefresherrefresh="resetQuery" refresher-triggered="{{refreshFlag}}">
+            <view>
+                <view class="infoNoData" wx:if="{{dataList0.length == 0}}">
+                    <view>
+                        <view>暂时没有数据</view>
+                    </view>
+                </view>
+                <view class="list-item" wx:for="{{dataList0}}" wx:for-index="index" wx:for-item="item" wx:key="index" bind:tap="openDialog" data-id="{{item.id}}">
+                    <!-- <view class="jm-formitem">
+                        <text>序号</text>
+                        <text>{{item.ordinal|| ""}}</text>
+                    </view> -->
+                    <view class="jm-formitem">
+                        <text>带队领导</text>
+                        <text>{{item.teamLeader|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>检查时间</text>
+                        <text>{{item.inspectionTime|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>检查人员</text>
+                        <text>{{item.inspector|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>被检查单位</text>
+                        <text>{{item.inspectedUnit|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>检查类别及\n区域</text>
+                        <text>{{item.inspectionCategory|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                            <text>检查情况及\n存在问题</text>
+                        <text>{{item.inspectionStatus|| ""}}</text>
+                    </view>
+                    <!-- <view class="jm-formitem">
+                        <text>存在问题</text>
+                        <text>{{item.issuesFound|| ""}}</text>
+                    </view> -->
+                </view>
+            </view>
+        </scroll-view>
+    </view>
+    <view wx:if="{{TabCur==1}}">
+        <scroll-view scroll-y class="list-box" bindscrolltolower="nextPage" refresher-enabled bindrefresherrefresh="resetQuery" refresher-triggered="{{refreshFlag}}">
+            <view>
+                <view class="infoNoData" wx:if="{{dataList1.length == 0}}">
+                    <view>
+                        <view>暂时没有数据</view>
+                    </view>
+                </view>
+                <view class="list-item" wx:for="{{dataList1}}" wx:for-index="index" wx:for-item="item" wx:key="index" bind:tap="openDialog" data-id="{{item.id}}">
+                    <!-- <view class="jm-formitem">
+                        <text>序号</text>
+                        <text>{{item.ordinal|| ""}}</text>
+                    </view> -->
+                    <view class="jm-formitem">
+                        <text>带队领导</text>
+                        <text>{{item.teamLeader|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>检查时间</text>
+                        <text>{{item.inspectionTime|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>检查人员</text>
+                        <text>{{item.inspector|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>被检查单位</text>
+                        <text>{{item.inspectedUnit|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>检查类别及\n区域</text>
+                        <text>{{item.inspectionCategory|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>检查情况及\n存在问题</text>
+                        <text>{{item.inspectionStatus|| ""}}</text>
+                    </view>
+                </view>
+            </view>
+        </scroll-view>
+    </view>
+    <view wx:if="{{TabCur==2}}">
+        <scroll-view scroll-y class="list-box" bindscrolltolower="nextPage" refresher-enabled bindrefresherrefresh="resetQuery" refresher-triggered="{{refreshFlag}}">
+            <view>
+                <view class="infoNoData" wx:if="{{dataList2.length == 0}}">
+                    <view>
+                        <view>暂时没有数据</view>
+                    </view>
+                </view>
+                <view class="list-item" wx:for="{{dataList2}}" wx:for-index="index" wx:for-item="item" wx:key="index" bind:tap="openDialog" data-id="{{item.id}}">
+                    <!-- <view class="jm-formitem">
+                        <text>序号</text>
+                        <text>{{item.ordinal|| ""}}</text>
+                    </view> -->
+                    <view class="jm-formitem">
+                        <text>带队领导</text>
+                        <text>{{item.teamLeader|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>检查时间</text>
+                        <text>{{item.inspectionTime|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>检查人员</text>
+                        <text>{{item.inspector|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>被检查单位</text>
+                        <text>{{item.inspectedUnit|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>检查类别及\n区域</text>
+                        <text>{{item.inspectionCategory|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>检查情况及\n存在问题</text>
+                        <text>{{item.inspectionStatus|| ""}}</text>
+                    </view>
+                </view>
+            </view>
+        </scroll-view>
+    </view>
+    <view wx:if="{{TabCur==3}}">
+        <scroll-view scroll-y class="list-box" bindscrolltolower="nextPage" refresher-enabled bindrefresherrefresh="resetQuery" refresher-triggered="{{refreshFlag}}">
+            <view>
+                <view class="infoNoData" wx:if="{{dataList3.length == 0}}">
+                    <view>
+                        <view>暂时没有数据</view>
+                    </view>
+                </view>
+                <view class="list-item" wx:for="{{dataList3}}" wx:for-index="index" wx:for-item="item" wx:key="index" bind:tap="openDialog" data-id="{{item.id}}">
+                    <!-- <view class="jm-formitem">
+                        <text>序号</text>
+                        <text>{{item.ordinal|| ""}}</text>
+                    </view> -->
+                    <view class="jm-formitem">
+                        <text>带队领导</text>
+                        <text>{{item.teamLeader|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>检查时间</text>
+                        <text>{{item.inspectionTime|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>检查人员</text>
+                        <text>{{item.inspector|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>被检查单位</text>
+                        <text>{{item.inspectedUnit|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>检查类别及\n区域</text>
+                        <text>{{item.inspectionCategory|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>检查情况及\n存在问题</text>
+                        <text>{{item.inspectionStatus|| ""}}</text>
+                    </view>
+                </view>
+            </view>
+        </scroll-view>
+    </view>
+    <view wx:if="{{TabCur==4}}">
+        <scroll-view scroll-y class="list-box" bindscrolltolower="nextPage" refresher-enabled bindrefresherrefresh="resetQuery" refresher-triggered="{{refreshFlag}}">
+            <view>
+                <view class="infoNoData" wx:if="{{dataList4.length == 0}}">
+                    <view>
+                        <view>暂时没有数据</view>
+                    </view>
+                </view>
+                <view class="list-item" wx:for="{{dataList4}}" wx:for-index="index" wx:for-item="item" wx:key="index" bind:tap="openDialog" data-id="{{item.id}}">
+                    <view class="jm-formitem">
+                        <text>带队领导</text>
+                        <text>{{item.teamLeader|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>检查时间</text>
+                        <text>{{item.inspectionTime|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>检查人员</text>
+                        <text>{{item.inspector|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>被检查单位</text>
+                        <text>{{item.inspectedUnit|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>检查类别及\n区域</text>
+                        <text>{{item.inspectionCategory|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>检查情况及\n存在问题</text>
+                        <text>{{item.inspectionStatus|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <button size="mini" catch:tap="deleteData" data-id="{{item.id}}">删除</button>
+                    </view>
+                </view>
+            </view>
+        </scroll-view>
+    </view>
+</view>

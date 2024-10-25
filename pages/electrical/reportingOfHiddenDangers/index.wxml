@@ -1,0 +1,112 @@
+<view class="container bg-white margin-top">
+    <view class="jm-header">
+        <view class="flex">
+            <view class="left" bind:tap="BackPage">
+                <t-icon size="20" bind:tap="onBack" aria-role="button" aria-label="返回" name="chevron-left" class="custom-capsule__icon" />
+                <text>返回</text>
+            </view>
+            <view class="content">
+                隐患上报
+            </view>
+            <view class="right"></view>
+        </view>
+    </view>
+
+    <scroll-view scroll-x enable-flex class="bg-white nav">
+        <view class="flex text-center">
+            <view wx:if="{{showMenu[0]}}" class="{{'cu-item flex-sub ' + (0==TabCur?'text-blue cur':'')}}" bind:tap="tabSelect" data-id="0">
+                内部报送
+            </view>
+           <view wx:if="{{TabCur==0}}" class="fix-button" bind:tap="gotoAdd">
+            <text class="t-icon-add-circle t-icon" style="font-size: 60rpx;line-height: 90rpx;color: #0066FF;"></text>
+            </view>
+            <view wx:if="{{showMenu[1]}}" class="{{'cu-item flex-sub ' + (1==TabCur?'text-blue cur':'')}}" bind:tap="tabSelect" data-id="1">
+                外部报送
+            </view>
+            <view  class="fix-button" bind:tap="gotoAdd">
+                <text class="t-icon-add-circle t-icon" style="font-size: 60rpx;line-height: 90rpx;color: #0066FF;"></text>
+            </view>
+        </view>
+    </scroll-view>
+    <view wx:if="{{TabCur==0}}">
+        <scroll-view scroll-y class="list-box" bindscrolltolower="nextPage" refresher-enabled bindrefresherrefresh="resetQuery" refresher-triggered="{{refreshFlag}}">
+            <view>
+                <view class="infoNoData" wx:if="{{dataList0.length == 0}}">
+                    <view>
+                        <view>暂时没有数据</view>
+                    </view>
+                </view>
+                <view class="list-item" wx:for="{{dataList0}}" wx:for-index="index" wx:for-item="item" wx:key="index" bind:tap="openDialog" data-id="{{item.id}}">
+                    <!-- <view class="jm-formitem">
+                        <text>序号</text>
+                        <text>{{item.ordinal|| ""}}</text>
+                    </view> -->
+                    <view class="jm-formitem">
+                        <text>责任站所</text>
+                        <text>{{item.responsibilityStation|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>隐患简述</text>
+                        <text>{{item.hazardDescription|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>发现日期</text>
+                        <text>{{item.discoveryDate|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>发现人</text>
+                        <text>{{item.discoverer|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>整改情况</text>
+                        <text>{{item.rectificationStatus|| ""}}</text>
+                    </view>
+                </view>
+            </view>
+        </scroll-view>
+    </view>
+    <view wx:if="{{TabCur==1}}">
+        <scroll-view scroll-y class="list-box" bindscrolltolower="nextPage" refresher-enabled bindrefresherrefresh="resetQuery" refresher-triggered="{{refreshFlag}}">
+            <view>
+                <view class="infoNoData" wx:if="{{dataList1.length == 0}}">
+                    <view>
+                        <view>暂时没有数据</view>
+                    </view>
+                </view>
+                <view class="list-item" wx:for="{{dataList1}}" wx:for-index="index" wx:for-item="item" wx:key="index" bind:tap="openDialog" data-id="{{item.id}}">
+                    <!-- <view class="jm-formitem">
+                        <text>序号</text>
+                        <text>{{item.ordinal|| ""}}</text>
+                    </view> -->
+                    <view class="jm-formitem">
+                        <text>报送时间</text>
+                        <text>{{item.submissionTime|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>发现人</text>
+                        <text>{{item.reporter|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>联系电话</text>
+                        <text>{{item.phone|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>隐患地点</text>
+                        <text>{{item.hazardLocation|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>隐患简述</text>
+                        <text>{{item.hazardDescription|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>状态</text>
+                        <text>
+                            <view wx:if="{{item.initialReviewStatus == 0}}">初核无效</view>
+                            <view wx:if="{{item.initialReviewStatus == 1}}">初核有效</view>
+                        </text>
+                    </view>
+                </view>
+            </view>
+        </scroll-view>
+    </view>
+</view>

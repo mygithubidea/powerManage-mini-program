@@ -1,0 +1,89 @@
+<!--pages/home/index.wxml-->
+<view>
+    <view class="jm-header">
+        <view class="flex">
+            <view class="left" bind:tap="BackPage">
+                <!-- <t-icon size="20" bind:tap="onBack" aria-role="button" aria-label="返回" name="chevron-left" class="custom-capsule__icon" />
+                <text>返回</text> -->
+            </view>
+            <view class="content">
+                安全业务
+            </view>
+            <view class="right"></view>
+        </view>
+    </view>
+
+    <view class="jm-card-menu">
+        <view class="jm-title">
+            <image src="/assets/title-icon.png" />
+            <span>安全资料管理</span>
+        </view>
+        <view class="flex flex-wrap">
+            <view wx:for="{{elements}}" wx:for-index="index" wx:for-item="item" wx:key="index">
+                <view class="jm-item" wx:if="{{item.isShow}}">
+                    <navigator url="{{'/pages/electrical/'+item.name+'/index'}}">
+                        <!-- <text class="jm-icon" path="{{item.icon}}"></text> -->
+                        <image class="jm-icon" src="{{'/assets/'+item.name+'.png'}}" mode="" />
+                        <text>{{item.title}}</text>
+                    </navigator>
+                </view>
+            </view>
+            <!-- <view class="jm-item">
+                <navigator url="{{'/pages/home/home'}}">
+                    <text class="jm-icon"></text>
+                    <text>demo</text>
+                </navigator>
+            </view> -->
+        </view>
+    </view>
+
+    <view class="jm-card-menu">
+        <view class="jm-title">
+            <image src="/assets/title-icon.png" />
+            <span>安全检查</span>
+        </view>
+        <view class="flex flex-wrap">
+            <view wx:for="{{inspections}}" wx:for-index="index" wx:for-item="item" wx:key="index">
+                <view class="jm-item" wx:if="{{item.isShow}}">
+                    <navigator url="{{'/pages/electrical/'+item.name+'/index'}}">
+                        <image class="jm-icon" src="{{'/assets/'+item.name+'.png'}}" mode="" />
+                        <text>{{item.title}}</text>
+                    </navigator>
+                </view>
+            </view>
+        </view>
+    </view>
+    
+    <view class="jm-card-menu">
+        <view class="jm-title">
+            <image src="/assets/title-icon.png" />
+            <span>电网巡查</span>
+        </view>
+        <view class="flex flex-wrap">
+            <view wx:for="{{patrols}}" wx:for-index="index" wx:for-item="item" wx:key="index">
+                <view class="jm-item" wx:if="{{item.isShow}}">
+                    <navigator url="{{'/pages/electrical/'+item.name+'/index'}}">
+                        <image class="jm-icon" src="{{'/assets/'+item.name+'.png'}}" mode="" />
+                        <text>{{item.title}}</text>
+                    </navigator>
+                </view>
+            </view>
+        </view>
+    </view>
+
+    <view class="jm-card-menu">
+        <view class="jm-title">
+            <image src="/assets/title-icon.png" />
+            <span>系统</span>
+        </view>
+        <view class="flex flex-wrap">
+            <view class="jm-item">
+                <navigator url="/pages/login/login">
+                    <image class="jm-icon" src="/assets/logout.png" mode="" />
+                    <text>退出登录</text>
+                </navigator>
+            </view>
+        </view>
+    </view>
+
+</view>

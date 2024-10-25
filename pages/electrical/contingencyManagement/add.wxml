@@ -1,0 +1,117 @@
+<view>
+    <view class="jm-header">
+        <view class="flex">
+            <view class="left" bind:tap="BackPage">
+                <t-icon size="20" bind:tap="onBack" aria-role="button" aria-label="返回" name="chevron-left" class="custom-capsule__icon" />
+                <text>返回</text>
+            </view>
+            <view class="content">
+                {{readonly ? '':'新建'}}应急演练
+            </view>
+            <view class="right"></view>
+        </view>
+    </view>
+
+    <view class="jm-container bg-white margin-top">
+        <view class="{{'jm-form' + (readonly?' readonly':'')}}">
+            <view class="jm-form-title">
+                基本信息
+            </view>
+            <view class="jm-formitem2">
+                <text>单位</text>
+                <!-- <input disabled="{{readonly}}" model:value="{{formData.hostOrganization}}" bind:change="changeForm" data-key="hostOrganization" placeholder="请输入" /> -->
+                <picker disabled="{{readonly}}" mode="selector" bind:change="changeFormSelect" data-key="hostOrganization" range="{{unitSelectList}}">
+                    <view class="picker">{{formData.hostOrganization || "请选择"}}</view>
+                </picker>
+            </view>
+            <view class="jm-formitem2">
+                <text>演练日期</text>
+                <picker disabled="{{readonly}}" mode="date" bind:change="changeForm" data-key="date0" :start="new Date().toDateString()">
+                    <view class="picker">{{formData.date0 || "请选择日期"}}</view>
+                </picker>
+            </view>
+            <!-- <view class="jm-formitem2">
+                <text>演练时间</text>
+                <picker disabled="{{readonly}}" mode="time" bind:change="changeForm" data-key="date1">
+                    <view class="picker">{{formData.date1 || "请选择时间"}}</view>
+                </picker>
+            </view> -->
+            <view class="jm-formitem2">
+                <text>演练项目</text>
+                <input disabled="{{readonly}}" model:value="{{formData.drillProject}}" bind:change="changeForm" data-key="drillProject" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2">
+                <text>演练地点</text>
+                <input disabled="{{readonly}}" model:value="{{formData.drillLocation}}" bind:change="changeForm" data-key="drillLocation" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2">
+                <text>演练类型</text>
+                <view>
+                    <checkbox disabled="{{readonly}}" checked="{{formData.drillType == 1}}" bindtap="checkDrillType" data-index="{{1}}">现场</checkbox>
+                    <checkbox disabled="{{readonly}}" checked="{{formData.drillType == 0}}" bindtap="checkDrillType" data-index="{{0}}">桌面</checkbox>
+                </view>
+            </view>
+            <view class="jm-formitem2">
+                <text>主要演练内容</text>
+                <input disabled="{{readonly}}" model:value="{{formData.mainContent}}" bind:change="changeForm" data-key="mainContent" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2">
+                <text>参演人数</text>
+                <input disabled="{{readonly}}" model:value="{{formData.participantsCount}}" bind:change="changeForm" data-key="participantsCount" type="number" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2 flex-wrap">
+                <text style="width: 200rpx;">演练方案、脚本</text>
+                <view wx:if="{{!readonly}}">
+                    <button class="upload-btn" bind:tap="chooseFile" data-filekey="drillPlanScriptList">选择文件</button>
+                </view>
+                <view class="jm-fileList">
+                    <view wx:for="{{formData.drillPlanScriptList}}" wx:for-index="index" wx:for-item="item" wx:key="index" class="jm-file">
+                        <span bind:tap="downloadFile" data-downloadurl="{{item.url}}">{{item.name}}</span>
+                        <t-icon wx:if="{{!readonly}}" size="20" class="t-icon-close" bind:tap="removeFile" data-filekey="drillPlanScriptList" data-index="{{index}}" />
+                    </view>
+                </view>
+            </view>
+            <view class="jm-formitem2 flex-wrap">
+                <text>总结</text>
+                <view wx:if="{{!readonly}}">
+                    <button class="upload-btn" bind:tap="chooseFile" data-filekey="summaryList">选择文件</button>
+                </view>
+                <view class="jm-fileList">
+                    <view wx:for="{{formData.summaryList}}" wx:for-index="index" wx:for-item="item" wx:key="index" class="jm-file">
+                        <span bind:tap="downloadFile" data-downloadurl="{{item.url}}">{{item.name}}</span>
+                        <t-icon wx:if="{{!readonly}}" size="20" class="t-icon-close" bind:tap="removeFile" data-filekey="summaryList" data-index="{{index}}" />
+                    </view>
+                </view>
+            </view>
+            <view class="jm-formitem2 flex-wrap">
+                <text>评估</text>
+                <view wx:if="{{!readonly}}">
+                    <button class="upload-btn" bind:tap="chooseFile" data-filekey="evaluationList">选择文件</button>
+                </view>
+                <view class="jm-fileList">
+                    <view wx:for="{{formData.evaluationList}}" wx:for-index="index" wx:for-item="item" wx:key="index" class="jm-file">
+                        <span bind:tap="downloadFile" data-downloadurl="{{item.url}}">{{item.name}}</span>
+                        <t-icon wx:if="{{!readonly}}" size="20" class="t-icon-close" bind:tap="removeFile" data-filekey="evaluationList" data-index="{{index}}" />
+                    </view>
+                </view>
+            </view>
+            <view class="jm-formitem2 flex-wrap">
+                <text>现场照片</text>
+                <view class="jm-imageList">
+                    <view wx:for="{{formData.scenePhotosList}}" wx:for-index="index" wx:for-item="item" wx:key="index" class="jm-image">
+                        <image src="{{item.url}}" bind:tap="downloadFile" data-downloadurl="{{item.url}}"/>
+                        <t-icon wx:if="{{!readonly}}" size="20" class="t-icon-close" bind:tap="removeFile" data-filekey="scenePhotosList" data-index="{{index}}" />
+                    </view>
+                    <view wx:if="{{!readonly}}">
+                        <button class="upload-btn" bind:tap="chooseImage" data-imagekey="scenePhotosList">+</button>
+                    </view>
+                </view>
+            </view>
+        </view>
+
+        <view class="btn-group" style="padding-bottom: 40rpx;">
+            <button plain primary bind:tap="BackPage">返回</button>
+            <button wx:if="{{!readonly}}" class="primary" bind:tap="saveData">确认</button>
+        </view>
+    </view>
+</view>

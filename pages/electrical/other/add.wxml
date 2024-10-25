@@ -1,0 +1,80 @@
+<view>
+    <view class="jm-header">
+        <view class="flex">
+            <view class="left" bind:tap="BackPage">
+                <t-icon size="20" bind:tap="onBack" aria-role="button" aria-label="返回" name="chevron-left" class="custom-capsule__icon" />
+                <text>返回</text>
+            </view>
+            <view class="content">
+                {{readonly ? '':'新建'}}其他
+            </view>
+            <view class="right"></view>
+        </view>
+    </view>
+
+    <view class="jm-container bg-white margin-top">
+        <view class="{{'jm-form' + (readonly?' readonly':'')}}">
+            <view class="jm-form-title">
+                基本信息
+            </view>
+            <!-- <view class="jm-formitem2" wx:if="{{readonly}}">
+                <text>序号</text>
+                <input disabled="{{readonly}}" model:value="{{formData.ordinal}}" bind:change="changeForm" data-key="ordinal" type="number" placeholder="请输入" />
+            </view> -->
+            <view class="jm-formitem2">
+                <text>单位</text>
+                <!-- <input disabled="{{readonly}}" model:value="{{formData.unit}}" bind:change="changeForm" data-key="unit" placeholder="请输入" /> -->
+                <picker disabled="{{readonly}}" mode="selector" bind:change="changeFormSelect" data-key="unit" range="{{unitSelectList}}">
+                    <view class="picker">{{formData.unit || "请选择"}}</view>
+                </picker>
+            </view>
+            <view class="jm-formitem2 flex-wrap">
+                <text>描述</text>
+                <view>
+                    <textarea disabled="{{readonly}}" value="{{formData.description}}" bind:blur="changeForm" data-key="description" />
+                </view>
+            </view>
+            <view class="jm-formitem2">
+                <text>文件名称</text>
+                <input disabled="{{readonly}}" model:value="{{formData.fileName}}" bind:change="changeForm" data-key="fileName" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2">
+                <text>份数</text>
+                <input disabled="{{readonly}}" model:value="{{formData.copies}}" bind:change="changeForm" data-key="copies" type="number" placeholder="请输入" />
+            </view>
+            <!-- <view class="jm-formitem2">
+                <text>上传者</text>
+                <input disabled="{{readonly}}" model:value="{{formData.uploader}}" bind:change="changeForm" data-key="uploader" placeholder="请输入" />
+            </view> -->
+            <view class="jm-formitem2">
+                <text>上传日期</text>
+                <picker disabled="{{readonly}}" mode="date" bind:change="changeForm" data-key="date0" :start="new Date().toDateString()">
+                    <view class="picker">{{formData.date0 || "请选择日期"}}</view>
+                </picker>
+            </view>
+            <!-- <view class="jm-formitem2">
+                <text>会议时间</text>
+                <picker disabled="{{readonly}}" mode="time" bind:change="changeForm" data-key="date1">
+                    <view class="picker">{{formData.date1 || "请选择时间"}}</view>
+                </picker>
+            </view> -->
+            <view class="jm-formitem2 flex-wrap">
+                <text></text>
+                <view wx:if="{{!readonly}}">
+                    <button class="upload-btn" bind:tap="chooseFile" data-filekey="annexList">选择文件</button>
+                </view>
+                <view class="jm-fileList">
+                    <view wx:for="{{formData.annexList}}" wx:for-index="index" wx:for-item="item" wx:key="index" class="jm-file">
+                        <span bind:tap="downloadFile" data-downloadurl="{{item.url}}">{{item.name}}</span>
+                        <t-icon wx:if="{{!readonly}}" size="20" class="t-icon-close" bind:tap="removeFile" data-filekey="annexList" data-index="{{index}}" />
+                    </view>
+                </view>
+            </view>
+        </view>
+
+        <view class="btn-group" style="padding-bottom: 40rpx;">
+            <button plain primary bind:tap="BackPage">返回</button>
+            <button wx:if="{{!readonly}}" class="primary" bind:tap="saveData">确认</button>
+        </view>
+    </view>
+</view>

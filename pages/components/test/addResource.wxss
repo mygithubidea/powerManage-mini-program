@@ -1,0 +1,429 @@
+.pageInfo {
+    font-size: .9rem;
+    color: #414141;
+    background: #f6f6f6;
+}
+
+.bookTime {
+    font-size: .8rem;
+    text-align: center;
+    color: #8d8b8e;
+    padding: 10rpx 0;
+}
+
+.titleInfo {
+    display: flex;
+    padding: 15rpx;
+    background: #129174;
+    color: #fff;
+}
+.titleInfo text {
+    flex: auto;
+}
+
+.titleInfo .name {
+    font-size: 1rem;
+}
+
+.titleInfo .logs {
+    text-align: right;
+}
+
+.listInfo {
+    /* padding: 0 20rpx; */
+    background: #fff;
+    margin: 20rpx;
+    padding: 20rpx 10rpx;
+
+}
+.listInfo .list {
+    padding-bottom: 230rpx;
+}
+
+.editInfo .item {
+    width: 100%;
+    overflow: hidden;
+}
+
+.list .item {
+    width: 100%;
+    display: flex;
+    border-bottom: 1rpx solid #f8f8f8;
+    padding: 10rpx 0;
+}
+
+.list .itemH {
+    /* background: #fff; */
+    height: 80rpx;
+    line-height: 80rpx;
+}
+
+/* .childColor{
+    background-color: #fffdf6;
+} */
+
+.search-input {
+    width: 75%;
+    height: 80rpx;
+    line-height: 80rpx;
+    padding: 0;
+    border-radius: 16rpx;
+    background-color: #fff;
+    color: #808080;
+    float: left;
+}
+
+.allChild .itemInfo label {
+    width: 20%;
+    display: inline-block;
+    float: left;
+}
+
+.allChild .pickerInfo {
+    width: 80%;
+    float: right;
+    text-align: right;
+}
+
+.allChild .pickerInfo .selector {
+    width: 60%;
+    height: 80rpx;
+    line-height: 80rpx;
+    padding: 0 0 0 20rpx;
+    border-radius: 16rpx;
+    background-color: #fff;
+    color: #808080;
+    display: inline-block;
+}
+
+.allChild .pickerInfo .iconfont {
+    display: inline-block;
+}
+.itemL {
+    width: 30%;
+    float: left;
+    /* padding: 10rpx 0; */
+    line-height: 80rpx;
+}
+
+.itemR {
+    width: 70%;
+    float: left;
+}
+
+/* .list .itemR {
+    text-align: right;
+} */
+
+.list > .item .itemR .iconfont {
+    display: inline-block;
+    width: 80rpx;
+    height: 80rpx;
+    line-height: 80rpx;
+    color: #717171;
+}
+
+.grey {
+    color: #717171;
+    display: block;
+    float: left;
+    margin-right: 20rpx;
+}
+  
+/* .itemR .picker {
+    text-align: right;
+} */
+
+.item .remark{
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.foot-join-car {
+    width: 100%;
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    bottom: 0;
+    height: 100rpx;
+    background: #fff;
+    border-top: 1px solid #DFDFDF;
+}
+
+.join-car-btn-w100 {
+    display: block;
+    width: 90%;
+    height: 80rpx;
+    line-height: 80rpx;
+    background: #129174;
+    color: #fff;
+    border-radius: 5rpx;
+    border: 0;
+    margin: 10rpx auto 0;
+    text-align: center;
+}
+
+/*上传图片*/  
+  .imgList {
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  .imgItem {
+    text-align: left;
+    margin-right: 20rpx;
+    margin-bottom: 10rpx;
+    position: relative;
+  }
+  
+  .imgItem image {
+    width: 150rpx;
+    height: 150rpx;
+  }
+  
+  .imgList .delImg {
+    width: 35rpx;
+    height: 35rpx;
+    background: rgba(0, 0, 0, 0.4);
+    position: absolute;
+    top: 0;
+    right: 0;
+    text-align: center;
+    font-size: .8rem;
+    color: #fff;
+  }
+  
+  .chooseimg {
+    margin-right: 20rpx;
+    margin-bottom: 17rpx;
+    width: 150rpx;
+    height: 150rpx;
+  }
+  
+  .weui-uploader__input-box {
+    float: left;
+    position: relative;
+    margin-right: 9px;
+    margin-bottom: 9px;
+    width: 150rpx;
+    height: 150rpx;
+    border: 1px solid #d9d9d9;
+  }
+  
+  .imgBox {
+    width: 100%;
+    margin: auto;
+    padding-top: 20rpx;
+  }
+
+  /*弹窗遮罩*/
+  .mask-layer {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #000;
+    opacity: 0.5;
+    overflow: hidden;
+    z-index: 2000;
+    color: #fff;
+}
+
+.dialog-upd {
+    width: 80%;
+    margin: 0 10%;
+}
+
+.dialog-upd, .dialog-upd-pay {
+    width: 80%;
+    padding: 40rpx 0rpx;
+    background: #fff;
+    border-radius: 10rpx;
+    z-index: 2001;
+    left: 0%;
+    position: fixed;
+    font-size: .8rem;
+    top: 10%;
+}
+
+.groupingTitle {
+    text-align: center;
+    margin-bottom: 30rpx;
+    font-size: 1rem;
+}
+
+.groupInfo {
+    width: 80%;
+    margin: auto;
+}
+
+.messageInput {
+    width: 100%;
+    min-height: 200rpx;
+    display: block;
+    border: 1rpx solid #e2e2e2;
+    border-radius: 5rpx;
+    margin: 10rpx 0;
+}
+.weui-cell {
+    width: 80%;
+    margin: auto;
+}
+
+.calcel-btn, .main-btn {
+    display: block;
+    width: 45%;
+    border: 1rpx solid #e2e2e2;
+    text-align: center;
+    /* padding: 10rpx 0; */
+    border-radius: 5rpx;
+}
+
+.calcel-btn {
+    margin-right: 10%;
+}
+
+.main-btn {
+    background-color: #129174;
+    color: #fff;
+}
+
+.remarkInfo {
+    overflow: hidden;
+    margin: auto 25rpx;
+}
+
+textarea {
+    width: 100%;
+    border: 1rpx solid #f8f8f8;
+    padding: 25rpx 0;
+}
+/*选择小组弹窗*/
+.mask-info {
+    width: 90%;
+    max-height: 60%;
+    margin: auto;
+    padding: 40rpx 0rpx;
+    background: #fff;
+    border-radius: 10rpx;
+    z-index: 2001;
+    left: 5%;
+    position: fixed;
+    font-size: .8rem;
+    top: 10%;
+    overflow-y: scroll;
+}
+
+.maskBtn {
+    background-color: #1bb1e6;
+    color: #fff;
+    text-align: right;
+}
+
+.maskBtn span {
+    display: inline-block;
+    margin-right: 20rpx;
+    padding: 15rpx 0;
+}
+
+.mask-info-list-item {
+    color: #747474;
+    padding: 10rpx;
+    margin: 10rpx;
+    position: relative;
+    border-bottom: 1rpx solid #eaeaea;
+}
+
+.mask-info-list-item .viewRadio {
+    position: absolute;
+    bottom: 20rpx;
+    right: 20rpx;
+}
+
+/*子项目列表*/
+.allChild {
+    width: 100%;
+    margin: auto;
+    padding: 20rpx 0;
+    /* display: flex; */
+    border-bottom: 1rpx solid #f8f8f8;
+}
+.addChildBtn {
+    background: #129174;
+    color: #fff;
+    width: 30%;
+    margin: 25rpx auto;
+    padding: 10rpx 0;
+    text-align: center;
+}
+.childLsit {
+    width: 100%;
+    overflow: hidden;
+}
+.childItem {
+    overflow: hidden;
+    background: #fff;
+    margin-bottom: 20rpx;
+    padding: 0 10rpx;
+    border-radius: 5rpx;
+}
+
+.childItem:last-child{
+    margin: 0;
+}
+
+.childLsit .itemHead {
+    width: 100%;
+    overflow: hidden;
+    height: 80rpx;
+}
+
+.childLsit .itemHead .itemTitle {
+    width: 40%;
+    float: left;
+}
+
+.childLsit .itemHead .childLogs {
+    width: 50%;
+    float: right;
+    text-align: right;
+}
+
+.childLsit .itemHead .itemTitle input{
+    width: 70%;
+    height: 80rpx;
+    font-size: 1rem;
+    color: #e19446;
+    float: left;
+}
+
+.childLsit .itemHead .logs, .childLsit .itemHead .iconfont {
+    display: inline-block;
+    line-height: 80rpx;
+}
+
+.childLsit .itemHead .logs{
+  color: #307f64;
+}
+
+.childLsit .itemHead .itemTitle .iconfont {
+    width: 30%;
+} 
+
+.childLsit .itemInfo {
+    width: 100%;
+    height: 80rpx;
+    display: flex;
+    padding: 10rpx 0;
+    border-top: 1rpx solid #eeeeee;
+    line-height: 80rpx;
+}
+
+.childLsit .itemInfo label {
+    width: 30%;
+}

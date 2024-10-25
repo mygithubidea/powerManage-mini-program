@@ -1,0 +1,146 @@
+<view>
+    <view class="jm-header">
+        <view class="flex">
+            <view class="left" bind:tap="BackPage">
+                <t-icon size="20" bind:tap="onBack" aria-role="button" aria-label="返回" name="chevron-left" class="custom-capsule__icon" />
+                <text>返回</text>
+            </view>
+            <view class="content">
+                {{readonly ? '':'新建'}}{{TabCur == 0 ? '内部报送' : '外部报送'}}
+            </view>
+            <view class="right"></view>
+        </view>
+    </view>
+
+    <view class="jm-container bg-white margin-top">
+        <view class="{{'jm-form' + (readonly?' readonly':'')}}" wx:if="{{TabCur == 0}}">
+            <view class="jm-form-title">
+                基本信息
+            </view>
+            <!-- <view class="jm-formitem2">
+                <text>序号</text>
+                <input disabled="{{readonly}}" model:value="{{formData.ordinal}}" bind:change="changeForm" data-key="ordinal" placeholder="请输入" />
+            </view> -->
+            <view class="jm-formitem2">
+                <text>责任站所</text>
+                <input disabled="{{readonly}}" model:value="{{formData.responsibilityStation || ''}}" bind:change="changeForm" data-key="responsibilityStation" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2">
+                <text>责任班组</text>
+                <input disabled="{{readonly}}" model:value="{{formData.responsibilityTeam || ''}}" bind:change="changeForm" data-key="responsibilityTeam" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2 flex-wrap">
+                <text>隐患简述</text>
+                <view>
+                    <textarea disabled="{{readonly}}" value="{{formData.hazardDescription || '-'}}" bind:blur="changeForm" data-key="hazardDescription" />
+                </view>
+            </view>
+            <view class="jm-formitem2">
+                <text>发现日期</text>
+                <input disabled="{{readonly}}" model:value="{{formData.discoveryDate || ''}}" bind:change="changeForm" data-key="discoveryDate" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2">
+                <text>发现人</text>
+                <input disabled="{{readonly}}" model:value="{{formData.discoverer || ''}}" bind:change="changeForm" data-key="discoverer" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2">
+                <text>隐患评估</text>
+                <input disabled="{{readonly}}" model:value="{{formData.hazardAssessment || ''}}" bind:change="changeForm" data-key="hazardAssessment" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2">
+                <text>整改方案</text>
+                <input disabled="{{readonly}}" model:value="{{formData.rectificationPlan || ''}}" bind:change="changeForm" data-key="rectificationPlan" placeholder="请输入" />
+            </view>
+            
+            <view class="jm-formitem2">
+                <text>临时措施</text>
+                <input disabled="{{readonly}}" model:value="{{formData.temporaryMeasures || ''}}" bind:change="changeForm" data-key="temporaryMeasures" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2">
+                <text>整改责任人</text>
+                <input disabled="{{readonly}}" model:value="{{formData.rectificationResponsiblePerson || ''}}" bind:change="changeForm" data-key="rectificationResponsiblePerson" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2">
+                <text>治理（整改）完成日期</text>
+                <input disabled="{{readonly}}" model:value="{{formData.rectificationCompletionDate || ''}}" bind:change="changeForm" data-key="rectificationCompletionDate" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2">
+                <text>整改资金（万元）</text>
+                <input disabled="{{readonly}}" model:value="{{formData.rectificationFunds || ''}}" bind:change="changeForm" data-key="rectificationFunds" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2">
+                <text>验收时间</text>
+                <picker mode="date" disabled="{{readonly}}" value="{{formData.acceptanceTime}}" bindchange="changeFormDate" data-key="acceptanceTime">
+                    <view class="picker">
+                        {{formData.acceptanceTime || '请选择日期'}}
+                    </view>
+                </picker>
+            </view>
+            <view class="jm-formitem2">
+                <text>验收人</text>
+                <input disabled="{{readonly}}" model:value="{{formData.acceptor || ''}}" bind:change="changeForm" data-key="acceptor" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2">
+                <text>整改情况</text>
+                <input disabled="{{readonly}}" model:value="{{formData.rectificationStatus || ''}}" bind:change="changeForm" data-key="rectificationStatus" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2">
+                <text>效果评估</text>
+                <input disabled="{{readonly}}" model:value="{{formData.effectEvaluation || ''}}" bind:change="changeForm" data-key="effectEvaluation" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2 flex-wrap">
+                <text>附件</text>
+                <view class="jm-imageList">
+                    <view wx:for="{{formData.attachmentList}}" wx:for-index="index" wx:for-item="item" wx:key="index" class="jm-image">
+                        <image src="{{item.url}}" bind:tap="downloadFile" data-downloadurl="{{item.url}}"/>
+                        <t-icon wx:if="{{!readonly}}" size="20" class="t-icon-close" bind:tap="removeFile" data-filekey="attachmentList" data-index="{{index}}" />
+                    </view>
+                    <view wx:if="{{!readonly}}">
+                        <button class="upload-btn" bind:tap="chooseImage" data-imagekey="attachmentList">+</button>
+                    </view>
+                </view>
+            </view>
+        </view>
+
+        <view class="{{'jm-form' + (readonly?' readonly':'')}}" wx:if="{{TabCur == 1}}">
+            <view class="jm-form-title">
+                基本信息
+            </view>
+            <view class="jm-formitem2">
+                <text>发现人</text>
+                <input disabled="{{readonly}}" model:value="{{formData.reporter}}" bind:change="changeForm" data-key="reporter" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2">
+                <text>联系电话</text>
+                <input disabled="{{readonly}}" model:value="{{formData.phone}}" bind:change="changeForm" data-key="phone" placeholder="请输入" maxlength="11" />
+            </view>
+            <view class="jm-formitem2">
+                <text>隐患地点</text>
+                <input disabled="{{readonly}}" model:value="{{formData.hazardLocation}}" bind:change="changeForm" data-key="hazardLocation" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2 flex-wrap">
+                <text>隐患简述</text>
+                <view>
+                    <textarea disabled="{{readonly}}" value="{{formData.hazardDescription}}" bind:blur="changeForm" data-key="hazardDescription" />
+                </view>
+            </view>
+            <view class="jm-formitem2 flex-wrap">
+                <text>上传隐患地点照片</text>
+                <view class="jm-imageList">
+                    <view wx:for="{{formData.hazardPhotoList}}" wx:for-index="index" wx:for-item="item" wx:key="index" class="jm-image">
+                        <image src="{{item.url}}" bind:tap="downloadFile" data-downloadurl="{{item.url}}"/>
+                        <t-icon wx:if="{{!readonly}}" size="20" class="t-icon-close" bind:tap="removeFile" data-filekey="hazardPhotoList" data-index="{{index}}" />
+                    </view>
+                    <view wx:if="{{!readonly}}">
+                        <button class="upload-btn" bind:tap="chooseImage" data-imagekey="hazardPhotoList">+</button>
+                    </view>
+                </view>
+            </view>
+        </view>
+
+        <view class="btn-group" style="padding-bottom: 40rpx;">
+            <button plain primary bind:tap="BackPage">返回</button>
+            <button wx:if="{{!readonly}}" class="primary" bind:tap="saveData">确认</button>
+        </view>
+    </view>
+</view>

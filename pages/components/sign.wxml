@@ -1,0 +1,22 @@
+<view class="jm-formitem2 flex-wrap">
+    <text>{{title}}</text>
+    <view>
+        <text wx:if="{{!readonly}}" style="color: #0097fe;" bind:tap="openDialog">签名</text>
+        <!-- <text style="color: #0097fe;margin-left: 24rpx;">删除</text> -->
+    </view>
+    <slot></slot>
+</view>
+<view wx:if="{{isShow}}" class="sign-area">
+    <view class="title">
+        请在下方灰色框内签名：
+    </view>
+    <view class="handCenter">
+        <canvas class="canvas" id="canvas" style="background-color: white;" canvas-id="canvas" disable-scroll="true" bindtouchstart="canvasStart" bindtouchmove="canvasMove" binderror="canvasIdErrorCallback">
+        </canvas>
+    </view>
+    <view class="btn-group">
+        <button catchtap="closeDialog" class="delBtn">取消</button>
+        <button catchtap="cleardraw" class="delBtn">清空</button>
+        <button catchtap="getImg" class="subBtn">完成</button>
+    </view>
+</view>

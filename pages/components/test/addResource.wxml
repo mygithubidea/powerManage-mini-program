@@ -1,0 +1,2397 @@
+<view class="pageInfo" wx:for="{{infoList}}" wx:for-item="info" wx:for-index="infoIndex">
+    <view class="bookTime" wx:if="{{pageType == 'edit' && info.guideRealReimbTime}}">
+        记账于 {{info.guideRealReimbTime}}
+    </view>
+    <view class="titleInfo" wx:if="{{pageType == 'edit'}}">
+        <text class="name">{{info.name}} <text wx:if="{{resourceName == 'hotel'}}">(住{{info.times}}晚)</text></text>
+        <text class="logs" bindtap="getGuideLog" data-type="{{resourceName}}" data-id="{{info.id}}">日志</text>
+    </view>
+    <view wx:if="{{resourceName == 'hotel'}}" class="listInfo">
+        <view wx:if="{{pageType == 'edit'}}" class="editInfo">
+            <view class="item">
+                <label class="">房间类型：</label>
+                <text class=''>{{info.hotelType}}</text>
+            </view>
+            <view class="item">
+                <label for="">入住时间：</label>
+                <text class=''>{{info.orderDate}}</text>
+            </view>
+            <view class="item">
+                <label for="">安排备注：</label>
+                <text wx:if="{{info.remark}}" class=''>{{info.remark}}</text>
+            </view>
+        </view>
+        <view class="list">
+            <view wx:if="{{pageType == 'edit'}}" class="item itemH">
+                <label for="" class="itemL">客人信息</label>
+                <view class="itemR" bindtap="getGroup" data-index="{{infoIndex}}">
+                    <!-- <text>{{info.memberContactInfo}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input' placeholder="请选择" value="{{info.memberContactInfo}}" disabled></input>
+                </view>
+
+                <!-- <label wx:if="{{!info.customerOrderNumber && !info.customerTripNumber}}" for="" class="itemL">客人信息</label>
+                <label wx:elif="{{info.customerOrderNumber && info.customerOrderNumber !=''}}" for="" class="itemL">客人信息</label>
+                <label wx:elif="{{info.customerTripNumber && info.customerTripNumber !=''}}" for="" class="itemL">客人信息</label>
+                <view class="itemR" bindtap="getGroup" data-index="{{infoIndex}}">
+                    <text wx:if="{{!info.customerOrderNumber && !info.customerTripNumber}}"></text>
+                    <text wx:elif="{{info.customerOrderNumber && info.customerOrderNumber !=''}}">{{info.customerOrderNumber}}</text>
+                    <text wx:elif="{{info.customerTripNumber && info.customerTripNumber !=''}}">{{info.customerTripNumber}}</text>
+                    <text class="iconfont iconarrow-right"></text>
+                </view> -->
+            </view>
+            <view wx:if="{{pageType == 'add'}}" class="item itemH">
+                <label for="" class="itemL">酒店</label>
+                <view class="itemR" bindtap="getSearchList" data-method="hotel" data-type="resources" data-index="{{infoIndex}}">
+                    <input class='search-input remark' bindtap="getSearchList" data-method="hotel" data-type="resources" data-index="{{infoIndex}}" placeholder="请选择" value="{{info.resourceText}}" disabled></input>
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                </view>
+            </view>
+            <view wx:if="{{pageType == 'edit'}}" class="item itemH">
+                <label for="" class="itemL">行程日期</label>
+                <view class="itemR">
+                    <picker class="search-input" mode="date" value="{{info.orderDate}}" start="2010-01-01" end="2030-12-31" bindchange="myinput" data-name="orderDate" data-index="{{infoIndex}}">
+                        <view class="picker">{{info.orderDate}}</view>
+                    </picker>
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">房间类型</label>
+                <view class="itemR">
+                    <!-- <text class="grey" bindtap="getSearchList" data-type="dictionary" data-code="jiudianfangjian_leixing" data-index="{{infoIndex}}">请选择</text>
+                    <input class='search-input' bindinput="myinput" value="{{info.dictionary}}" data-name="dictionary" data-index="{{infoIndex}}" placeholder="请输入"></input> -->
+                    <!-- <text class="iconfont iconarrow-right" bindtap="getSearchList" data-type="dictionary" data-code="jiudianfangjian_leixing" data-index="{{infoIndex}}"></text> -->
+                    <input class="search-input" bindtap="getSearchList" data-type="dictionary" data-code="jiudianfangjian_leixing" data-index="{{infoIndex}}" value="{{info.dictionary}}" placeholder="请选择" disabled></input>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">付款方式</label>
+                <view class="itemR">
+                    <picker class="search-input" mode='selector' bindchange="bindCashTypeChange" value="{{cashTypeidx}}" range="{{cashTypeList}}" range-key="{{'name'}}" data-selecthx="{{cashTypeList[cashTypeidx].name}}" data-index="{{infoIndex}}">
+                        <view class="picker">{{info.cashTypeName}}</view>
+                    </picker>
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                </view>
+            </view>
+            <view wx:if="{{cashTypeidx == 0}}" class="item itemH" bindtap="getSignNumberList">
+                <label for="" class="itemL">签单号</label>
+                <view class="itemR" bindtap="getSignNumberList" data-index="{{infoIndex}}">
+                    <!-- <text class='search-input'>{{info.signNumber}}</text> -->
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input' placeholder="请选择" value="{{info.signNumber}}" disabled></input>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">天数</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.times}}" data-name="times" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">单价</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.price}}" data-name="price" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{pageType == 'add'}}" class="item itemH">
+                <label for="" class="itemL">客人信息</label>
+                <view class="itemR">
+                    <text wx:if="{{memberList.length != 0}}" class='search-input' bindtap="getGroup" data-index="{{infoIndex}}">共{{memberList.length}}组</text>
+                    <text wx:if="{{memberList.length == 0}}" class='search-input' bindtap="getGroup" data-index="{{infoIndex}}">请选择</text>
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                </view>
+            </view>
+            <view wx:if="{{memberList.length != 0}}" class="allChild">
+                <view class="childLsit">
+                    <view class="childItem" wx:for="{{memberList}}" wx:key='{{index}}'>
+                        <view class="itemInfo">
+                            <label for="" class="">客人</label>
+                            <view class="itemR">
+                                <text class='search-input remark'>{{item.memberContactInfo}}</text>
+                                <text class="iconfont iconguanbi" bindtap='delChildMemberItem' data-idx='{{index}}' data-index="{{infoIndex}}"></text>
+                            </view>
+
+                            <!-- <label wx:if="{{!item.orderNumber && !item.customerTripNumber}}" for="" class="">小团号</label>
+                            <label wx:elif="{{item.orderNumber && item.orderNumber !=''}}" for="" class="">小团号</label>
+                            <label wx:elif="{{item.customerTripNumber && item.customerTripNumber !=''}}" for="" class="">流水号</label>
+                            <view class="itemR">
+                                <text wx:if="{{!item.orderNumber && !item.customerTripNumber}}" class='search-input remark'></text>
+                                <text wx:elif="{{item.orderNumber && item.orderNumber !=''}}" class='search-input remark'>{{item.orderNumber}}</text>
+                                <text wx:elif="{{item.customerTripNumber && item.customerTripNumber !=''}}" class='search-input remark'>{{item.customerTripNumber}}</text>
+                                <text class="iconfont iconguanbi" bindtap='delChildMemberItem' data-idx='{{index}}'></text>
+                            </view> -->
+                        </view>
+                        <view class="itemInfo">
+                            <label for="" class="">数量</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.count}}" data-idx='{{index}}' data-name="count" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view class="itemInfo">
+                            <label for="" class="">免去数量</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.freeCount}}" data-idx='{{index}}' data-name="freeCount" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view wx:if="{{cashTypeidx == 0}}" class="itemInfo">
+                            <label for="" class="">签单金额</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.guideRealReimbMoney}}" data-idx='{{index}}' data-name="guideRealReimbMoney" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view wx:if="{{cashTypeidx == 1}}" class="itemInfo">
+                            <label for="" class="">现付金额</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.guideRealReimbMoney}}" data-idx='{{index}}' data-name="guideRealReimbMoney" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view class="itemInfo">
+                            <label for="" class="">记账备注</label>
+                            <view class="itemR">
+                                <!-- <text class='search-input remark' bindtap="getRemark" data-idx='{{index}}' data-name="remark" data-value="{{item.remark}}">{{item.remark}}</text> -->
+                                <!-- <text class="iconfont iconarrow-right"></text> -->
+                                <input class='search-input remark' bindtap="getRemark" data-idx='{{index}}' data-name="remark" data-value="{{item.remark}}" placeholder="请输入" value="{{item.remark}}" disabled></input>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </view>  
+            <view wx:if="{{memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">数量</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.count}}" data-name="count" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">免去数量</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.freeCount}}" data-name="freeCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{cashTypeidx == 0 && memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">签单金额</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.guideRealReimbMoney}}" data-name="guideRealReimbMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{cashTypeidx == 1 && memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">现付金额</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.guideRealReimbMoney}}" data-name="guideRealReimbMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">记账备注</label>
+                <view class="itemR">
+                    <!-- <text class='search-input remark' bindtap="getRemark" data-name="guideRealReimbRemark" data-value="{{info.guideRealReimbRemark}}" data-index="{{infoIndex}}">{{info.guideRealReimbRemark}}</text> -->
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input remark' bindtap="getRemark" data-name="guideRealReimbRemark" data-value="{{info.guideRealReimbRemark}}" data-index="{{infoIndex}}" placeholder="请输入" disabled value="{{info.guideRealReimbRemark}}"></input>
+                </view>
+            </view>
+
+            <view class="item">
+                <view class='imgContent'>
+                    <view class='imgBox'>
+                        <view class='imgList'>
+                        <block wx:for="{{info.detailPics}}" wx:key="index">
+                            <view class='imgItem'>
+                            <image src='{{item}}' data-src="{{item}}" bindtap="previewImage" data-id='{{index}}' data-index="{{infoIndex}}"></image>
+                            <view wx:if="{{pageType == 'add' || reimbStatus == 'confirm' || reimbStatus == 'back'}}" class="delImg iconfont iconguanbi" bindtap="delImg" data-indx="{{index}}" data-index="{{infoIndex}}"></view>
+                            </view>
+                        </block>
+                        <view wx:if="{{pageType == 'add' || reimbStatus == 'confirm' || reimbStatus == 'back'}}" class='chooseimg' bindtap='uploadDetailImage' data-index="{{infoIndex}}">
+                            <view class="weui-uploader__input-box"></view>
+                        </view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+    <view wx:if="{{resourceName == 'hotelv2'}}" class="listInfo">
+        <view wx:if="{{pageType == 'edit'}}" class="editInfo">
+            <view class="item">
+                <label for="">安排备注：</label>
+                <text class=''>{{info.remark}}</text>
+            </view>
+        </view>
+        <view class="list">
+            <view wx:if="{{pageType == 'edit'}}" class="item itemH">
+                <label for="" class="itemL">客人信息</label>
+                <view class="itemR" bindtap="getGroup" data-index="{{infoIndex}}">
+                    <!-- <text>{{info.memberContactInfo}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input' placeholder="请选择" value="{{info.memberContactInfo}}" disabled></input>
+                </view>
+
+                <!-- <label wx:if="{{!info.customerOrderNumber && !info.customerTripNumber}}" for="" class="itemL">客人信息</label>
+                <label wx:elif="{{info.customerOrderNumber && info.customerOrderNumber !=''}}" for="" class="itemL">客人信息</label>
+                <label wx:elif="{{info.customerTripNumber && info.customerTripNumber !=''}}" for="" class="itemL">客人信息</label>
+                <view class="itemR" bindtap="getGroup" data-index="{{infoIndex}}">
+                    <text wx:if="{{!info.customerOrderNumber && !info.customerTripNumber}}"></text>
+                    <text wx:elif="{{info.customerOrderNumber && info.customerOrderNumber !=''}}">{{info.customerOrderNumber}}</text>
+                    <text wx:elif="{{info.customerTripNumber && info.customerTripNumber !=''}}">{{info.customerTripNumber}}</text>
+                    <text class="iconfont iconarrow-right"></text>
+                </view> -->
+            </view>
+            <view wx:if="{{pageType == 'add'}}" class="item itemH">
+                <label for="" class="itemL">酒店</label>
+                <view class="itemR">
+                    <!-- <text class='search-input remark' bindtap="getSearchList" data-method="hotelv2" data-type="resources" data-index="{{infoIndex}}">{{info.resourceText}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input remark' bindtap="getSearchList" data-method="hotelv2" data-type="resources" data-index="{{infoIndex}}" placeholder="请选择" value="{{info.resourceText}}" disabled></input>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">付款方式</label>
+                <view class="itemR">
+                    <picker class="search-input" mode='selector' bindchange="bindCashTypeChange" value="{{cashTypeidx}}" range="{{cashTypeList}}" range-key="{{'name'}}" data-selecthx="{{cashTypeList[cashTypeidx].name}}" data-index="{{infoIndex}}">
+                        <view class="picker">{{info.cashTypeName}}</view>
+                    </picker>
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                </view>
+            </view>
+            <view wx:if="{{cashTypeidx == 0}}" class="item itemH">
+                <label for="" class="itemL">签单号</label>
+                <view class="itemR" bindtap="getSignNumberList" data-index="{{infoIndex}}">
+                    <!-- <text>{{info.signNumber}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input' placeholder="请选择" value="{{info.signNumber}}" disabled></input>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">天数</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.times}}" data-name="times" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{pageType == 'add'}}" class="item itemH">
+                <label for="" class="itemL">客人信息</label>
+                <view class="itemR">
+                    <text wx:if="{{memberList.length != 0}}" class='search-input' bindtap="getGroup" data-index="{{infoIndex}}">共{{memberList.length}}组</text>
+                    <text wx:if="{{memberList.length == 0}}" class='search-input' bindtap="getGroup" data-index="{{infoIndex}}">请选择</text>
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                </view>
+            </view>
+            <view class="allChild">
+                <view class="childLsit">
+                    <view class="childItem" wx:for="{{info.childList}}" wx:key='{{index}}' wx:if="{{item.isDelete != 1}}">
+                        <view class="itemHead">
+                            <view class="itemTitle">
+                                <!-- <input class='' placeholder='房间' placeholder-style="color:#e19446;" value="{{item.roomType}}" bindinput="getKeyWord" data-idx='{{index}}' data-name="roomType" data-index="{{infoIndex}}"></input> -->
+                                <input class="" placeholder='房间' placeholder-style="color:#e19446;" value="{{item.roomType}}" bindtap="getSearchList" data-type="dictionary" data-idx='{{index}}' data-code="jiudianfangjian_leixing" data-index="{{infoIndex}}" disabled></input>
+                                <!-- <text class="iconfont iconarrow-right" bindtap="getSearchList" data-type="dictionary" data-idx='{{index}}' data-code="jiudianfangjian_leixing" data-index="{{infoIndex}}"></text> -->
+                            </view>
+                            <view class="childLogs">
+                                <text wx:if="{{item.id}}" class="logs" bindtap="getGuideLog" data-type="{{resourceName}}" data-title="{{item.roomType}}" data-childId="{{item.id}}">日志</text>
+                                <text class="iconfont iconguanbi" bindtap='delChildItem' data-idx='{{index}}' data-index="{{infoIndex}}"></text>
+                            </view> 
+                        </view>
+                        <view class="itemInfo">
+                            <label for="" class="">数量</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getKeyWord" placeholder='' value="{{item.count}}" data-idx='{{index}}' data-name="count" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <!-- <view class="itemInfo">
+                            <label for="" class="">免去数量</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getKeyWord" placeholder='' value="{{item.freeCount}}" data-idx='{{index}}' data-name="freeCount"></input>
+                            </view>
+                        </view> -->
+                        <view class="itemInfo">
+                            <label for="" class="">金额</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getKeyWord" placeholder='' value="{{item.price}}" data-idx='{{index}}' data-name="price" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <!-- <view class="itemInfo">
+                            <label for="" class="">其他</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getKeyWord" placeholder='' value="{{item.otherFee}}" data-idx='{{index}}' data-name="otherFee"></input>
+                            </view>
+                        </view> -->
+                    </view>
+                </view>
+                <view class="addChildBtn" bindtap="addChildListItem" data-index="{{infoIndex}}">
+                    添加房间
+                </view>  
+            </view>           
+            <view wx:if="{{memberList.length != 0}}" class="allChild">
+                <view class="childLsit">
+                    <view class="childItem" wx:for="{{memberList}}" wx:key='{{index}}'>
+                        <view class="itemInfo">
+                            <label for="" class="">客人</label>
+                            <view class="itemR">
+                                <text class='search-input remark'>{{item.memberContactInfo}}</text>
+                                <text class="iconfont iconguanbi" bindtap='delChildMemberItem' data-idx='{{index}}' data-index="{{infoIndex}}"></text>
+                            </view>
+
+                            <!-- <label wx:if="{{!item.customerOrderNumber && !item.customerTripNumber}}" for="" class="">小团号</label>
+                            <label wx:elif="{{item.customerOrderNumber && item.customerOrderNumber !=''}}" for="" class="">小团号</label>
+                            <label wx:elif="{{item.customerTripNumber && item.customerTripNumber !=''}}" for="" class="">流水号</label>
+                            <view class="itemR">
+                                <text wx:if="{{!item.customerOrderNumber && !item.customerTripNumber}}" class='search-input remark'></text>
+                                <text wx:elif="{{item.customerOrderNumber && item.customerOrderNumber !=''}}" class='search-input remark'>{{item.customerOrderNumber}}</text>
+                                <text wx:elif="{{item.customerTripNumber && item.customerTripNumber !=''}}" class='search-input remark'>{{item.customerTripNumber}}</text>
+                                <text class="iconfont iconguanbi" bindtap='delChildMemberItem' data-idx='{{index}}'></text>
+                            </view> -->
+                        </view>
+                        <view wx:if="{{cashTypeidx == 0}}" class="itemInfo">
+                            <label for="" class="">签单金额</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.guideRealReimbMoney}}" data-idx='{{index}}' data-name="guideRealReimbMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view class="itemInfo">
+                            <label for="" class="">记账备注</label>
+                            <view class="itemR">
+                                <!-- <text class='search-input remark' bindtap="getRemark" data-idx='{{index}}' data-name="remark" data-value="{{item.remark}}" data-index="{{infoIndex}}">{{item.remark}}</text>
+                                <text class="iconfont iconarrow-right"></text> -->
+                                <input class='search-input remark' bindtap="getRemark" data-idx='{{index}}' data-name="remark" data-value="{{item.remark}}" data-index="{{infoIndex}}" placeholder="请输入" value="{{item.remark}}" disabled></input>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </view>     
+            <view wx:if="{{cashTypeidx == 0 && memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">签单金额</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.guideRealReimbMoney}}" data-name="guideRealReimbMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{pageType == 'edit' && cashTypeidx == 1 && memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">现付金额</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.guideRealReimbMoney}}" data-name="guideRealReimbMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">记账备注</label>
+                <view class="itemR">
+                    <!-- <text class='search-input remark' bindtap="getRemark" data-name="guideRealReimbRemark" data-value="{{guideRealReimbRemark}}" data-index="{{infoIndex}}">{{guideRealReimbRemark}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input remark' bindtap="getRemark" data-name="guideRealReimbRemark" data-value="{{guideRealReimbRemark}}" data-index="{{infoIndex}}" placeholder="请输入" value="{{guideRealReimbRemark}}" disabled></input>
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                </view>
+            </view>
+            <view class="item">
+                <view class='imgContent'>
+                    <view class='imgBox'>
+                        <view class='imgList'>
+                        <block wx:for="{{info.detailPics}}" wx:key="index">
+                            <view class='imgItem'>
+                            <image src='{{item}}' data-src="{{item}}" bindtap="previewImage" data-id='{{index}}' data-index="{{infoIndex}}"></image>
+                            <view wx:if="{{pageType == 'add' || reimbStatus == 'confirm' || reimbStatus == 'back'}}" class="delImg iconfont iconguanbi" bindtap="delImg" data-indx="{{index}}" data-index="{{infoIndex}}"></view>
+                            </view>
+                        </block>
+                        <view wx:if="{{pageType == 'add' || reimbStatus == 'confirm' || reimbStatus == 'back'}}" class='chooseimg' bindtap='uploadDetailImage' data-index="{{infoIndex}}">
+                            <view class="weui-uploader__input-box"></view>
+                        </view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+
+        </view>
+    </view>
+    <view wx:if="{{resourceName == 'restaurant'}}" class="listInfo">
+        <view wx:if="{{pageType == 'edit'}}" class="editInfo">
+            <view class="item">
+                <label class="">餐饮类型：</label>
+                <text class=''>{{info.busType}}</text>
+            </view>
+            <view class="item">
+                <label for="">用餐时间：</label>
+                <text class=''>{{info.orderDate}}</text>
+            </view>
+            <view class="item">
+                <label for="">安排备注：</label>
+                <text class=''>{{info.remark}}</text>
+            </view>
+        </view>
+        <view class="list">
+            <view wx:if="{{pageType == 'edit'}}" class="item itemH">
+                <label for="" class="itemL">客人信息</label>
+                <view class="itemR" bindtap="getGroup" data-index="{{infoIndex}}">
+                    <!-- <text>{{info.memberContactInfo}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input' placeholder="请选择" value="{{info.memberContactInfo}}" disabled></input>
+                </view>
+
+                <!-- <label wx:if="{{!info.customerOrderNumber && !info.customerTripNumber}}" for="" class="itemL">客人信息</label>
+                <label wx:elif="{{info.customerOrderNumber && info.customerOrderNumber !=''}}" for="" class="itemL">客人信息</label>
+                <label wx:elif="{{info.customerTripNumber && info.customerTripNumber !=''}}" for="" class="itemL">客人信息</label>
+                <view class="itemR" bindtap="getGroup" data-index="{{infoIndex}}">
+                    <text wx:if="{{!info.customerOrderNumber && !info.customerTripNumber}}"></text>
+                    <text wx:elif="{{info.customerOrderNumber && info.customerOrderNumber !=''}}">{{info.customerOrderNumber}}</text>
+                    <text wx:elif="{{info.customerTripNumber && info.customerTripNumber !=''}}">{{info.customerTripNumber}}</text>
+                    <text class="iconfont iconarrow-right"></text>
+                </view> -->
+            </view>
+            <view wx:if="{{pageType == 'edit'}}" class="item itemH">
+                <label for="" class="itemL">行程日期</label>
+                <view class="itemR">
+                    <picker class="search-input" mode="date" value="{{info.orderDate}}" start="2010-01-01" end="2030-12-31" bindchange="myinput" data-name="orderDate" data-index="{{infoIndex}}">
+                        <view class="picker">{{info.orderDate}}</view>
+                    </picker>
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">餐厅</label>
+                <view class="itemR">
+                    <!-- <text class='search-input remark' bindtap="getSearchList" data-method="restaurant" data-type="resources" data-index="{{infoIndex}}">{{info.resourceText}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input remark' bindtap="getSearchList" data-method="restaurant" data-type="resources" data-index="{{infoIndex}}" placeholder="请选择" value="{{info.resourceText}}" disabled></input>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">餐饮类型</label>
+                <view class="itemR">
+                    <!-- <input class='search-input' bindinput="myinput" value="{{info.dictionary}}" data-name="dictionary" data-index="{{infoIndex}}"></input>
+                    <text class="iconfont iconarrow-right" bindtap="getSearchList" data-type="dictionary" data-code="canyin_leixing" data-index="{{infoIndex}}"></text> -->
+                    <!-- <input class='search-input' bindinput="myinput" value="{{info.dictionary}}" data-name="dictionary" data-index="{{infoIndex}}" placeholder="请输入"></input> -->
+                    <input class="search-input" bindtap="getSearchList" data-type="dictionary" data-code="canyin_leixing" data-index="{{infoIndex}}" placeholder="请选择" value="{{info.dictionary}}" disabled></input>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">用餐类别</label>
+                <view class="itemR">
+                    <picker class="search-input" mode='selector' bindchange="bindMealTypeChange" value="{{mealTypeIdx}}" range="{{mealTypeList}}" range-key="{{'name'}}" data-selecthx="{{mealTypeList[mealTypeIdx].name}}" data-index="{{infoIndex}}">
+                        <view class="picker">{{info.mealTypeText}}</view>
+                    </picker>
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">付款方式</label>
+                <view class="itemR">
+                    <picker class="search-input" mode='selector' bindchange="bindCashTypeChange" value="{{cashTypeidx}}" range="{{cashTypeList}}" range-key="{{'name'}}" data-selecthx="{{cashTypeList[cashTypeidx].name}}" data-index="{{infoIndex}}">
+                        <view class="picker">{{info.cashTypeName}}</view>
+                    </picker>
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                </view>
+            </view>
+            <view wx:if="{{cashTypeidx == 0}}" class="item itemH">
+                <label for="" class="itemL">签单号</label>
+                <view class="itemR" bindtap="getSignNumberList" data-index="{{infoIndex}}">
+                    <!-- <text>{{info.signNumber}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input' placeholder="请选择" value="{{info.signNumber}}" disabled></input>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">次数</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.times}}" data-name="times" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">单价</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.price}}" data-name="price" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{pageType == 'add'}}" class="item itemH">
+                <label for="" class="itemL">客人信息</label>
+                <view class="itemR">
+                    <text wx:if="{{memberList.length != 0}}" class='search-input' bindtap="getGroup" data-index="{{infoIndex}}">共{{memberList.length}}组</text>
+                    <text wx:if="{{memberList.length == 0}}" class='search-input' bindtap="getGroup" data-index="{{infoIndex}}">请选择</text>
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                </view>
+            </view>
+            <view wx:if="{{memberList.length != 0}}" class="allChild">
+                <view class="childLsit">
+                    <view class="childItem" wx:for="{{memberList}}" wx:key='{{index}}'>
+                        <view class="itemInfo">
+                            <label for="" class="">客人</label>
+                            <view class="itemR">
+                                <text class='search-input remark'>{{item.memberContactInfo}}</text>
+                                <text class="iconfont iconguanbi" bindtap='delChildMemberItem' data-idx='{{index}}' data-index="{{infoIndex}}"></text>
+                            </view>
+
+                            <!-- <label wx:if="{{!item.orderNumber && !item.customerTripNumber}}" for="" class="">小团号</label>
+                            <label wx:elif="{{item.orderNumber && item.orderNumber !=''}}" for="" class="">小团号</label>
+                            <label wx:elif="{{item.customerTripNumber && item.customerTripNumber !=''}}" for="" class="">流水号</label>
+                            <view class="itemR">
+                                <text wx:if="{{!item.orderNumber && !item.customerTripNumber}}" class='search-input remark'></text>
+                                <text wx:elif="{{item.orderNumber && item.orderNumber !=''}}" class='search-input remark'>{{item.orderNumber}}</text>
+                                <text wx:elif="{{item.customerTripNumber && item.customerTripNumber !=''}}" class='search-input remark'>{{item.customerTripNumber}}</text>
+                                <text class="iconfont iconguanbi" bindtap='delChildMemberItem' data-idx='{{index}}' data-index="{{infoIndex}}"></text>
+                            </view> -->
+                        </view>
+                        <view class="itemInfo">
+                            <label for="" class="">数量</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.count}}" data-idx='{{index}}' data-name="count" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view class="itemInfo">
+                            <label for="" class="">免去数量</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.freeCount}}" data-idx='{{index}}' data-name="freeCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view wx:if="{{cashTypeidx == 0}}" class="itemInfo">
+                            <label for="" class="">签单金额</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.guideRealReimbMoney}}" data-idx='{{index}}' data-name="guideRealReimbMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view wx:if="{{cashTypeidx == 1}}" class="itemInfo">
+                            <label for="" class="">现付金额</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.guideRealReimbMoney}}" data-idx='{{index}}' data-name="guideRealReimbMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view class="itemInfo">
+                            <label for="" class="">记账备注</label>
+                            <view class="itemR">
+                                <!-- <text class='search-input remark' bindtap="getRemark" data-idx='{{index}}' data-name="remark" data-value="{{item.remark}}" data-index="{{infoIndex}}">{{item.remark}}</text>
+                                <text class="iconfont iconarrow-right"></text> -->
+                                <input class='search-input remark' bindtap="getRemark" data-idx='{{index}}' data-name="remark" data-value="{{item.remark}}" data-index="{{infoIndex}}" placeholder="请输入" value="{{item.remark}}" disabled></input>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </view>     
+            <view wx:if="{{memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">数量</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.count}}" data-name="count" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">免去数量</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.freeCount}}" data-name="freeCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{cashTypeidx == 0 && memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">签单金额</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.guideRealReimbMoney}}" data-name="guideRealReimbMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{cashTypeidx == 1 && memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">现付金额</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.guideRealReimbMoney}}" data-name="guideRealReimbMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">记账备注</label>
+                <view class="itemR">
+                    <!-- <text class='search-input remark' bindtap="getRemark" data-name="guideRealReimbRemark" data-value="{{guideRealReimbRemark}}" data-index="{{infoIndex}}">{{guideRealReimbRemark}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input remark' bindtap="getRemark" data-name="guideRealReimbRemark" data-value="{{guideRealReimbRemark}}" data-index="{{infoIndex}}" placeholder="请输入" value="{{guideRealReimbRemark}}" disabled></input>
+                </view>
+            </view>
+
+            <view class="item">
+                <view class='imgContent'>
+                    <view class='imgBox'>
+                        <view class='imgList'>
+                        <block wx:for="{{info.detailPics}}" wx:key="index">
+                            <view class='imgItem'>
+                            <image src='{{item}}' data-src="{{item}}" bindtap="previewImage" data-id='{{index}}' data-index="{{infoIndex}}"></image>
+                            <view wx:if="{{pageType == 'add' || reimbStatus == 'confirm' || reimbStatus == 'back'}}" class="delImg iconfont iconguanbi" bindtap="delImg" data-indx="{{index}}" data-index="{{infoIndex}}"></view>
+                            </view>
+                        </block>
+                        <view wx:if="{{pageType == 'add' || reimbStatus == 'confirm' || reimbStatus == 'back'}}" class='chooseimg' bindtap='uploadDetailImage' data-index="{{infoIndex}}">
+                            <view class="weui-uploader__input-box"></view>
+                        </view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+
+        </view>
+    </view>
+    <view wx:if="{{resourceName == 'visa'}}" class="listInfo">
+        <view wx:if="{{pageType == 'edit'}}" class="editInfo">
+            <view class="item">
+                <label class="">签证类型：</label>
+                <text class=''>{{info.visaType}}</text>
+            </view>
+            <view class="item">
+                <label for="">安排备注：</label>
+                <text class=''>{{info.remark}}</text>
+            </view>
+        </view>
+        <view class="list">
+            <view wx:if="{{pageType == 'edit'}}" class="item itemH">
+                <label for="" class="itemL">客人信息</label>
+                <view class="itemR" bindtap="getGroup" data-index="{{infoIndex}}">
+                    <!-- <text>{{info.memberContactInfo}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input' placeholder="请选择" value="{{info.memberContactInfo}}" disabled></input>
+                </view>
+
+                <!-- <label wx:if="{{!info.customerOrderNumber && !info.customerTripNumber}}" for="" class="itemL">客人信息</label>
+                <label wx:elif="{{info.customerOrderNumber && info.customerOrderNumber !=''}}" for="" class="itemL">客人信息</label>
+                <label wx:elif="{{info.customerTripNumber && info.customerTripNumber !=''}}" for="" class="itemL">客人信息</label>
+                <view class="itemR" bindtap="getGroup" data-index="{{infoIndex}}">
+                    <text wx:if="{{!info.customerOrderNumber && !info.customerTripNumber}}"></text>
+                    <text wx:elif="{{info.customerOrderNumber && info.customerOrderNumber !=''}}">{{info.customerOrderNumber}}</text>
+                    <text wx:elif="{{info.customerTripNumber && info.customerTripNumber !=''}}">{{info.customerTripNumber}}</text>
+                    <text class="iconfont iconarrow-right"></text>
+                </view> -->
+            </view>
+            <view wx:if="{{pageType == 'edit'}}" class="item itemH">
+                <label for="" class="itemL">行程日期</label>
+                <view class="itemR">
+                    <picker class="search-input" mode="date" value="{{info.orderDate}}" start="2010-01-01" end="2030-12-31" bindchange="myinput" data-name="orderDate" data-index="{{infoIndex}}">
+                        <view class="picker">{{info.orderDate}}</view>
+                    </picker>
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">签证</label>
+                <view class="itemR">
+                    <!-- <text class='search-input remark' bindtap="getSearchList" data-method="visa" data-type="resources" data-index="{{infoIndex}}">{{info.resourceText}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input remark' bindtap="getSearchList" data-method="visa" data-type="resources" data-index="{{infoIndex}}" placeholder="请选择" value="{{info.resourceText}}" disabled></input>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">签证类型</label>
+                <view class="itemR">
+                    <!-- <input class='search-input' bindinput="myinput" value="{{info.dictionary}}" data-name="dictionary" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                    <text class="iconfont iconarrow-right" bindtap="getSearchList" data-type="dictionary" data-code="visa_type" data-index="{{infoIndex}}"></text> -->
+                    <input class="search-input" bindtap="getSearchList" data-type="dictionary" data-code="visa_type" data-index="{{infoIndex}}" placeholder="请选择" value="{{info.dictionary}}" disabled></input>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">付款方式</label>
+                <view class="itemR">
+                    <picker class="search-input" mode='selector' bindchange="bindCashTypeChange" value="{{cashTypeidx}}" range="{{cashTypeList}}" range-key="{{'name'}}" data-selecthx="{{cashTypeList[cashTypeidx].name}}" data-index="{{infoIndex}}">
+                        <view class="picker">{{info.cashTypeName}}</view>
+                    </picker>
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                </view>
+            </view>
+            <view wx:if="{{cashTypeidx == 0}}" class="item itemH">
+                <label for="" class="itemL">签单号</label>
+                <view class="itemR" bindtap="getSignNumberList" data-index="{{infoIndex}}">
+                    <!-- <text>{{info.signNumber}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input' placeholder="请选择" value="{{info.signNumber}}" disabled></input>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">单价</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.price}}" data-name="price" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{pageType == 'add'}}" class="item itemH">
+                <label for="" class="itemL">客人信息</label>
+                <view class="itemR">
+                    <text wx:if="{{memberList.length != 0}}" class='search-input' bindtap="getGroup" data-index="{{infoIndex}}">共{{memberList.length}}组</text>
+                    <text wx:if="{{memberList.length == 0}}" class='search-input' bindtap="getGroup" data-index="{{infoIndex}}">请选择</text>
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                </view>
+            </view>
+            <view wx:if="{{memberList.length != 0}}" class="allChild">
+                <view class="childLsit">
+                    <view class="childItem" wx:for="{{memberList}}" wx:key='{{index}}'>
+                        <view class="itemInfo">
+                            <label for="" class="">客人</label>
+                            <view class="itemR">
+                                <text class='search-input remark'>{{item.memberContactInfo}}</text>
+                                <text class="iconfont iconguanbi" bindtap='delChildMemberItem' data-idx='{{index}}' data-index="{{infoIndex}}"></text>
+                            </view>
+
+                            <!-- <label wx:if="{{!item.orderNumber && !item.customerTripNumber}}" for="" class="">小团号</label>
+                            <label wx:elif="{{item.orderNumber && item.orderNumber !=''}}" for="" class="">小团号</label>
+                            <label wx:elif="{{item.customerTripNumber && item.customerTripNumber !=''}}" for="" class="">流水号</label>
+                            <view class="itemR">
+                                <text wx:if="{{!item.orderNumber && !item.customerTripNumber}}" class='search-input remark'></text>
+                                <text wx:elif="{{item.orderNumber && item.orderNumber !=''}}" class='search-input remark'>{{item.orderNumber}}</text>
+                                <text wx:elif="{{item.customerTripNumber && item.customerTripNumber !=''}}" class='search-input remark'>{{item.customerTripNumber}}</text>
+                                <text class="iconfont iconguanbi" bindtap='delChildMemberItem' data-idx='{{index}}' data-index="{{infoIndex}}"></text>
+                            </view> -->
+                        </view>
+                        <view class="itemInfo">
+                            <label for="" class="">数量</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.count}}" data-idx='{{index}}' data-name="count" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view class="itemInfo">
+                            <label for="" class="">免去数量</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.freeCount}}" data-idx='{{index}}' data-name="freeCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view wx:if="{{cashTypeidx == 0}}" class="itemInfo">
+                            <label for="" class="">签单金额</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.guideRealReimbMoney}}" data-idx='{{index}}' data-name="guideRealReimbMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view wx:if="{{cashTypeidx == 1}}" class="itemInfo">
+                            <label for="" class="">现付金额</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.guideRealReimbMoney}}" data-idx='{{index}}' data-name="guideRealReimbMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view class="itemInfo">
+                            <label for="" class="">记账备注</label>
+                            <view class="itemR">
+                                <!-- <text class='search-input remark' bindtap="getRemark" data-idx='{{index}}' data-name="remark" data-value="{{item.remark}}" data-index="{{infoIndex}}">{{item.remark}}</text>
+                                <text class="iconfont iconarrow-right"></text> -->
+                                <input class='search-input remark' bindtap="getRemark" data-idx='{{index}}' data-name="remark" data-value="{{item.remark}}" data-index="{{infoIndex}}" placeholder="请输入" value="{{item.remark}}" disabled></input>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </view>     
+            <view wx:if="{{memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">数量</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.count}}" data-name="count" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">免去数量</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.freeCount}}" data-name="freeCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{cashTypeidx == 0 && memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">签单金额</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.guideRealReimbMoney}}" data-name="guideRealReimbMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{cashTypeidx == 1 && memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">现付金额</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.guideRealReimbMoney}}" data-name="guideRealReimbMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">记账备注</label>
+                <view class="itemR">
+                    <!-- <text class='search-input remark' bindtap="getRemark" data-name="guideRealReimbRemark" data-value="{{guideRealReimbRemark}}" data-index="{{infoIndex}}">{{guideRealReimbRemark}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input remark' bindtap="getRemark" data-name="guideRealReimbRemark" data-value="{{guideRealReimbRemark}}" data-index="{{infoIndex}}" placeholder="请输入" value="{{guideRealReimbRemark}}" disabled></input>
+                </view>
+            </view>
+
+            <view class="item">
+                <view class='imgContent'>
+                    <view class='imgBox'>
+                        <view class='imgList'>
+                        <block wx:for="{{info.detailPics}}" wx:key="index">
+                            <view class='imgItem'>
+                            <image src='{{item}}' data-src="{{item}}" bindtap="previewImage" data-id='{{index}}' data-index="{{infoIndex}}"></image>
+                            <view wx:if="{{pageType == 'add' || reimbStatus == 'confirm' || reimbStatus == 'back'}}" class="delImg iconfont iconguanbi" bindtap="delImg" data-indx="{{index}}" data-index="{{infoIndex}}"></view>
+                            </view>
+                        </block>
+                        <view wx:if="{{pageType == 'add' || reimbStatus == 'confirm' || reimbStatus == 'back'}}" class='chooseimg' bindtap='uploadDetailImage' data-index="{{infoIndex}}">
+                            <view class="weui-uploader__input-box"></view>
+                        </view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+
+        </view>
+    </view>
+    <view wx:if="{{resourceName == 'shop'}}" class="listInfo">
+        <view wx:if="{{pageType == 'edit'}}" class="editInfo">
+            <view class="item">
+                <label for="">安排备注：</label>
+                <text class=''>{{info.remark}}</text>
+            </view>
+        </view>
+        <view class="list">
+            <view wx:if="{{pageType == 'add'}}" class="item itemH">
+                <label for="" class="itemL">购物店</label>
+                <view class="itemR">
+                    <!-- <text class='search-input remark' bindtap="getSearchList" data-method="shop" data-type="resources" data-index="{{infoIndex}}">{{info.resourceText}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input remark' bindtap="getSearchList" data-method="shop" data-type="resources" data-index="{{infoIndex}}" placeholder="请选择" value="{{info.resourceText}}" disabled></input>
+                </view>
+            </view>
+            <view class="allChild">
+                <view class="childLsit">
+                    <view class="childItem" wx:for="{{info.childList}}" wx:key='{{index}}' wx:if="{{item.isDelete != 1}}">
+                        <view class="itemHead">
+                            <view class="itemTitle">
+                                <!-- <input class='' placeholder='商品' placeholder-style="color:#e19446;" value="{{item.goods}}" bindinput="getKeyWord" data-idx='{{index}}' data-name="goods" data-index="{{infoIndex}}"></input>
+                                <text class="iconfont iconarrow-right" bindtap="getSearchList" data-type="dictionary" data-idx='{{index}}' data-code="shangpin_leixing" data-index="{{infoIndex}}"></text> -->
+                                <input class="" placeholder='商品' placeholder-style="color:#e19446;" value="{{item.goods}}" bindtap="getSearchList" data-type="dictionary" data-idx='{{index}}' data-code="shangpin_leixing" data-index="{{infoIndex}}" disabled></input>
+                            </view>
+                            <view class="childLogs">
+                                <text wx:if="{{item.id}}" class="logs" bindtap="getGuideLog" data-type="{{resourceName}}" data-title="{{item.goods}}" data-childId="{{item.id}}">日志</text>
+                                <text class="iconfont iconguanbi" bindtap='delChildItem' data-idx='{{index}}' data-index="{{infoIndex}}"></text>
+                            </view> 
+                        </view>
+                        <view class="itemInfo">
+                            <label for="" class="">打单</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getKeyWord" placeholder='' value="{{item.buyMoney}}" data-idx='{{index}}' data-name="buyMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view class="itemInfo">
+                            <label for="" class="">代收</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getKeyWord" placeholder='' value="{{item.mGuideCollect}}" data-idx='{{index}}' data-name="mGuideCollect" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view wx:if="{{travelAgencyConfig.guideAppCanInputDriverAndAccompanyRebate == 1}}" class="itemInfo">
+                            <label for="" class="">司机佣金现付</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getKeyWord" placeholder='' value="{{item.driverRebate}}" data-idx='{{index}}' data-name="driverRebate" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view wx:if="{{travelAgencyConfig.guideAppCanInputDriverAndAccompanyRebate == 1}}" class="itemInfo">
+                            <label for="" class="">全陪佣金现付</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getKeyWord" placeholder='' value="{{item.accompanyRebate}}" data-idx='{{index}}' data-name="accompanyRebate" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view class="itemInfo">
+                            <label for="" class="">商品备注</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getKeyWord" placeholder='' value="{{item.remark}}" data-idx='{{index}}' data-name="remark" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+                <view wx:if="{{pageType == 'add' || travelAgencyConfig.opInputShopOrderGuideCanEdite == 1}}" class="addChildBtn" bindtap="addChildListItem" data-index="{{infoIndex}}">
+                    添加商品
+                </view>  
+            </view>           
+            <view wx:if="{{pageType == 'edit'}}" class="item itemH">
+                <label for="" class="itemL">行程日期</label>
+                <view class="itemR">
+                    <picker wx:if="{{travelAgencyConfig.opInputShopOrderGuideCanEdite == 1}}" class="search-input" mode="date" value="{{info.orderDate}}" start="2010-01-01" end="2030-12-31" bindchange="myinput" data-name="orderDate" data-index="{{infoIndex}}">
+                        <view class="picker">{{info.orderDate}}</view>
+                    </picker>
+                    <picker wx:if="{{travelAgencyConfig.opInputShopOrderGuideCanEdite == 0}}" class="search-input" mode="date" value="{{info.orderDate}}" start="2010-01-01" end="2030-12-31" data-name="orderDate" data-index="{{infoIndex}}" disabled>
+                    <view class="picker">{{info.orderDate}}</view>
+                    </picker>
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">进店人数</label>
+                <view class="itemR" wx:if="{{pageType == 'edit'}}">
+                    <input wx:if="{{travelAgencyConfig.opInputShopOrderGuideCanEdite == 1}}" class='search-input' bindinput="myinput" value="{{info.buyMemberCount}}" data-name="buyMemberCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                    <input wx:if="{{travelAgencyConfig.opInputShopOrderGuideCanEdite == 0}}" class='search-input' value="{{info.buyMemberCount}}" data-name="buyMemberCount" data-index="{{infoIndex}}" placeholder="请输入" disabled></input>
+                </view>
+                <view class="itemR" wx:else="{{pageType == 'add'}}">
+                    <input class='search-input' bindinput="myinput" value="{{info.buyMemberCount}}" data-name="buyMemberCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">记账备注</label>
+                <view class="itemR">
+                    <!-- <text class='search-input remark' bindtap="getRemark" data-name="guideRealReimbRemark" data-value="{{guideRealReimbRemark}}" data-index="{{infoIndex}}">{{guideRealReimbRemark}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input remark' bindtap="getRemark" data-name="guideRealReimbRemark" data-value="{{guideRealReimbRemark}}" data-index="{{infoIndex}}" placeholder="请输入" value="{{guideRealReimbRemark}}" disabled></input>
+                </view>
+            </view>
+            
+            <view wx:if="{{pageType == 'add' || travelAgencyConfig.opInputShopOrderGuideCanEdite == 1}}" class="item">
+                <view class='imgContent'>
+                    <view class='imgBox'>
+                        <view class='imgList'>
+                        <block wx:for="{{info.detailPics}}" wx:key="index">
+                            <view class='imgItem'>
+                            <image src='{{item}}' data-src="{{item}}" bindtap="previewImage" data-id='{{index}}' data-index="{{infoIndex}}"></image>
+                            <view wx:if="{{pageType == 'add' || reimbStatus == 'confirm' || reimbStatus == 'back'}}" class="delImg iconfont iconguanbi" bindtap="delImg" data-indx="{{index}}" data-index="{{infoIndex}}"></view>
+                            </view>
+                        </block>
+                        <view wx:if="{{pageType == 'add' || reimbStatus == 'confirm' || reimbStatus == 'back'}}" class='chooseimg' bindtap='uploadDetailImage' data-index="{{infoIndex}}">
+                            <view class="weui-uploader__input-box"></view>
+                        </view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+
+        </view>
+    </view>
+    <view wx:if="{{resourceName == 'selfCompany'}}" class="listInfo">
+        <view wx:if="{{pageType == 'edit'}}" class="editInfo">
+            <view class="item">
+                <label for="">自费项目：</label>
+                <text class=''>{{info.selfType}}</text>
+            </view>
+            <view class="item">
+                <label for="">安排备注：</label>
+                <text class=''>{{info.remark}}</text>
+            </view>
+        </view>
+        <view class="list">
+            <view wx:if="{{pageType == 'edit'}}" class="item itemH">
+                <label for="" class="itemL">客人信息</label>
+                <view class="itemR" bindtap="getGroup" data-index="{{infoIndex}}">
+                    <!-- <text>{{info.memberContactInfo}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input' placeholder="请选择" value="{{info.memberContactInfo}}" disabled></input>
+                </view>
+
+                <!-- <label wx:if="{{!info.customerOrderNumber && !info.customerTripNumber}}" for="" class="itemL">客人信息</label>
+                <label wx:elif="{{info.customerOrderNumber && info.customerOrderNumber !=''}}" for="" class="itemL">客人信息</label>
+                <label wx:elif="{{info.customerTripNumber && info.customerTripNumber !=''}}" for="" class="itemL">客人信息</label>
+                <view class="itemR" bindtap="getGroup" data-index="{{infoIndex}}">
+                    <text wx:if="{{!info.customerOrderNumber && !info.customerTripNumber}}"></text>
+                    <text wx:elif="{{info.customerOrderNumber && info.customerOrderNumber !=''}}">{{info.customerOrderNumber}}</text>
+                    <text wx:elif="{{info.customerTripNumber && info.customerTripNumber !=''}}">{{info.customerTripNumber}}</text>
+                    <text class="iconfont iconarrow-right"></text>
+                </view> -->
+            </view>
+            <view wx:if="{{pageType == 'add'}}" class="item itemH">
+                <label for="" class="itemL">自费商家</label>
+                <view class="itemR">
+                    <!-- <text class='search-input remark' bindtap="getSearchList" data-method="selfCompany" data-type="resources" data-index="{{infoIndex}}">{{info.resourceText}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input remark' bindtap="getSearchList" data-method="selfCompany" data-type="resources" data-index="{{infoIndex}}" placeholder="请选择" value="{{info.resourceText}}" disabled></input>
+                </view>
+            </view>
+            <view wx:if="{{pageType == 'edit'}}" class="item itemH">
+                <label for="" class="itemL">行程日期</label>
+                <view class="itemR">
+                    <picker class="search-input" mode="date" value="{{info.orderDate}}" start="2010-01-01" end="2030-12-31" bindchange="myinput" data-name="orderDate" data-index="{{infoIndex}}">
+                        <view class="picker">{{info.orderDate}}</view>
+                    </picker>
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">自费项目</label>
+                <view class="itemR">
+                    <!-- <input class='search-input' bindinput="myinput" value="{{info.dictionary}}" data-name="dictionary" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                    <text class="iconfont iconarrow-right" bindtap="getSearchList" data-type="dictionary" data-code="zifeixiangmu_leixing" data-index="{{infoIndex}}"></text> -->
+                    <input class="search-input" bindtap="getSearchList" data-type="dictionary" data-code="zifeixiangmu_leixing" data-index="{{infoIndex}}" placeholder="请选择" value="{{info.dictionary}}" disabled></input>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">付款方式</label>
+                <view class="itemR">
+                    <picker class="search-input" mode='selector' bindchange="bindCashTypeChange" value="{{cashTypeidx}}" range="{{cashTypeList}}" range-key="{{'name'}}" data-selecthx="{{cashTypeList[cashTypeidx].name}}" data-index="{{infoIndex}}">
+                        <view class="picker">{{info.cashTypeName}}</view>
+                    </picker>
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                </view>
+            </view>
+            <view wx:if="{{cashTypeidx == 0}}" class="item itemH" bindtap="getSignNumberList">
+                <label for="" class="itemL">签单号</label>
+                <view class="itemR" bindtap="getSignNumberList" data-index="{{infoIndex}}">
+                    <!-- <text>{{info.signNumber}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input' placeholder="请选择" value="{{info.signNumber}}" disabled></input>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">卖价</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.sellPrice}}" data-name="sellPrice" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">底价</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.price}}" data-name="price" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{pageType == 'add'}}" class="item itemH">
+                <label for="" class="itemL">客人信息</label>
+                <view class="itemR">
+                    <text wx:if="{{memberList.length != 0}}" class='search-input' bindtap="getGroup" data-index="{{infoIndex}}">共{{memberList.length}}组</text>
+                    <text wx:if="{{memberList.length == 0}}" class='search-input' bindtap="getGroup" data-index="{{infoIndex}}">请选择</text>
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                </view>
+            </view>
+            <view wx:if="{{memberList.length != 0}}" class="allChild">
+                <view class="childLsit">
+                    <view class="childItem" wx:for="{{memberList}}" wx:key='{{index}}'>
+                        <view class="itemInfo">
+                            <label for="" class="">客人</label>
+                            <view class="itemR">
+                                <text class='search-input remark'>{{item.memberContactInfo}}</text>
+                                <text class="iconfont iconguanbi" bindtap='delChildMemberItem' data-idx='{{index}}' data-index="{{infoIndex}}"></text>
+                            </view>
+                            <!-- <label wx:if="{{!item.orderNumber && !item.customerTripNumber}}" for="" class="">小团号</label>
+                            <label wx:elif="{{item.orderNumber && item.orderNumber !=''}}" for="" class="">小团号</label>
+                            <label wx:elif="{{item.customerTripNumber && item.customerTripNumber !=''}}" for="" class="">流水号</label>
+                            <view class="itemR">
+                                <text wx:if="{{!item.orderNumber && !item.customerTripNumber}}" class='search-input remark'></text>
+                                <text wx:elif="{{item.orderNumber && item.orderNumber !=''}}" class='search-input remark'>{{item.orderNumber}}</text>
+                                <text wx:elif="{{item.customerTripNumber && item.customerTripNumber !=''}}" class='search-input remark'>{{item.customerTripNumber}}</text>
+                                <text class="iconfont iconguanbi" bindtap='delChildMemberItem' data-idx='{{index}}' data-index="{{infoIndex}}"></text>
+                            </view> -->
+                        </view>
+                        <view class="itemInfo">
+                            <label for="" class="">实收数量</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.count}}" data-idx='{{index}}' data-name="count" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view class="itemInfo">
+                            <label for="" class="">实收金额</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.guideRealReimbReceiveMoney}}" data-idx='{{index}}' data-name="guideRealReimbReceiveMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view class="itemInfo">
+                            <label for="" class="">实销数量</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.guideRealReimbReceiveCount}}" data-idx='{{index}}' data-name="guideRealReimbReceiveCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view class="itemInfo">
+                            <label for="" class="">免去数量</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.freeCount}}" data-idx='{{index}}' data-name="freeCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view wx:if="{{cashTypeidx == 0}}" class="itemInfo">
+                            <label for="" class="">签单金额</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.guideRealReimbMoney}}" data-idx='{{index}}' data-name="guideRealReimbMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view wx:if="{{cashTypeidx == 1}}" class="itemInfo">
+                            <label for="" class="">现付金额</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.guideRealReimbMoney}}" data-idx='{{index}}' data-name="guideRealReimbMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view class="itemInfo">
+                            <label for="" class="">记账备注</label>
+                            <view class="itemR">
+                                <!-- <text class='search-input remark' bindtap="getRemark" data-idx='{{index}}' data-name="remark" data-value="{{item.remark}}" data-index="{{infoIndex}}">{{item.remark}}</text>
+                                <text class="iconfont iconarrow-right"></text> -->
+                                <input class='search-input remark' bindtap="getRemark" data-idx='{{index}}' data-name="remark" data-value="{{item.remark}}" data-index="{{infoIndex}}" placeholder="请输入" value="{{item.remark}}" disabled></input>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </view>     
+            <view wx:if="{{memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">实收数量</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.count}}" data-name="count" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">实收金额</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.guideRealReimbReceiveMoney}}" data-name="guideRealReimbReceiveMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">实销数量</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.guideRealReimbReceiveCount}}" data-name="guideRealReimbReceiveCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">免去数量</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.freeCount}}" data-name="freeCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{cashTypeidx == 0 && memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">签单金额</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.guideRealReimbMoney}}" data-name="guideRealReimbMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{cashTypeidx == 1 && memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">现付金额</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.guideRealReimbMoney}}" data-name="guideRealReimbMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">记账备注</label>
+                <view class="itemR">
+                    <!-- <text class='search-input remark' bindtap="getRemark" data-name="guideRealReimbRemark" data-value="{{guideRealReimbRemark}}" data-index="{{infoIndex}}">{{guideRealReimbRemark}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input remark' bindtap="getRemark" data-name="guideRealReimbRemark" data-value="{{guideRealReimbRemark}}" data-index="{{infoIndex}}" placeholder="请输入" value="{{guideRealReimbRemark}}" disabled></input>
+                </view>
+            </view>
+
+            <view class="item">
+                <view class='imgContent'>
+                    <view class='imgBox'>
+                        <view class='imgList'>
+                        <block wx:for="{{info.detailPics}}" wx:key="index">
+                            <view class='imgItem'>
+                            <image src='{{item}}' data-src="{{item}}" bindtap="previewImage" data-id='{{index}}' data-index="{{infoIndex}}"></image>
+                            <view wx:if="{{pageType == 'add' || reimbStatus == 'confirm' || reimbStatus == 'back'}}" class="delImg iconfont iconguanbi" bindtap="delImg" data-indx="{{index}}" data-index="{{infoIndex}}"></view>
+                            </view>
+                        </block>
+                        <view wx:if="{{pageType == 'add' || reimbStatus == 'confirm' || reimbStatus == 'back'}}" class='chooseimg' bindtap='uploadDetailImage' data-index="{{infoIndex}}">
+                            <view class="weui-uploader__input-box"></view>
+                        </view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+
+        </view>
+    </view>
+    <view wx:if="{{resourceName == 'selfv2Company'}}" class="listInfo">
+        <view wx:if="{{pageType == 'edit'}}" class="editInfo">
+            <view class="item">
+                <label for="">自费项目：</label>
+                <text class=''>{{info.selfv2Type}}</text>
+            </view>
+            <view class="item">
+                <label for="">安排备注：</label>
+                <text class=''>{{info.remark}}</text>
+            </view>
+        </view>
+        <view class="list">
+            <view wx:if="{{pageType == 'edit'}}" class="item itemH">
+                <label for="" class="itemL">客人信息</label>
+                <view class="itemR" bindtap="getGroup" data-index="{{infoIndex}}">
+                    <!-- <text>{{info.memberContactInfo}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input' placeholder="请选择" value="{{info.memberContactInfo}}" disabled></input>
+                </view>
+
+                <!-- <label wx:if="{{!info.customerOrderNumber && !info.customerTripNumber}}" for="" class="itemL">客人信息</label>
+                <label wx:elif="{{info.customerOrderNumber && info.customerOrderNumber !=''}}" for="" class="itemL">客人信息</label>
+                <label wx:elif="{{info.customerTripNumber && info.customerTripNumber !=''}}" for="" class="itemL">客人信息</label>
+                <view class="itemR" bindtap="getGroup" data-index="{{infoIndex}}">
+                    <text wx:if="{{!info.customerOrderNumber && !info.customerTripNumber}}"></text>
+                    <text wx:elif="{{info.customerOrderNumber && info.customerOrderNumber !=''}}">{{info.customerOrderNumber}}</text>
+                    <text wx:elif="{{info.customerTripNumber && info.customerTripNumber !=''}}">{{info.customerTripNumber}}</text>
+                    <text class="iconfont iconarrow-right"></text>
+                </view> -->
+            </view>
+            <view wx:if="{{pageType == 'add'}}" class="item itemH">
+                <label for="" class="itemL">自费商家</label>
+                <view class="itemR">
+                    <!-- <text class='search-input remark' bindtap="getSearchList" data-method="selfv2Company" data-type="resources" data-index="{{infoIndex}}">{{info.resourceText}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input remark' bindtap="getSearchList" data-method="selfv2Company" data-type="resources" data-index="{{infoIndex}}" placeholder="请选择" value="{{info.resourceText}}" disabled></input>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">自费项目</label>
+                <view class="itemR">
+                    <!-- <input class='search-input' bindinput="myinput" value="{{info.dictionary}}" data-name="dictionary"  data-index="{{infoIndex}}" placeholder="请输入"></input>
+                    <text class="iconfont iconarrow-right" bindtap="getSearchList" data-type="dictionary" data-code="zifeixiangmu_leixing"  data-index="{{infoIndex}}"></text> -->
+                    <input class='search-input' placeholder="请选择" value="{{info.dictionary}}" bindtap="getSearchList" data-type="dictionary" data-code="zifeixiangmu_leixing" data-index="{{infoIndex}}" disabled></input>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">卖价</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.price}}" data-name="price" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">实收金额</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.sellPrice}}" data-name="sellPrice" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{pageType == 'add'}}" class="item itemH">
+                <label for="" class="itemL">客人信息</label>
+                <view class="itemR">
+                    <text wx:if="{{memberList.length != 0}}" class='search-input' bindtap="getGroup" data-index="{{infoIndex}}">共{{memberList.length}}组</text>
+                    <text wx:if="{{memberList.length == 0}}" class='search-input' bindtap="getGroup" data-index="{{infoIndex}}">请选择</text>
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                </view>
+            </view>
+            <view class="allChild">
+                <view class="childLsit">
+                    <view class="childItem" wx:for="{{info.childList}}" wx:key='{{index}}' wx:if="{{item.isDelete != 1}}">
+                        <view class="itemHead">
+                            <view class="itemTitle">
+                                <!-- <input class='' placeholder='成本项目' placeholder-style="color:#e19446;" value="{{item.project}}" bindinput="getKeyWord" data-idx='{{index}}' data-name="project" data-index="{{infoIndex}}"></input>
+                                <text class="iconfont iconarrow-right" bindtap="getSearchList" data-type="dictionary" data-idx='{{index}}' data-code="zifeixiangmu_leixing" data-index="{{infoIndex}}"></text> -->
+                                <input class='' placeholder='成本项目' placeholder-style="color:#e19446;" value="{{item.project}}" bindtap="getSearchList" data-type="dictionary" data-idx='{{index}}' data-code="zifeixiangmu_leixing" data-index="{{infoIndex}}" disabled></input>
+                            </view>
+                            <view class="childLogs">
+                                <text wx:if="{{item.id}}" class="logs" bindtap="getGuideLog" data-type="{{resourceName}}" data-title="{{item.project}}" data-childId="{{item.id}}">日志</text>
+                                <text class="iconfont iconguanbi" bindtap='delChildItem' data-idx='{{index}}' data-index="{{infoIndex}}"></text>
+                            </view> 
+                        </view>
+                        <view class="itemInfo">
+                            <label for="" class="">数量</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getKeyWord" placeholder='' value="{{item.projectCount}}" data-idx='{{index}}' data-name="projectCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view class="itemInfo">
+                            <label for="" class="">单价</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getKeyWord" placeholder='' value="{{item.projectPrice}}" data-idx='{{index}}' data-name="projectPrice" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view class="itemInfo">
+                            <label for="" class="">其他成本</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getKeyWord" placeholder='' value="{{item.otherFee}}" data-idx='{{index}}' data-name="otherFee" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <!-- <view class="itemInfo">
+                            <label for="" class="">实销数量</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.guideRealReimbReceiveCount}}" data-idx='{{index}}' data-name="guideRealReimbReceiveCount" data-index="{{infoIndex}}"></input>
+                            </view>
+                        </view> -->
+                        <view class="itemInfo">
+                            <label for="" class="">付款方式</label>
+                            <view class="pickerInfo">
+                                <picker class="selector" mode='selector' bindchange="bindChildCashTypeChange" value="{{selfv2cashTypeList}}" range="{{selfv2cashTypeList}}" range-key="{{'name'}}" data-selecthx="{{selfv2cashTypeList[cashTypeidx].name}}" data-indx="{{index}}" data-index="{{infoIndex}}">
+                                    <view class="picker">{{item.name}}</view>    
+                                </picker>
+                                <text class="iconfont iconarrow-right"></text>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+                <view class="addChildBtn" bindtap="addChildListItem" data-index="{{infoIndex}}">
+                    添加项目
+                </view>  
+            </view>
+            <view wx:if="{{memberList.length != 0}}" class="allChild">
+                <view class="childLsit">
+                    <view class="childItem" wx:for="{{memberList}}" wx:key='{{index}}'>
+                        <view class="itemInfo">
+                            <label for="" class="">客人</label>
+                            <view class="itemR">
+                                <text class='search-input remark'>{{item.memberContactInfo}}</text>
+                                <text class="iconfont iconguanbi" bindtap='delChildMemberItem' data-idx='{{index}}' data-index="{{infoIndex}}"></text>
+                            </view>
+
+                            <!-- <label wx:if="{{!item.customerOrderNumber && !item.customerTripNumber}}" for="" class="">小团号</label>
+                            <label wx:elif="{{item.customerOrderNumber && item.customerOrderNumber !=''}}" for="" class="">小团号</label>
+                            <label wx:elif="{{item.customerTripNumber && item.customerTripNumber !=''}}" for="" class="">流水号</label>
+                            <view class="itemR">
+                                <text wx:if="{{!item.customerOrderNumber && !item.customerTripNumber}}" class='search-input remark'></text>
+                                <text wx:elif="{{item.customerOrderNumber && item.customerOrderNumber !=''}}" class='search-input remark'>{{item.customerOrderNumber}}</text>
+                                <text wx:elif="{{item.customerTripNumber && item.customerTripNumber !=''}}" class='search-input remark'>{{item.customerTripNumber}}</text>
+                                <text class="iconfont iconguanbi" bindtap='delChildMemberItem' data-idx='{{index}}' data-index="{{infoIndex}}"></text>
+                            </view> -->
+                        </view>
+                        <view class="itemInfo">
+                            <label for="" class="">记账备注</label>
+                            <view class="itemR">
+                                <!-- <text class='search-input remark' bindtap="getRemark" data-idx='{{index}}' data-name="remark" data-value="{{item.remark}}" data-index="{{infoIndex}}">{{item.remark}}</text>
+                                <text class="iconfont iconarrow-right"></text> -->
+                                <input class='search-input remark' bindtap="getRemark" data-idx='{{index}}' data-name="remark" data-value="{{item.remark}}" data-index="{{infoIndex}}" placeholder="请输入" value="{{item.remark}}" disabled></input>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </view>     
+            <view wx:if="{{memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">记账备注</label>
+                <view class="itemR">
+                    <!-- <text class='search-input remark' bindtap="getRemark" data-name="guideRealReimbRemark" data-value="{{info.guideRealReimbRemark}}" data-index="{{infoIndex}}">{{info.guideRealReimbRemark}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input remark' bindtap="getRemark" data-name="guideRealReimbRemark" data-value="{{info.guideRealReimbRemark}}" data-index="{{infoIndex}}" placeholder="请输入" value="{{info.guideRealReimbRemark}}" disabled></input>
+                </view>
+            </view>
+            
+            <view class="item">
+                <view class='imgContent'>
+                    <view class='imgBox'>
+                        <view class='imgList'>
+                        <block wx:for="{{info.detailPics}}" wx:key="index">
+                            <view class='imgItem'>
+                            <image src='{{item}}' data-src="{{item}}" bindtap="previewImage" data-id='{{index}}' data-index="{{infoIndex}}"></image>
+                            <view wx:if="{{pageType == 'add' || reimbStatus == 'confirm' || reimbStatus == 'back'}}" class="delImg iconfont iconguanbi" bindtap="delImg" data-indx="{{index}}" data-index="{{infoIndex}}"></view>
+                            </view>
+                        </block>
+                        <view wx:if="{{pageType == 'add' || reimbStatus == 'confirm' || reimbStatus == 'back'}}" class='chooseimg' bindtap='uploadDetailImage' data-index="{{infoIndex}}">
+                            <view class="weui-uploader__input-box"></view>
+                        </view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+
+        </view>
+    </view>
+    <view wx:if="{{resourceName == 'scenic'}}" class="listInfo">
+        <view wx:if="{{pageType == 'edit'}}" class="editInfo">
+            <view class="item">
+                <label class="">门票类别：</label>
+                <text class=''>{{info.ticketType}}</text>
+            </view>
+            <view class="item">
+                <label for="">安排备注：</label>
+                <text class=''>{{info.remark}}</text>
+            </view>
+        </view>
+        <view class="list">
+            <view wx:if="{{pageType == 'edit'}}" class="item itemH">
+                <label for="" class="itemL">客人信息</label>
+                <view class="itemR" bindtap="getGroup" data-index="{{infoIndex}}">
+                    <!-- <text>{{info.memberContactInfo}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input' placeholder="请选择" value="{{info.memberContactInfo}}" disabled></input>
+                </view>
+                <!-- <label wx:if="{{!info.customerOrderNumber && !info.customerTripNumber}}" for="" class="itemL">客人信息</label>
+                <label wx:elif="{{info.customerOrderNumber && info.customerOrderNumber !=''}}" for="" class="itemL">客人信息</label>
+                <label wx:elif="{{info.customerTripNumber && info.customerTripNumber !=''}}" for="" class="itemL">客人信息</label>
+                <view class="itemR" bindtap="getGroup" data-index="{{infoIndex}}">
+                    <text wx:if="{{!info.customerOrderNumber && !info.customerTripNumber}}"></text>
+                    <text wx:elif="{{info.customerOrderNumber && info.customerOrderNumber !=''}}">{{info.customerOrderNumber}}</text>
+                    <text wx:elif="{{info.customerTripNumber && info.customerTripNumber !=''}}">{{info.customerTripNumber}}</text>
+                    <text class="iconfont iconarrow-right"></text>
+                </view> -->
+            </view>
+            <view wx:if="{{pageType == 'add'}}" class="item itemH">
+                <label for="" class="itemL">景区</label>
+                <view class="itemR">
+                    <!-- <text class='search-input remark' bindtap="getSearchList" data-method="scenic" data-type="resources" data-index="{{infoIndex}}">{{info.resourceText}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input remark' bindtap="getSearchList" data-method="scenic" data-type="resources" data-index="{{infoIndex}}" placeholder="请选择" value="{{info.resourceText}}" disabled></input>
+                </view>
+            </view>
+            <view wx:if="{{pageType == 'edit'}}" class="item itemH">
+                <label for="" class="itemL">行程日期</label>
+                <view class="itemR">
+                    <picker class="search-input" mode="date" value="{{info.orderDate}}" start="2010-01-01" end="2030-12-31" bindchange="myinput" data-name="orderDate" data-index="{{infoIndex}}">
+                        <view class="picker">{{info.orderDate}}</view>
+                    </picker>
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">门票类别</label>
+                <view class="itemR">
+                    <!-- <input class='search-input' bindinput="myinput" value="{{info.dictionary}}" data-name="dictionary" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                    <text class="iconfont iconarrow-right" bindtap="getSearchList" data-type="dictionary" data-code="jingqumenpiao_leixing" data-index="{{infoIndex}}"></text> -->
+                    <input class="search-input" bindtap="getSearchList" data-type="dictionary" data-code="jingqumenpiao_leixing" data-index="{{infoIndex}}" placeholder="请选择" value="{{info.dictionary}}" disabled></input>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">是否为加点</label>
+                <view class="itemR">
+                    <checkbox checked="{{info.isGuideExtra}}" bindtap="checkAddChecked" value="isGuideExtra" data-index="{{infoIndex}}"></checkbox>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">付款方式</label>
+                <view class="itemR">
+                    <picker class="search-input" mode='selector' bindchange="bindCashTypeChange" value="{{cashTypeidx}}" range="{{cashTypeList}}" range-key="{{'name'}}" data-selecthx="{{cashTypeList[cashTypeidx].name}}" data-index="{{infoIndex}}">
+                        <view class="picker">{{info.cashTypeName}}</view>
+                    </picker>
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                </view>
+            </view>
+            <view wx:if="{{cashTypeidx == 0}}" class="item itemH">
+                <label for="" class="itemL">签单号</label>
+                <view class="itemR" bindtap="getSignNumberList" data-index="{{infoIndex}}">
+                    <!-- <text>{{info.signNumber}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input' placeholder="请选择" value="{{info.signNumber}}" disabled></input>
+                </view>
+            </view>
+            <view wx:if="{{!!info.isGuideExtra && travelAgencyConfig.isScenicArrangeHideChildInfo == 1}}" class="item itemH">
+                <label for="" class="itemL">卖价</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.sellPrice}}" data-name="sellPrice" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{!!info.isGuideExtra && travelAgencyConfig.isScenicArrangeHideChildInfo == 1}}" class="item itemH">
+                <label for="" class="itemL">底价</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.price}}" data-name="price" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{!info.isGuideExtra && travelAgencyConfig.isScenicArrangeHideChildInfo == 1}}" class="item itemH">
+                <label for="" class="itemL">单价</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.price}}" data-name="price" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{!!info.isGuideExtra && travelAgencyConfig.isScenicArrangeHideChildInfo == 0}}" class="item itemH">
+                <label for="" class="itemL">成人卖价</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.sellPrice}}" data-name="sellPrice" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{!!info.isGuideExtra && travelAgencyConfig.isScenicArrangeHideChildInfo == 0}}" class="item itemH">
+                <label for="" class="itemL">成人底价</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.price}}" data-name="price" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{!info.isGuideExtra && travelAgencyConfig.isScenicArrangeHideChildInfo == 0}}" class="item itemH">
+                <label for="" class="itemL">成人单价</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.price}}" data-name="price" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{!!info.isGuideExtra && travelAgencyConfig.isScenicArrangeHideChildInfo == 0}}" class="item itemH childColor">
+                <label for="" class="itemL">儿童卖价</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.childSellPrice}}" data-name="childSellPrice" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{!info.isGuideExtra && cashTypeidx == 0 && travelAgencyConfig.isScenicArrangeHideChildInfo == 1}}" class="item itemH">
+                <label for="" class="itemL">儿童底价</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.childPrice}}" data-name="childPrice" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{!info.isGuideExtra && travelAgencyConfig.isScenicArrangeHideChildInfo == 0}}" class="item itemH">
+                <label for="" class="itemL">儿童单价</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.childPrice}}" data-name="childPrice" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            
+
+            <view wx:if="{{!!info.isGuideExtra && travelAgencyConfig.isScenicArrangeHideChildInfo == 0}}" class="item itemH childColor">
+                <label for="" class="itemL">全陪卖价</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.accompanySellPrice}}" data-name="accompanySellPrice" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{!info.isGuideExtra && cashTypeidx == 0 && travelAgencyConfig.isScenicArrangeHideChildInfo == 1}}" class="item itemH">
+                <label for="" class="itemL">全陪底价</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.accompanyPrice}}" data-name="accompanyPrice" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{!info.isGuideExtra && travelAgencyConfig.isScenicArrangeHideChildInfo == 0}}" class="item itemH">
+                <label for="" class="itemL">全陪单价</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.accompanyPrice}}" data-name="accompanyPrice" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">客人信息</label>
+                <view class="itemR">
+                    <text wx:if="{{memberList.length != 0}}" class='search-input' bindtap="getGroup" data-index="{{infoIndex}}">共{{memberList.length}}组</text>
+                    <text wx:if="{{memberList.length == 0}}" class='search-input' bindtap="getGroup" data-index="{{infoIndex}}">请选择</text>
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                </view>
+            </view>
+            <view wx:if="{{memberList.length != 0}}" class="allChild">
+                <view class="childLsit">
+                    <view class="childItem" wx:for="{{memberList}}" wx:key='{{index}}'>
+                        <view class="itemInfo">
+                            <label for="" class="">客人</label>
+                            <view class="itemR">
+                                <text class='search-input remark'>{{item.memberContactInfo}}</text>
+                                <text class="iconfont iconguanbi" bindtap='delChildMemberItem' data-idx='{{index}}' data-index="{{infoIndex}}"></text>
+                            </view>
+
+                            <!-- <label wx:if="{{!item.orderNumber && !item.customerTripNumber}}" for="" class="">小团号</label>
+                            <label wx:elif="{{item.orderNumber && item.orderNumber !=''}}" for="" class="">小团号</label>
+                            <label wx:elif="{{item.customerTripNumber && item.customerTripNumber !=''}}" for="" class="">流水号</label>
+                            <view class="itemR">
+                                <text wx:if="{{!item.orderNumber && !item.customerTripNumber}}" class='search-input remark'></text>
+                                <text wx:elif="{{item.orderNumber && item.orderNumber !=''}}" class='search-input remark'>{{item.orderNumber}}</text>
+                                <text wx:elif="{{item.customerTripNumber && item.customerTripNumber !=''}}" class='search-input remark'>{{item.customerTripNumber}}</text>
+                                <text class="iconfont iconguanbi" bindtap='delChildMemberItem' data-idx='{{index}}' data-index="{{infoIndex}}"></text>
+                            </view> -->
+                        </view>
+
+                        <view wx:if="{{!!info.isGuideExtra && travelAgencyConfig.isScenicArrangeHideChildInfo == 0}}" class="item itemH">
+                            <label for="" class="">成人实收数量</label>
+                            <view class="itemR">
+                                <input class='search-input' bindinput="myinput" value="{{info.count}}" data-name="count" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                            <view wx:if="{{travelAgencyConfig.isScenicArrangeHideChildInfo == 0}}" class="item itemH">
+                                <label for="" class="">成人实销数量</label>
+                                <view class="itemR">
+                                    <input class='search-input' bindinput="myinput" value="{{info.guideRealReimbReceiveCount}}" data-name="guideRealReimbReceiveCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                                </view>
+                            </view>
+                            <view wx:if="{{travelAgencyConfig.isScenicArrangeHideChildInfo == 0}}" class="item itemH">
+                                <label for="" class="itemL">成人免去数量</label>
+                                <view class="itemR">
+                                    <input class='search-input' bindinput="myinput" value="{{info.freeCount}}" data-name="freeCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                                </view>
+                            </view>
+                            <view wx:if="{{!!info.isGuideExtra && travelAgencyConfig.isScenicArrangeHideChildInfo == 0}}" class="item itemH">
+                                <label for="" class="itemL">儿童实收数量</label>
+                                <view class="itemR">
+                                    <input class='search-input' bindinput="myinput" value="{{info.guideRealReimbReceiveChildCount}}" data-name="guideRealReimbReceiveChildCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                                </view>
+                            </view>
+                            <view wx:if="{{travelAgencyConfig.isScenicArrangeHideChildInfo == 0}}" class="item itemH">
+                                <label for="" class="itemL">儿童实销数量</label>
+                                <view class="itemR">
+                                    <input class='search-input' bindinput="myinput" value="{{info.childCount}}" data-name="childCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                                </view>
+                            </view>
+                            <view wx:if="{{travelAgencyConfig.isScenicArrangeHideChildInfo == 0}}" class="item itemH">
+                                <label for="" class="itemL">儿童免去数量</label>
+                                <view class="itemR">
+                                    <input class='search-input' bindinput="myinput" value="{{info.childFreeCount}}" data-name="childFreeCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                                </view>
+                            </view>
+                            <view wx:if="{{!!info.isGuideExtra && travelAgencyConfig.isScenicArrangeHideChildInfo == 0}}" class="item itemH">
+                                <label for="" class="itemL">全陪实收数量</label>
+                                <view class="itemR">
+                                    <input class='search-input' bindinput="myinput" value="{{info.guideRealReimbReceiveAccompanyCount}}" data-name="guideRealReimbReceiveAccompanyCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                                </view>
+                            </view>
+                            <view wx:if="{{travelAgencyConfig.isScenicArrangeHideChildInfo == 0}}" class="item itemH">
+                                <label for="" class="itemL">全陪实销数量</label>
+                                <view class="itemR">
+                                    <input class='search-input' bindinput="myinput" value="{{info.accompanyCount}}" data-name="accompanyCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                                </view>
+                            </view>
+                            <view wx:if="{{travelAgencyConfig.isScenicArrangeHideChildInfo == 0}}" class="item itemH">
+                                <label for="" class="itemL">全陪免去数量</label>
+                                <view class="itemR">
+                                    <input class='search-input' bindinput="myinput" value="{{info.accompanyFreeCount}}" data-name="accompanyFreeCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                                </view>
+                            </view>
+                        <view wx:if="{{info.isGuideExtra && travelAgencyConfig.isScenicArrangeHideChildInfo == 1}}" class="itemInfo">
+                            <label for="" class="">实收数量</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.count}}" data-idx='{{index}}' data-name="count" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view wx:if="{{travelAgencyConfig.isScenicArrangeHideChildInfo == 1}}" class="itemInfo">
+                            <label for="" class="">实销数量</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.guideRealReimbReceiveCount}}" data-idx='{{index}}' data-name="guideRealReimbReceiveCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view wx:if="{{travelAgencyConfig.isScenicArrangeHideChildInfo == 1}}" class="itemInfo">
+                            <label for="" class="">免去数量</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.freeCount}}" data-idx='{{index}}' data-name="freeCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view wx:if="{{info.isGuideExtra}}" class="itemInfo">
+                            <label for="" class="">实收金额</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.guideRealReimbMoney}}" data-idx='{{index}}' data-name="guideRealReimbMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view wx:if="{{cashTypeidx == 0}}" class="itemInfo">
+                            <label for="" class="">签单金额</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.guideRealReimbMoney}}" data-idx='{{index}}' data-name="guideRealReimbMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view wx:if="{{cashTypeidx == 1}}" class="itemInfo">
+                            <label for="" class="">现付金额</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.guideRealReimbMoney}}" data-idx='{{index}}' data-name="guideRealReimbMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view wx:if="{{info.isGuideExtra && travelAgencyConfig.guideAppCanInputDriverAndAccompanyRebate == 1}}" class="itemInfo">
+                            <label for="" class="">司机佣金现付</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.driverRebate}}" data-idx='{{index}}' data-name="driverRebate" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view wx:if="{{info.isGuideExtra && travelAgencyConfig.guideAppCanInputDriverAndAccompanyRebate == 1}}" class="itemInfo">
+                            <label for="" class="">全陪佣金现付</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.accompanyRebate}}" data-idx='{{index}}' data-name="accompanyRebate" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view class="itemInfo">
+                            <label for="" class="">记账备注</label>
+                            <view class="itemR">
+                                <!-- <text class='search-input remark' bindtap="getRemark" data-idx='{{index}}' data-name="remark" data-value="{{item.remark}}">{{item.remark}}</text>
+                                <text class="iconfont iconarrow-right" data-index="{{infoIndex}}"></text> -->
+                                <input class='search-input remark' bindtap="getRemark" data-idx='{{index}}' data-name="remark" data-value="{{item.remark}}"  placeholder="请输入" value="{{item.remark}}" disabled></input>
+
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+            <view wx:if="{{!!info.isGuideExtra &&  memberList.length == 0 && travelAgencyConfig.isScenicArrangeHideChildInfo == 0}}" class="item itemH">
+                <label for="" class="itemL">成人实收数量</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.guideRealReimbReceiveCount}}" data-name="guideRealReimbReceiveCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{memberList.length == 0 && travelAgencyConfig.isScenicArrangeHideChildInfo == 0}}" class="item itemH">
+                <label for="" class="itemL">成人实销数量</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.count}}" data-name="count" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{memberList.length == 0 && travelAgencyConfig.isScenicArrangeHideChildInfo == 0}}" class="item itemH">
+                <label for="" class="itemL">成人免去数量</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.freeCount}}" data-name="freeCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{!!info.isGuideExtra && memberList.length == 0 && travelAgencyConfig.isScenicArrangeHideChildInfo == 0}}" class="item itemH childColor">
+                <label for="" class="itemL">儿童实收数量</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.guideRealReimbReceiveChildCount}}" data-name="guideRealReimbReceiveChildCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{memberList.length == 0 && travelAgencyConfig.isScenicArrangeHideChildInfo == 0}}" class="item itemH childColor">
+                <label for="" class="itemL">儿童实销数量</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.childCount}}" data-name="childCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{memberList.length == 0 && travelAgencyConfig.isScenicArrangeHideChildInfo == 0}}" class="item itemH childColor">
+                <label for="" class="itemL">儿童免去数量</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.childFreeCount}}" data-name="childFreeCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{!!info.isGuideExtra && memberList.length == 0 && travelAgencyConfig.isScenicArrangeHideChildInfo == 0}}" class="item itemH childColor">
+                <label for="" class="itemL">全陪实收数量</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.guideRealReimbReceiveAccompanyCount}}" data-name="guideRealReimbReceiveAccompanyCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{memberList.length == 0 && travelAgencyConfig.isScenicArrangeHideChildInfo == 0}}" class="item itemH childColor">
+                <label for="" class="itemL">全陪实销数量</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.accompanyCount}}" data-name="accompanyCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{memberList.length == 0 && travelAgencyConfig.isScenicArrangeHideChildInfo == 0}}" class="item itemH childColor">
+                <label for="" class="itemL">全陪免去数量</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.accompanyFreeCount}}" data-name="accompanyFreeCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{!!info.isGuideExtra &&  memberList.length == 0 && travelAgencyConfig.isScenicArrangeHideChildInfo == 1}}" class="item itemH">
+                <label for="" class="itemL">实收数量</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.guideRealReimbReceiveCount}}" data-name="guideRealReimbReceiveCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{memberList.length == 0 && travelAgencyConfig.isScenicArrangeHideChildInfo == 1}}" class="item itemH">
+                <label for="" class="itemL">实销数量</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.count}}" data-name="count" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{memberList.length == 0 && travelAgencyConfig.isScenicArrangeHideChildInfo == 1}}" class="item itemH">
+                <label for="" class="itemL">免去数量</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.freeCount}}" data-name="freeCount" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{!!info.isGuideExtra && memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">实收金额</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.guideRealReimbReceiveMoney}}" data-name="guideRealReimbReceiveMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <!-- <view wx:if="{{!!info.isGuideExtra && memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">金额</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.guideRealReimbMoney}}" data-name="guideRealReimbMoney" data-index="{{infoIndex}}"></input>
+                </view>
+            </view> -->
+            <view wx:if="{{cashTypeidx == 0 && memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">签单金额</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.guideRealReimbMoney}}" data-name="guideRealReimbMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{cashTypeidx == 1 && memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">现付金额</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.guideRealReimbMoney}}" data-name="guideRealReimbMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{!!info.isGuideExtra && travelAgencyConfig.guideAppCanInputDriverAndAccompanyRebate == 1 && memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">司机佣金现付</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.driverRebate}}" data-name="driverRebate" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{!!info.isGuideExtra && travelAgencyConfig.guideAppCanInputDriverAndAccompanyRebate == 1 && memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">全陪佣金现付</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.accompanyRebate}}" data-name="accompanyRebate" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">记账备注</label>
+                <view class="itemR">
+                    <!-- <text class='search-input remark' bindtap="getRemark" data-name="guideRealReimbRemark" data-value="{{guideRealReimbRemark}}" data-index="{{infoIndex}}">{{guideRealReimbRemark}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input remark' bindtap="getRemark" data-name="guideRealReimbRemark" data-value="{{guideRealReimbRemark}}" data-index="{{infoIndex}}" placeholder="请输入" value="{{guideRealReimbRemark}}" disabled></input>
+                </view>
+            </view>
+
+            <view class="item">
+                <view class='imgContent'>
+                    <view class='imgBox'>
+                        <view class='imgList'>
+                        <block wx:for="{{info.detailPics}}" wx:key="index">
+                            <view class='imgItem'>
+                            <image src='{{item}}' data-src="{{item}}" bindtap="previewImage" data-id='{{index}}' data-index="{{infoIndex}}"></image>
+                            <view wx:if="{{pageType == 'add' || reimbStatus == 'confirm' || reimbStatus == 'back'}}" class="delImg iconfont iconguanbi" bindtap="delImg" data-indx="{{index}}" data-index="{{infoIndex}}"></view>
+                            </view>
+                        </block>
+                        <view wx:if="{{pageType == 'add' || reimbStatus == 'confirm' || reimbStatus == 'back'}}" class='chooseimg' bindtap='uploadDetailImage' data-index="{{infoIndex}}">
+                            <view class="weui-uploader__input-box"></view>
+                        </view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+
+        </view>
+    </view>
+    <view wx:if="{{resourceName == 'scenicv2'}}" class="listInfo">
+        <view wx:if="{{pageType == 'edit'}}" class="editInfo">
+            <view class="item">
+                <label for="">安排备注：</label>
+                <text class=''>{{info.remark}}</text>
+            </view>
+        </view>
+        <view class="list">
+            <view wx:if="{{pageType == 'edit'}}" class="item itemH">
+                <label for="" class="itemL">客人信息</label>
+                <view class="itemR" bindtap="getGroup" data-index="{{infoIndex}}">
+                    <!-- <text>{{info.memberContactInfo}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input' placeholder="请选择" value="{{info.memberContactInfo}}" disabled></input>
+                </view>
+
+                <!-- <label wx:if="{{!info.customerOrderNumber && !info.customerTripNumber}}" for="" class="itemL">客人信息</label>
+                <label wx:elif="{{info.customerOrderNumber && info.customerOrderNumber !=''}}" for="" class="itemL">客人信息</label>
+                <label wx:elif="{{info.customerTripNumber && info.customerTripNumber !=''}}" for="" class="itemL">客人信息</label>
+                <view class="itemR" bindtap="getGroup" data-index="{{infoIndex}}">
+                    <text wx:if="{{!info.customerOrderNumber && !info.customerTripNumber}}"></text>
+                    <text wx:elif="{{info.customerOrderNumber && info.customerOrderNumber !=''}}">{{info.customerOrderNumber}}</text>
+                    <text wx:elif="{{info.customerTripNumber && info.customerTripNumber !=''}}">{{info.customerTripNumber}}</text>
+                    <text class="iconfont iconarrow-right"></text>
+                </view> -->
+            </view>
+            <view class="item itemH" wx:if="{{pageType == 'add'}}">
+                <label for="" class="itemL">景区</label>
+                <view class="itemR">
+                    <!-- <text class='search-input remark' bindtap="getSearchList" data-method="scenicv2" data-type="resources" data-index="{{infoIndex}}">{{info.resourceText}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input remark' bindtap="getSearchList" data-method="scenicv2" data-type="resources" data-index="{{infoIndex}}" placeholder="请选择" value="{{info.resourceText}}" disabled></input>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">付款方式</label>
+                <view class="itemR">
+                    <picker class="search-input" mode='selector' bindchange="bindCashTypeChange" value="{{cashTypeidx}}" range="{{cashTypeList}}" range-key="{{'name'}}" data-selecthx="{{cashTypeList[cashTypeidx].name}}" data-index="{{infoIndex}}">
+                        <view class="picker">{{info.cashTypeName}}</view>
+                    </picker>
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                </view>
+            </view>
+            <view wx:if="{{cashTypeidx == 0}}" class="item itemH">
+                <label for="" class="itemL">签单号</label>
+                <view class="itemR" bindtap="getSignNumberList" data-index="{{infoIndex}}">
+                    <!-- <text>{{info.signNumber}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input' placeholder="请选择" value="{{info.signNumber}}" disabled></input>
+                </view>
+            </view>
+            <view wx:if="{{pageType == 'add'}}" class="item itemH">
+                <label for="" class="itemL">客人信息</label>
+                <view class="itemR">
+                    <text wx:if="{{memberList.length != 0}}" class='search-input' bindtap="getGroup" data-index="{{infoIndex}}">共{{memberList.length}}组</text>
+                    <text wx:if="{{memberList.length == 0}}" class='search-input' bindtap="getGroup" data-index="{{infoIndex}}">请选择</text>
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                </view>
+            </view>
+            <view class="allChild">
+                <view class="childLsit">
+                    <view class="childItem" wx:for="{{info.childList}}" wx:key='{{index}}' wx:if="{{item.isDelete != 1}}">
+                        <view class="itemHead">
+                            <view class="itemTitle">
+                                <!-- <input class='' placeholder='门票' placeholder-style="color:#e19446;" value="{{item.ticketType}}" bindinput="getKeyWord" data-idx='{{index}}' data-name="ticketType" data-index="{{infoIndex}}"></input>
+                                <text class="iconfont iconarrow-right" bindtap="getSearchList" data-type="dictionary" data-idx='{{index}}' data-code="jingqumenpiao_leixing" data-index="{{infoIndex}}"></text> -->
+                                <input class='' placeholder='门票' placeholder-style="color:#e19446;" value="{{item.ticketType}}" bindtap="getSearchList" data-type="dictionary" data-idx='{{index}}' data-code="jingqumenpiao_leixing" data-index="{{infoIndex}}" disabled></input>
+                            </view>
+                            <view class="childLogs">
+                                <text wx:if="{{item.id}}" class="logs" bindtap="getGuideLog" data-type="{{resourceName}}" data-title="{{item.ticketType}}" data-childId="{{item.id}}">日志</text>
+                                <text class="iconfont iconguanbi" bindtap='delChildItem' data-idx='{{index}}' data-index="{{infoIndex}}"></text>
+                            </view> 
+                        </view>
+                        <view class="itemInfo">
+                            <label for="" class="">数量</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getKeyWord" placeholder='' value="{{item.count}}" data-idx='{{index}}' data-name="count" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view class="itemInfo">
+                            <label for="" class="">金额</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getKeyWord" placeholder='' value="{{item.price}}" data-idx='{{index}}' data-name="price" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+                <view class="addChildBtn" bindtap="addChildListItem" data-index="{{infoIndex}}">
+                    添加门票
+                </view>  
+            </view>
+            <view wx:if="{{memberList.length != 0}}" class="allChild">
+                <view class="childLsit">
+                    <view class="childItem" wx:for="{{memberList}}" wx:key='{{index}}'>
+                        <view class="itemInfo">
+                            <label for="" class="">客人</label>
+                            <view class="itemR">
+                                <text class='search-input remark'>{{item.memberContactInfo}}</text>
+                                <text class="iconfont iconguanbi" bindtap='delChildMemberItem' data-idx='{{index}}' data-index="{{infoIndex}}"></text>
+                            </view>
+
+                            <!-- <label wx:if="{{!item.customerOrderNumber && !item.customerTripNumber}}" for="" class="">小团号</label>
+                            <label wx:elif="{{item.customerOrderNumber && item.customerOrderNumber !=''}}" for="" class="">小团号</label>
+                            <label wx:elif="{{item.customerTripNumber && item.customerTripNumber !=''}}" for="" class="">流水号</label>
+                            <view class="itemR">
+                                <text wx:if="{{!item.customerOrderNumber && !item.customerTripNumber}}" class='search-input remark'></text>
+                                <text wx:elif="{{item.customerOrderNumber && item.customerOrderNumber !=''}}" class='search-input remark'>{{item.customerOrderNumber}}</text>
+                                <text wx:elif="{{item.customerTripNumber && item.customerTripNumber !=''}}" class='search-input remark'>{{item.customerTripNumber}}</text>
+                                <text class="iconfont iconguanbi" bindtap='delChildMemberItem' data-idx='{{index}}' data-index="{{infoIndex}}"></text>
+                            </view> -->
+                        </view>
+                        <view wx:if="{{cashTypeidx == 0}}" class="itemInfo">
+                            <label for="" class="">签单金额</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getKeyWord" value="{{info.guideRealReimbMoney}}" data-idx='{{index}}' data-name="guideRealReimbMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view wx:if="{{cashTypeidx == 1}}" class="itemInfo">
+                            <label for="" class="">现付金额</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getKeyWord" value="{{info.guideRealReimbMoney}}" data-idx='{{index}}' data-name="guideRealReimbMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view class="itemInfo">
+                            <label for="" class="">记账备注</label>
+                            <view class="itemR">
+                                <!-- <text class='search-input remark' bindtap="getRemark" data-idx='{{index}}' data-name="remark" data-value="{{item.remark}}" data-index="{{infoIndex}}">{{item.remark}}</text>
+                                <text class="iconfont iconarrow-right"></text> -->
+                                <input class='search-input remark' bindtap="getRemark" data-idx='{{index}}' data-name="remark" data-value="{{item.remark}}" data-index="{{infoIndex}}" placeholder="请输入" value="{{item.remark}}" disabled></input>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+            <view wx:if="{{cashTypeidx == 0 && memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">签单金额</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.guideRealReimbMoney}}" data-name="guideRealReimbMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{cashTypeidx == 1 && memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">现付金额</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.guideRealReimbMoney}}" data-name="guideRealReimbMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <!-- <view wx:if="{{pageType == 'edit' && cashTypeidx == 1 && memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">现付金额</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.guideRealReimbMoney}}" data-name="guideRealReimbMoney" data-index="{{infoIndex}}"></input>
+                </view>
+            </view> -->
+            <view wx:if="{{memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">记账备注</label>
+                <view class="itemR">
+                    <!-- <text class='search-input remark' bindtap="getRemark" data-name="guideRealReimbRemark" data-value="{{guideRealReimbRemark}}" data-index="{{infoIndex}}">{{guideRealReimbRemark}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input remark' bindtap="getRemark" data-name="guideRealReimbRemark" data-value="{{guideRealReimbRemark}}" data-index="{{infoIndex}}" placeholder="请输入" value="{{guideRealReimbRemark}}" disabled></input>
+                </view>
+            </view>
+            
+            <view class="item">
+                <view class='imgContent'>
+                    <view class='imgBox'>
+                        <view class='imgList'>
+                        <block wx:for="{{info.detailPics}}" wx:key="index">
+                            <view class='imgItem'>
+                            <image src='{{item}}' data-src="{{item}}" bindtap="previewImage" data-id='{{index}}' data-index="{{infoIndex}}"></image>
+                            <view wx:if="{{pageType == 'add' || reimbStatus == 'confirm' || reimbStatus == 'back'}}" class="delImg iconfont iconguanbi" bindtap="delImg" data-indx="{{index}}" data-index="{{infoIndex}}"></view>
+                            </view>
+                        </block>
+                        <view wx:if="{{pageType == 'add' || reimbStatus == 'confirm' || reimbStatus == 'back'}}" class='chooseimg' bindtap='uploadDetailImage' data-index="{{infoIndex}}">
+                            <view class="weui-uploader__input-box"></view>
+                        </view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+
+        </view>
+    </view>
+    <view wx:if="{{resourceName == 'transportCompany'}}" class="listInfo">
+        <view wx:if="{{pageType == 'edit'}}" class="editInfo">
+            <view class="item">
+                <label class="">交通类别：</label>
+                <text class=''>{{info.transportType}}</text>
+            </view>
+            <view class="item">
+                <label class="">地点信息：</label>
+                <text class=''>{{info.startPosition}}-{{info.destinationPosition}} {{info.shiftNumber}}</text>
+            </view>
+            <view class="item">
+                <label for="">安排备注：</label>
+                <text class=''>{{info.remark}}</text>
+            </view>
+        </view>
+        <view class="list">
+            <view wx:if="{{pageType == 'edit'}}" class="item itemH">
+                <label for="" class="itemL">客人信息</label>
+                <view class="itemR" bindtap="getGroup" data-index="{{infoIndex}}">
+                    <!-- <text>{{info.memberContactInfo}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input' placeholder="请选择" value="{{info.memberContactInfo}}" disabled></input>
+                </view>
+
+                <!-- <label wx:if="{{!info.customerOrderNumber && !info.customerTripNumber}}" for="" class="itemL">客人信息</label>
+                <label wx:elif="{{info.customerOrderNumber && info.customerOrderNumber !=''}}" for="" class="itemL">客人信息</label>
+                <label wx:elif="{{info.customerTripNumber && info.customerTripNumber !=''}}" for="" class="itemL">客人信息</label>
+                <view class="itemR" bindtap="getGroup" data-index="{{infoIndex}}">
+                    <text wx:if="{{!info.customerOrderNumber && !info.customerTripNumber}}"></text>
+                    <text wx:elif="{{info.customerOrderNumber && info.customerOrderNumber !=''}}">{{info.customerOrderNumber}}</text>
+                    <text wx:elif="{{info.customerTripNumber && info.customerTripNumber !=''}}">{{info.customerTripNumber}}</text>
+                    <text class="iconfont iconarrow-right"></text>
+                </view> -->
+            </view>
+            <view wx:if="{{pageType == 'edit'}}" class="item itemH">
+                <label for="" class="itemL">行程日期</label>
+                <view class="itemR">
+                    <picker class="search-input" mode="date" value="{{info.orderDate}}" start="2010-01-01" end="2030-12-31" bindchange="myinput" data-name="orderDate" data-index="{{infoIndex}}">
+                        <view class="picker">{{info.orderDate}}</view>
+                    </picker>
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                </view>
+            </view>
+            <view wx:if="{{pageType == 'add'}}" class="item itemH">
+                <label for="" class="itemL">交通公司</label>
+                <view class="itemR">
+                    <!-- <text class='search-input remark' bindtap="getSearchList" data-method="transportCompany" data-type="resources" data-index="{{infoIndex}}">{{info.resourceText}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input remark' bindtap="getSearchList" data-method="transportCompany" data-type="resources" data-index="{{infoIndex}}" placeholder="请选择" value="{{info.resourceText}}" disabled></input>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label wx:if="{{pageType == 'add'}}" for="" class="itemL">类别</label>
+                <label wx:if="{{pageType == 'edit'}}" for="" class="itemL">交通类别</label>
+                <view class="itemR">
+                    <!-- <input class='search-input' bindinput="myinput" value="{{info.dictionary}}" data-name="dictionary" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                    <text class="iconfont iconarrow-right" bindtap="getSearchList" data-type="dictionary" data-code="jiaotong_leixing" data-index="{{infoIndex}}"></text> -->
+                    <input class="search-input" bindtap="getSearchList" data-type="dictionary" data-code="jiaotong_leixing" data-index="{{infoIndex}}" placeholder="请选择" value="{{info.dictionary}}" disabled></input>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">始发地</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.startPosition}}" data-name="startPosition" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">目的地</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.destinationPosition}}" data-name="destinationPosition" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">班次</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.shiftNumber}}" data-name="shiftNumber" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">付款方式</label>
+                <view class="itemR">
+                    <picker class="search-input" mode='selector' bindchange="bindCashTypeChange" value="{{cashTypeidx}}" range="{{cashTypeList}}" range-key="{{'name'}}" data-selecthx="{{cashTypeList[cashTypeidx].name}}" data-index="{{infoIndex}}">
+                        <view class="picker">{{info.cashTypeName}}</view>
+                    </picker>
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                </view>
+            </view>
+            <view wx:if="{{cashTypeidx == 0}}" class="item itemH">
+                <label for="" class="itemL">签单号</label>
+                <view class="itemR" bindtap="getSignNumberList" data-index="{{infoIndex}}">
+                    <!-- <text>{{info.signNumber}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input' placeholder="请选择" value="{{info.signNumber}}" disabled></input>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">单价</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.price}}" data-name="price" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{pageType == 'add'}}" class="item itemH">
+                <label for="" class="itemL">客人信息</label>
+                <view class="itemR">
+                    <text wx:if="{{memberList.length != 0}}" class='search-input' bindtap="getGroup" data-index="{{infoIndex}}">共{{memberList.length}}组</text>
+                    <text wx:if="{{memberList.length == 0}}" class='search-input' bindtap="getGroup" data-index="{{infoIndex}}">请选择</text>
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                </view>
+            </view>
+            <view wx:if="{{memberList.length != 0}}" class="allChild">
+                <view class="childLsit">
+                    <view class="childItem" wx:for="{{memberList}}" wx:key='{{index}}'>
+                        <view class="itemInfo">
+                            <label for="" class="">客人</label>
+                            <view class="itemR">
+                                <text class='search-input remark'>{{item.memberContactInfo}}</text>
+                                <text class="iconfont iconguanbi" bindtap='delChildMemberItem' data-idx='{{index}}' data-index="{{infoIndex}}"></text>
+                            </view>
+
+                            <!-- <label wx:if="{{!item.orderNumber && !item.customerTripNumber}}" for="" class="">小团号</label>
+                            <label wx:elif="{{item.orderNumber && item.orderNumber !=''}}" for="" class="">小团号</label>
+                            <label wx:elif="{{item.customerTripNumber && item.customerTripNumber !=''}}" for="" class="">流水号</label>
+                            <view class="itemR">
+                                <text wx:if="{{!item.orderNumber && !item.customerTripNumber}}" class='search-input remark'></text>
+                                <text wx:elif="{{item.orderNumber && item.orderNumber !=''}}" class='search-input remark'>{{item.orderNumber}}</text>
+                                <text wx:elif="{{item.customerTripNumber && item.customerTripNumber !=''}}" class='search-input remark'>{{item.customerTripNumber}}</text>
+                                <text class="iconfont iconguanbi" bindtap='delChildMemberItem' data-idx='{{index}}' data-index="{{infoIndex}}"></text>
+                            </view> -->
+                        </view>
+                        <view class="itemInfo">
+                            <label for="" class="">数量</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.count}}" data-idx='{{index}}' data-name="count" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view wx:if="{{cashTypeidx == 0}}" class="itemInfo">
+                            <label for="" class="">签单金额</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.guideRealReimbMoney}}" data-idx='{{index}}' data-name="mTotalPay" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view class="itemInfo">
+                            <label for="" class="">记账备注</label>
+                            <view class="itemR">
+                                <!-- <text class='search-input remark' bindtap="getRemark" data-idx='{{index}}' data-name="remark" data-value="{{item.remark}}" data-index="{{infoIndex}}">{{item.remark}}</text>
+                                <text class="iconfont iconarrow-right"></text> -->
+                                <input class='search-input remark' bindtap="getRemark" data-idx='{{index}}' data-name="remark" data-value="{{item.remark}}" data-index="{{infoIndex}}" placeholder="请输入" value="{{item.remark}}" disabled></input>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </view>     
+            <view wx:if="{{memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">数量</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.count}}" data-name="count" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{cashTypeidx == 0 && memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">签单金额</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.guideRealReimbMoney}}" data-name="guideRealReimbMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">记账备注</label>
+                <view class="itemR">
+                    <!-- <text class='search-input remark' bindtap="getRemark" data-name="guideRealReimbRemark" data-value="{{guideRealReimbRemark}}" data-index="{{infoIndex}}">{{guideRealReimbRemark}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input remark' bindtap="getRemark" data-name="guideRealReimbRemark" data-value="{{guideRealReimbRemark}}" data-index="{{infoIndex}}" placeholder="请输入" value="{{guideRealReimbRemark}}" disabled></input>
+                </view>
+            </view>
+
+            <view class="item">
+                <view class='imgContent'>
+                    <view class='imgBox'>
+                        <view class='imgList'>
+                        <block wx:for="{{info.detailPics}}" wx:key="index">
+                            <view class='imgItem'>
+                            <image src='{{item}}' data-src="{{item}}" bindtap="previewImage" data-id='{{index}}' data-index="{{infoIndex}}"></image>
+                            <view wx:if="{{pageType == 'add' || reimbStatus == 'confirm' || reimbStatus == 'back'}}" class="delImg iconfont iconguanbi" bindtap="delImg" data-indx="{{index}}" data-index="{{infoIndex}}"></view>
+                            </view>
+                        </block>
+                        <view wx:if="{{pageType == 'add' || reimbStatus == 'confirm' || reimbStatus == 'back'}}" class='chooseimg' bindtap='uploadDetailImage' data-index="{{infoIndex}}">
+                            <view class="weui-uploader__input-box"></view>
+                        </view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+
+        </view>
+    </view>
+    <view wx:if="{{resourceName == 'insurance'}}" class="listInfo">
+        <view wx:if="{{pageType == 'edit'}}" class="editInfo">
+            <view class="item">
+                <label class="">保险类型：</label>
+                <text class=''>{{info.insuranceType}}</text>
+            </view>
+            <view class="item">
+                <label for="">安排备注：</label>
+                <text class=''>{{info.remark}}</text>
+            </view>
+        </view>
+        <view class="list">
+            <view wx:if="{{pageType == 'edit'}}" class="item itemH">
+                <label for="" class="itemL">客人信息</label>
+                <view class="itemR" bindtap="getGroup" data-index="{{infoIndex}}">
+                    <!-- <text>{{info.memberContactInfo}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input' placeholder="请选择" value="{{info.memberContactInfo}}" disabled></input>
+                </view>
+
+                <!-- <label wx:if="{{!info.customerOrderNumber && !info.customerTripNumber}}" for="" class="itemL">客人信息</label>
+                <label wx:elif="{{info.customerOrderNumber && info.customerOrderNumber !=''}}" for="" class="itemL">客人信息</label>
+                <label wx:elif="{{info.customerTripNumber && info.customerTripNumber !=''}}" for="" class="itemL">客人信息</label>
+                <view class="itemR" bindtap="getGroup" data-index="{{infoIndex}}">
+                    <text wx:if="{{!info.customerOrderNumber && !info.customerTripNumber}}"></text>
+                    <text wx:elif="{{info.customerOrderNumber && info.customerOrderNumber !=''}}">{{info.customerOrderNumber}}</text>
+                    <text wx:elif="{{info.customerTripNumber && info.customerTripNumber !=''}}">{{info.customerTripNumber}}</text>
+                    <text class="iconfont iconarrow-right"></text>
+                </view> -->
+            </view>
+            <view wx:if="{{pageType == 'edit'}}" class="item itemH">
+                <label for="" class="itemL">行程日期</label>
+                <view class="itemR">
+                    <picker class="search-input" mode="date" value="{{info.orderDate}}" start="2010-01-01" end="2030-12-31" bindchange="myinput" data-name="orderDate" data-index="{{infoIndex}}">
+                        <view class="picker">{{info.orderDate}}</view>
+                    </picker>
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                </view>
+            </view>
+            <view wx:if="{{pageType == 'add'}}" class="item itemH">
+                <label for="" class="itemL">保险公司</label>
+                <view class="itemR">
+                    <!-- <text class='search-input remark' bindtap="getSearchList" data-method="insurance" data-type="resources" data-index="{{infoIndex}}">{{info.resourceText}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input remark' bindtap="getSearchList" data-method="insurance" data-type="resources" data-index="{{infoIndex}}" placeholder="请选择" value="{{info.resourceText}}" disabled></input>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">险种</label>
+                <view class="itemR">
+                    <!-- <input class='search-input' bindinput="myinput" value="{{info.dictionary}}" data-name="dictionary" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                    <text class="iconfont iconarrow-right" bindtap="getSearchList" data-type="dictionary" data-code="baoxianxianzhong_leixing" data-index="{{infoIndex}}"></text> -->
+                    <input class='search-input' bindtap="getSearchList" data-type="dictionary" data-code="baoxianxianzhong_leixing" data-index="{{infoIndex}}" placeholder="请选择" value="{{info.dictionary}}" disabled></input>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">付款方式</label>
+                <view class="itemR">
+                    <picker class="search-input" mode='selector' bindchange="bindCashTypeChange" value="{{cashTypeidx}}" range="{{cashTypeList}}" range-key="{{'name'}}" data-selecthx="{{cashTypeList[cashTypeidx].name}}" data-index="{{infoIndex}}">
+                        <view class="picker">{{info.cashTypeName}}</view>
+                    </picker>
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                </view>
+            </view>
+            <view wx:if="{{cashTypeidx == 0}}" class="item itemH">
+                <label for="" class="itemL">签单号</label>
+                <view class="itemR" bindtap="getSignNumberList" data-index="{{infoIndex}}">
+                    <!-- <text>{{info.signNumber}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input' placeholder="请选择" value="{{info.signNumber}}" disabled></input>
+                </view>
+            </view>
+            <view class="item itemH">
+                <label for="" class="itemL">单价</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.price}}" data-name="price" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{pageType == 'add'}}" class="item itemH">
+                <label for="" class="itemL">客人信息</label>
+                <view class="itemR">
+                    <text wx:if="{{memberList.length != 0}}" class='search-input' bindtap="getGroup" data-index="{{infoIndex}}">共{{memberList.length}}组</text>
+                    <text wx:if="{{memberList.length == 0}}" class='search-input' bindtap="getGroup" data-index="{{infoIndex}}">请选择</text>
+                    <!-- <text class="iconfont iconarrow-right"></text> -->
+                </view>
+            </view>
+            <view wx:if="{{memberList.length != 0}}" class="allChild">
+                <view class="childLsit">
+                    <view class="childItem" wx:for="{{memberList}}" wx:key='{{index}}'>
+                        <view class="itemInfo">
+                            <label for="" class="">客人</label>
+                            <view class="itemR">
+                                <text class='search-input remark'>{{item.memberContactInfo}}</text>
+                                <text class="iconfont iconguanbi" bindtap='delChildMemberItem' data-idx='{{index}}' data-index="{{infoIndex}}"></text>
+                            </view>
+
+                            <!-- <label wx:if="{{!item.orderNumber && !item.customerTripNumber}}" for="" class="">小团号</label>
+                            <label wx:elif="{{item.orderNumber && item.orderNumber !=''}}" for="" class="">小团号</label>
+                            <label wx:elif="{{item.customerTripNumber && item.customerTripNumber !=''}}" for="" class="">流水号</label>
+                            <view class="itemR">
+                                <text wx:if="{{!item.orderNumber && !item.customerTripNumber}}" class='search-input remark'></text>
+                                <text wx:elif="{{item.orderNumber && item.orderNumber !=''}}" class='search-input remark'>{{item.orderNumber}}</text>
+                                <text wx:elif="{{item.customerTripNumber && item.customerTripNumber !=''}}" class='search-input remark'>{{item.customerTripNumber}}</text>
+                                <text class="iconfont iconguanbi" bindtap='delChildMemberItem' data-idx='{{index}}' data-index="{{infoIndex}}"></text>
+                            </view> -->
+                        </view>
+                        <view class="itemInfo">
+                            <label for="" class="">数量</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.count}}" data-idx='{{index}}' data-name="count" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view wx:if="{{cashTypeidx == 0}}" class="itemInfo">
+                            <label for="" class="">签单金额</label>
+                            <view class="">
+                                <input class='search-input' bindinput="getMemberKeyWord" value="{{item.guideRealReimbMoney}}" data-idx='{{index}}' data-name="guideRealReimbMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                            </view>
+                        </view>
+                        <view class="itemInfo">
+                            <label for="" class="">记账备注</label>
+                            <view class="itemR">
+                                <!-- <text class='search-input remark' bindtap="getRemark" data-idx='{{index}}' data-name="remark" data-value="{{item.remark}}" data-index="{{infoIndex}}">{{item.remark}}</text>
+                                <text class="iconfont iconarrow-right"></text> -->
+                                <input class='search-input remark' bindtap="getRemark" data-idx='{{index}}' data-name="remark" data-value="{{item.remark}}" data-index="{{infoIndex}}" placeholder="请输入" value="{{item.remark}}" disabled></input>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </view>     
+            <view wx:if="{{memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">数量</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.count}}" data-name="count" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{cashTypeidx == 0 && memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">签单金额</label>
+                <view class="itemR">
+                    <input class='search-input' bindinput="myinput" value="{{info.guideRealReimbMoney}}" data-name="guideRealReimbMoney" data-index="{{infoIndex}}" placeholder="请输入"></input>
+                </view>
+            </view>
+            <view wx:if="{{memberList.length == 0}}" class="item itemH">
+                <label for="" class="itemL">记账备注</label>
+                <view class="itemR">
+                    <!-- <text class='search-input remark' bindtap="getRemark" data-name="guideRealReimbRemark" data-value="{{guideRealReimbRemark}}" data-index="{{infoIndex}}">{{guideRealReimbRemark}}</text>
+                    <text class="iconfont iconarrow-right"></text> -->
+                    <input class='search-input remark' bindtap="getRemark" data-name="guideRealReimbRemark" data-value="{{guideRealReimbRemark}}" data-index="{{infoIndex}}" placeholder="请输入" value="{{guideRealReimbRemark}}" disabled></input>
+                </view>
+            </view>
+
+            <view class="item">
+                <view class='imgContent'>
+                    <view class='imgBox'>
+                        <view class='imgList'>
+                        <block wx:for="{{info.detailPics}}" wx:key="index">
+                            <view class='imgItem'>
+                            <image src='{{item}}' data-src="{{item}}" bindtap="previewImage" data-id='{{index}}' data-index="{{infoIndex}}"></image>
+                            <view wx:if="{{pageType == 'add' || reimbStatus == 'confirm' || reimbStatus == 'back'}}" class="delImg iconfont iconguanbi" bindtap="delImg" data-indx="{{index}}" data-index="{{infoIndex}}"></view>
+                            </view>
+                        </block>
+                        <view wx:if="{{pageType == 'add' || reimbStatus == 'confirm' || reimbStatus == 'back'}}" class='chooseimg' bindtap='uploadDetailImage' data-index="{{infoIndex}}">
+                            <view class="weui-uploader__input-box"></view>
+                        </view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+
+        </view>
+    </view>
+ </view>
+
+ <view class='foot-join-car' wx:if="{{pageType == 'add' || reimbStatus == 'confirm' || reimbStatus == 'back'}}">
+  <view bindtap='saveRescource' class='join-car-btn-w100 ft16'>保存</view>
+</view>
+
+<!--备注弹窗-->
+<view class='mask-layer' wx:if='{{isShowDialog}}' bindtap='cancelDailog'></view>
+ <view class='lh30 dialog-upd' wx:if='{{isShowDialog}}'>
+    <form bindsubmit="saveRemarkInfo" bindreset="">
+        <view class="remarkInfo">
+            <textarea class="" model:value="{{remarkKeyWord}}" show-confirm-bar="{{false}}" auto-height />
+        </view>
+        <view class="weui-cell">
+            <button class='calcel-btn' bindtap='cancelDailog'>取消</button>
+            <view style="width: 50rpx;"></view>
+            <!-- <text class='calcel-btn' bindtap='cancelDailog'>取消</text> -->
+            <!-- <text class='main-btn' bindtap='saveRemarkInfo'>保存</text> -->
+            <button formType="submit" class='main-btn'>保存</button>
+        </view>
+    </form>
+</view>
+
+
+<!--选择小组弹窗-->
+<view class='mask-layer' wx:if="{{isShowGroup}}" bindtap='cancelGroup'></view>
+<view class='mask-info' wx:if="{{isShowGroup}}">
+    <!-- <view wx:if="{{pageType == 'add'}}" class="groupingTitle">选择小组</view>
+    <view wx:if="{{pageType == 'edit'}}" class="groupingTitle">客人小团号/流水号</view>
+    <view wx:if="{{pageType == 'add' && (resourceName != 'hotelv2' && resourceName != 'scenicv2' && resourceName != 'selfv2Company')}}" class="maskBtn">
+        <span class="allBtn">
+            {{checkAllFont}}
+            <checkbox checked="{{checked}}" bindtap="checkAll" value="all"></checkbox>
+        </span>
+        <span bindtap="checkedGroup">确定</span>
+    </view> -->
+    <view class="groupingTitle">选择小组</view>
+    <!-- <view wx:if="{{pageType == 'edit'}}" class="groupingTitle">客人小团号/流水号</view> -->
+    <view wx:if="{{pageType == 'add'}}" class="maskBtn">
+        <span class="allBtn">
+            {{checkAllFont}}
+            <checkbox checked="{{checked}}" bindtap="checkAll" value="all"></checkbox>
+        </span>
+        <span bindtap="checkedGroup">确定</span>
+    </view>
+
+    <view wx:if="{{pageType == 'add'}}" class="mask-info-list">
+        <checkbox-group bindchange="checkChange">
+            <view wx:for="{{groupList}}" class="mask-info-list-item">
+                <view>客人：{{item.memberContactInfo}} {{item.adultCount}}大{{item.childCount}}小</view>
+                <view wx:if="{{item.customerTripNumber !=''}}">小团号： {{item.customerTripNumber}}</view>
+                <view wx:elif="{{item.orderNumber !=''}}">流水号： {{item.orderNumber}}</view>
+                <checkbox class="viewRadio" data-id="{{item.customerOrderId}}" value="{{item.customerOrderId}}" checked="{{item.checked}}" />
+            </view>
+        </checkbox-group>
+    </view>
+
+    <view wx:if="{{pageType == 'edit'}}" class="mask-info-list">
+        <view class="mask-info-list-item" bindtap="getEditMember" data-name="all">清空</view>
+        <view wx:for="{{groupList}}" class="mask-info-list-item"   data-name="customerTripNumber" data-value="{{item.customerTripNumber}}" data-id="{{item.customerOrderId}}" data-member="{{item.memberContactInfo}}">
+            <view>客人：{{item.memberContactInfo}} {{item.adultCount}}大{{item.childCount}}小</view>
+            <view wx:if="{{item.customerTripNumber !=''}}" bindtap="getEditMember" data-name="customerTripNumber" data-value="{{item.customerTripNumber}}" data-id="{{item.customerOrderId}}" data-member="{{item.memberContactInfo}}">小团号： {{item.customerTripNumber}}</view>
+            <view wx:elif="{{item.orderNumber !=''}}" bindtap="getEditMember" data-name="customerOrderNumber" data-value="{{item.orderNumber}}" data-id="{{item.customerOrderId}}" data-member="{{item.memberContactInfo}}">流水号： {{item.orderNumber}}</view>
+        </view>
+    </view>
+
+    <!-- <view wx:if="{{pageType == 'add' && (resourceName != 'hotelv2' && resourceName != 'scenicv2' && resourceName != 'selfv2Company')}}" class="mask-info-list">
+        <checkbox-group bindchange="checkChange">
+            <view wx:for="{{groupList}}" class="mask-info-list-item">
+                <view wx:if="{{item.orderNumber !=''}}">小团号： {{item.orderNumber}}</view>
+                <view wx:elif="{{item.customerTripNumber !=''}}">流水号： {{item.customerTripNumber}}</view>
+                <view>人数：{{item.adultCount}}大{{item.childCount}}小</view>
+                <view>联系人：</view>
+                <checkbox class="viewRadio" value="{{item.customerOrderId}}" checked="{{item.checked}}" />
+            </view>
+        </checkbox-group>
+    </view> -->
+
+    <!-- <view wx:if="{{pageType == 'edit' || (resourceName == 'hotelv2' || resourceName == 'scenicv2' || resourceName == 'selfv2Company')}}" class="mask-info-list">
+        <view class="mask-info-list-item" bindtap="getEditMember" data-name="all">清空</view>
+        <view wx:for="{{groupList}}" class="mask-info-list-item">
+            <view wx:if="{{item.orderNumber !=''}}" bindtap="getEditMember" data-name="customerOrderNumber" data-value="{{item.orderNumber}}" data-id="{{item.customerOrderId}}">小团号： {{item.orderNumber}}</view>
+            <view wx:elif="{{item.customerTripNumber !=''}}" bindtap="getEditMember" data-name="customerTripNumber" data-value="{{item.customerTripNumber}}" data-id="{{item.customerOrderId}}">流水号： {{item.customerTripNumber}}</view>
+        </view>
+    </view> -->
+</view>
+
+<!--签单号列表弹窗-->
+<view class='mask-layer' wx:if="{{isShowSignNumber}}" bindtap='cancelGroup'></view>
+<view class='mask-info' wx:if="{{isShowSignNumber}}">
+  <view class="groupingTitle">选择签单号</view>
+  <view class="mask-info-list">
+        <view wx:for="{{signNumberList}}" class="mask-info-list-item">
+            <view bindtap="getEditSignNumber" data-name="signNumber" data-value="{{item.signNumber}}" data-id="">{{item.signNumber}}</view>
+        </view>
+    </view>
+</view>

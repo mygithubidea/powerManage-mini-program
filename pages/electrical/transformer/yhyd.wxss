@@ -1,0 +1,7 @@
+.jm-form-title {
+    margin: 20rpx 0;
+}
+.jm-formitem2 text:first-child {
+    width: 280rpx;
+    line-height: 1.1;
+}

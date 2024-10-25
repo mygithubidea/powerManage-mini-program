@@ -1,0 +1,99 @@
+<view>
+    <view class="jm-header">
+        <view class="flex">
+            <view class="left" bind:tap="BackPage">
+                <t-icon size="20" bind:tap="onBack" aria-role="button" aria-label="返回" name="chevron-left" class="custom-capsule__icon" />
+                <text>返回</text>
+            </view>
+            <view class="content">
+                缺陷隐患台账
+            </view>
+            <view class="right"></view>
+        </view>
+    </view>
+
+    <view class="jm-container bg-white margin-top">
+
+        <view class="jm-form">
+
+            <view class="jm-form-title">
+                基本信息
+            </view>
+            <!-- <view class="jm-formitem2">
+                <text>序号</text>
+                <view class="right-form">{{formData.ordinal || ''}}</view>
+            </view> -->
+            <view class="jm-formitem2">
+                <text>责任站所</text>
+                <view class="right-form">{{formData.responsibleStation || ''}}</view>
+            </view>
+            <view class="jm-formitem2">
+                <text>责任班组</text>
+                <view class="right-form"></view>
+                <!-- <view class="right-form">{{formData.responsibleTeam}}</view> -->
+            </view>
+            <view class="jm-formitem2">
+                <text>隐患简述</text>
+                <view class="right-form">{{formData.defectDescription || ''}}</view>
+            </view>
+            <view class="jm-formitem2">
+                <text>发现日期</text>
+                <view class="right-form">{{formData.discoveryDate || ''}}</view>
+            </view>
+            <view class="jm-formitem2">
+                <text>发现人</text>
+                <view class="right-form">{{formData.discoverer || ''}}</view>
+            </view>
+            <view class="jm-formitem2">
+                <text>隐患评估</text>
+                <view class="right-form">{{formData.riskAssessment || ''}}</view>
+            </view>
+            <view class="jm-formitem2">
+                <text>整改方案</text>
+                <view class="right-form">{{formData.rectificationPlan || ''}}</view>
+            </view>
+            <view class="jm-formitem2">
+                <text>整改责任人</text>
+                <view class="right-form">{{formData.rectificationResponsible || ''}}</view>
+            </view>
+            <view class="jm-formitem2">
+                <text>治理（整改）完成日期</text>
+                <view class="right-form">{{formData.rectificationCompletionDate || ''}}</view>
+            </view>
+            <view class="jm-formitem2">
+                <text>整改资金（万元）</text>
+                <view class="right-form">{{formData.rectificationFunds || ''}}</view>
+            </view>
+            <view class="jm-formitem2">
+                <text>验收时间</text>
+                <view class="right-form">{{formData.acceptanceDate || ''}}</view>
+            </view>
+            <view class="jm-formitem2">
+                <text>验收人</text>
+                <view class="right-form">{{formData.acceptancePerson || ''}}</view>
+            </view>
+            <view class="jm-formitem2">
+                <text>整改情况</text>
+                <view class="right-form">{{formData.rectificationStatus || ''}}</view>
+            </view>
+            <view class="jm-formitem2">
+                <text>效果评估</text>
+                <view class="right-form">满足安全要求</view>
+                <!-- <view class="right-form">{{formData.effectivenessEvaluation}}</view> -->
+            </view>
+            <view class="jm-formitem2 downloadUrl" style="align-items: flex-start;">
+                <text>附件</text>
+                <view>
+                    <view class="url" wx:for="{{formData.downloadUrl}}" wx:for-item="url" wx:key="index">{{url || ''}}</view>
+                    <!-- <view class="url" wx:for="{{formData.downloadUrl}}" wx:for-item="url" wx:key="index">
+                        <view bind:tap="downloadFile" data-downloadurl="{{url}}">
+                            {{url}}
+                            {{getFileName(url)}}
+                        </view>
+                    </view> -->
+                </view>
+            </view>
+
+        </view>
+    </view>
+</view>

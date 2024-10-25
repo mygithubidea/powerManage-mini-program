@@ -1,0 +1,179 @@
+<view>
+    <view class="jm-header">
+        <view class="flex">
+            <view class="left" bind:tap="BackPage">
+                <t-icon size="20" bind:tap="onBack" aria-role="button" aria-label="返回" name="chevron-left" class="custom-capsule__icon" />
+                <text>返回</text>
+            </view>
+            <view class="content">
+                {{readonly ? '':'修改'}}线路巡检记录
+            </view>
+            <view class="right"></view>
+        </view>
+    </view>
+
+    <view class="jm-container bg-white margin-top">
+
+        <view class="{{'jm-form' + (readonly?' readonly':'')}}">
+
+            <view class="jm-form-title">
+                基本信息
+            </view>
+            <view class="jm-formitem2">
+                <text>线路名称</text>
+                <input disabled model:value="{{formData.lineName}}" />
+            </view>
+            <view class="jm-formitem2">
+                <text>杆号</text>
+                <input disabled model:value="{{formData.poleNumber}}" />
+            </view>
+            <view class="jm-formitem2">
+                <text>管理单位</text>
+                <input disabled="{{readonly}}" model:value="{{formData.managementUnit}}" bind:change="changeForm" data-key="managementUnit" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2">
+                <text>检查人员</text>
+                <view class="right-form">
+                    <input disabled model:value="{{formData.inspector}}" bind:change="changeForm" data-key="inspector" placeholder="请输入" />
+                </view>
+            </view>
+            <view class="jm-formitem2">
+                <text>负责人</text>
+                <view class="right-form">
+                    <input disabled model:value="{{formData.responsiblePerson}}" bind:change="changeForm" data-key="responsiblePerson" placeholder="请输入" />
+                </view>
+            </view>
+            <view class="jm-formitem2">
+                <text>巡查日期</text>
+                <picker disabled="{{readonly}}" mode="date" bind:change="changeForm" data-key="date0" :start="new Date().toDateString()">
+                    <view class="picker">{{formData.date0 || "请选择日期"}}</view>
+                </picker>
+            </view>
+            <view class="jm-formitem2">
+                <text>巡查时间</text>
+                <picker disabled="{{readonly}}" mode="time" bind:change="changeForm" data-key="date1">
+                    <view class="picker">{{formData.date1 || "请选择时间"}}</view>
+                </picker>
+            </view>
+            <view class="jm-formitem2" style="height:auto">
+                <text>经纬度</text>
+                <text class="right-text" bind:tap="getLocation">{{formData.longitudeLatitude || '获取定位'}}
+                </text>
+            </view>
+            
+            <view class="jm-form-title">
+                巡查内容
+            </view>
+            <view class="jm-formitem2">
+                <text>杆塔及基础情况</text>
+                <view class="right-form">
+                    <switch disabled="{{readonly}}" checked="{{formData.towerFoundation}}" bindchange="changeForm" data-key="towerFoundation"/>
+                    <text bind:tap="gotoAddYhyd" wx:if="{{!formData.towerFoundation}}"  class="{{switchDisableKeys.towerFoundation ? 'right-btn disable' : 'right-btn'}}"
+                        data-key="towerFoundation" data-reason="杆塔及基础情况">新建一患一档</text>
+                </view>
+            </view>
+            <view class="jm-formitem2">
+                <text>钢箍情况</text>
+                <view class="right-form">
+                    <switch disabled="{{readonly}}" checked="{{formData.steelBands}}" bindchange="changeForm" data-key="steelBands"/>
+                    <text bind:tap="gotoAddYhyd" wx:if="{{!formData.steelBands}}"  class="{{switchDisableKeys.steelBands ? 'right-btn disable' : 'right-btn'}}"
+                        data-key="steelBands" data-reason="钢箍情况">新建一患一档</text>
+                </view>
+            </view>
+            <view class="jm-formitem2">
+                <text>横担情况</text>
+                <view class="right-form">
+                    <switch disabled="{{readonly}}" checked="{{formData.crossArms}}" bindchange="changeForm" data-key="crossArms"/>
+                    <text bind:tap="gotoAddYhyd" wx:if="{{!formData.crossArms}}"  class="{{switchDisableKeys.crossArms ? 'right-btn disable' : 'right-btn'}}"
+                        data-key="crossArms" data-reason="横担情况">新建一患一档</text>
+                </view>
+            </view>
+            <view class="jm-formitem2">
+                <text>金具情况</text>
+                <view class="right-form">
+                    <switch disabled="{{readonly}}" checked="{{formData.fittings}}" bindchange="changeForm" data-key="fittings"/>
+                    <text bind:tap="gotoAddYhyd" wx:if="{{!formData.fittings}}"  class="{{switchDisableKeys.fittings ? 'right-btn disable' : 'right-btn'}}"
+                        data-key="fittings" data-reason="金具情况">新建一患一档</text>
+                </view>
+            </view>
+            <view class="jm-formitem2">
+                <text>导线情况</text>
+                <view class="right-form">
+                    <switch disabled="{{readonly}}" checked="{{formData.conductors}}" bindchange="changeForm" data-key="conductors"/>
+                    <text bind:tap="gotoAddYhyd" wx:if="{{!formData.conductors}}"  class="{{switchDisableKeys.conductors ? 'right-btn disable' : 'right-btn'}}"
+                        data-key="conductors" data-reason="导线情况">新建一患一档</text>
+                </view>
+            </view>
+            <view class="jm-formitem2">
+                <text>绝缘子情况</text>
+                <view class="right-form">
+                    <switch disabled="{{readonly}}" checked="{{formData.insulators}}" bindchange="changeForm" data-key="insulators"/>
+                    <text bind:tap="gotoAddYhyd" wx:if="{{!formData.insulators}}"  class="{{switchDisableKeys.insulators ? 'right-btn disable' : 'right-btn'}}"
+                        data-key="insulators" data-reason="绝缘子情况">新建一患一档</text>
+                </view>
+            </view>
+            <view class="jm-formitem2">
+                <text>拉线情况</text>
+                <view class="right-form">
+                    <switch disabled="{{readonly}}" checked="{{formData.guyWires}}" bindchange="changeForm" data-key="guyWires"/>
+                    <text bind:tap="gotoAddYhyd" wx:if="{{!formData.guyWires}}"  class="{{switchDisableKeys.guyWires ? 'right-btn disable' : 'right-btn'}}"
+                        data-key="guyWires" data-reason="拉线情况">新建一患一档</text>
+                </view>
+            </view>
+            <view class="jm-formitem2">
+                <text>设备情况</text>
+                <view class="right-form">
+                    <switch disabled="{{readonly}}" checked="{{formData.equipment}}" bindchange="changeForm" data-key="equipment"/>
+                    <text bind:tap="gotoAddYhyd" wx:if="{{!formData.equipment}}"  class="{{switchDisableKeys.equipment ? 'right-btn disable' : 'right-btn'}}"
+                        data-key="equipment" data-reason="设备情况">新建一患一档</text>
+                </view>
+            </view>
+            <view class="jm-formitem2">
+                <text>安全标识是否存在</text>
+                <view class="right-form">
+                    <switch disabled="{{readonly}}" checked="{{formData.safetySignage}}" bindchange="changeForm" data-key="safetySignage"/>
+                    <text bind:tap="gotoAddYhyd" wx:if="{{!formData.safetySignage}}"  class="{{switchDisableKeys.safetySignage ? 'right-btn disable' : 'right-btn'}}"
+                        data-key="safetySignage" data-reason="安全标识">新建一患一档</text>
+                </view>
+            </view>
+            <view class="jm-formitem2">
+                <text>是否符合安全距离要求</text>
+                <view class="right-form">
+                    <switch disabled="{{readonly}}" checked="{{formData.complianceWithSafetyDistance}}" bindchange="changeForm" data-key="complianceWithSafetyDistance"/>
+                    <text bind:tap="gotoAddYhyd" wx:if="{{!formData.complianceWithSafetyDistance}}"  class="{{switchDisableKeys.complianceWithSafetyDistance ? 'right-btn disable' : 'right-btn'}}"
+                        data-key="complianceWithSafetyDistance" data-reason="安全距离">新建一患一档</text>
+                </view>
+            </view>
+            <view class="jm-formitem2">
+                <text>障碍情况</text>
+                <view class="right-form">
+                    <switch disabled="{{readonly}}" checked="{{formData.obstacles}}" bindchange="changeForm" data-key="obstacles"/>
+                    <text bind:tap="gotoAddYhyd" wx:if="{{!formData.obstacles}}"  class="{{switchDisableKeys.obstacles ? 'right-btn disable' : 'right-btn'}}"
+                        data-key="obstacles" data-reason="障碍情况">新建一患一档</text>
+                </view>
+            </view>
+
+            <view class="jm-form-title">
+                工作照片
+            </view>
+            
+            <sign readonly="{{readonly}}" title="工作照片" bind:setSign="signChange" data-signkey="photoList">
+                <view class="jm-imageList">
+                    <view wx:for="{{formData.photoList}}" wx:for-index="index" wx:for-item="item" wx:key="index" class="jm-image">
+                        <image src="{{item.url}}" bind:tap="downloadFile" data-downloadurl="{{item.url}}"/>
+                        <t-icon wx:if="{{!readonly}}" size="20" class="t-icon-close" bind:tap="removeFile" data-filekey="photoList" data-index="{{index}}" />
+                    </view>
+                    <view wx:if="{{!readonly}}">
+                        <button class="upload-btn" bind:tap="chooseImage" data-imagekey="photoList">+</button>
+                    </view>
+                </view>
+            </sign>
+
+        </view>
+
+        <view class="btn-group" style="padding-bottom: 40rpx;">
+            <button plain primary bind:tap="BackPage">返回</button>
+            <button wx:if="{{!readonly}}" class="primary" bind:tap="saveData">确认</button>
+        </view>
+    </view>
+</view>

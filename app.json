@@ -1,0 +1,67 @@
+{
+    "permission": {
+        "scope.userLocation": {
+            "desc": "获取当前位置经纬度"
+        },
+        "scope.chooseImage": {
+            "desc": "获取手机图片或拍照"
+        },
+        "scope.chooseMessageFile": {
+            "desc": "选择微信的文件上传"
+        }
+    },
+    "requiredPrivateInfos": ["chooseLocation", "getLocation"],
+    "entryPagePath": "pages/login/login",
+    "pages": [
+        "pages/login/login",
+        "pages/home/index",
+        "pages/electrical/law/index",
+        "pages/electrical/managementSystem/index",
+        "pages/electrical/notice/index",
+        "pages/electrical/secConference/index",
+        "pages/electrical/secConference/add",
+        "pages/electrical/secTraining/index",
+        "pages/electrical/secTraining/add",
+        "pages/electrical/secPromotion/index",
+        "pages/electrical/secPromotion/add",
+        "pages/electrical/contingencyManagement/index",
+        "pages/electrical/contingencyManagement/add",
+        "pages/electrical/securityInvestment/index",
+        "pages/electrical/responsibilityLetter/index",
+        "pages/electrical/responsibilityLetter/add",
+        "pages/electrical/other/index",
+        "pages/electrical/other/add",
+        "pages/electrical/securityInspectionRecords/index",
+        "pages/electrical/securityInspectionRecords/add",
+        "pages/electrical/reportingOfHiddenDangers/index",
+        "pages/electrical/reportingOfHiddenDangers/add",
+        "pages/electrical/rectificationNotice/index",
+        "pages/electrical/rectificationNotice/add",
+
+        "pages/electrical/circuit/index",
+        "pages/electrical/circuit/add",
+        "pages/electrical/circuit/record",
+        "pages/electrical/circuit/yhyd",
+        "pages/electrical/circuit/viewDefectRisk",
+
+        "pages/electrical/transformer/index",
+        "pages/electrical/transformer/add",
+        "pages/electrical/transformer/record",
+        "pages/electrical/transformer/yhyd",
+        "pages/electrical/transformer/viewDefectRisk"
+
+        
+    ],
+    "usingComponents": {
+        "sign": "./pages/components/sign",
+        "t-icon": "tdesign-miniprogram/icon/icon"
+    },
+    "window": {
+        "backgroundTextStyle": "light",
+        "navigationBarBackgroundColor": "#f6f6f6",
+        "backgroundColor": "#f6f6f6",
+        "navigationBarTitleText": "珙县电力",
+        "navigationBarTextStyle": "black"
+    },
+    "sitemapLocation": "sitemap.json"
+}

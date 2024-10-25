@@ -1,0 +1,82 @@
+.jm-card-menu {
+    margin: 4rpx 4rpx 8rpx;
+    padding: 40rpx 20rpx;
+    line-height: 40rpx;
+    border-radius: 20rpx;
+    background-color: rgba(255, 255, 255, 1);
+    color: rgba(255, 255, 255, 1);
+    font-size: 36rpx;
+    text-align: center;
+    box-shadow: 0rpx 4rpx 12rpx 0rpx rgba(0, 0, 0, 0.4);
+    font-family: Roboto;
+    border: 2rpx solid rgba(187, 187, 187, 1);
+
+}
+
+/* .jm-card-menu .jm-title:before {
+    display: inline-block;
+    text-align: center;
+    content: "·";
+    font-size: 40rpx;
+    line-height: 32rpx;
+    color: rgba(0, 102, 255, 1);
+    font-weight: bolder;
+    width: 40rpx;
+    height: 40rpx;
+    border-radius: 50%;
+    border: solid 4rpx rgba(0, 102, 255, 1);
+} */
+
+.jm-card-menu .jm-title {
+    display: flex;
+    align-items: center;
+    margin-left: 12rpx;
+    line-height: 52rpx;
+    color: rgba(0, 0, 0, 1);
+    font-size: 36rpx;
+    text-align: left;
+    font-weight: bold;
+}
+.jm-card-menu .jm-title image{
+    width: 48rpx;
+    height: 48rpx;
+    margin-right: 8rpx;
+}
+
+.jm-item {
+    display: block;
+    margin-right: 40rpx;
+    width: 130rpx;
+    height: 190rpx;
+}
+
+.jm-item-box {
+    margin-right: 56rpx;
+}
+
+.jm-item-box:nth-child(4n) {
+    margin-right: 0;
+}
+
+.jm-card-menu .jm-icon {
+    display: block;
+    width: 70rpx;
+    height: 70rpx;
+    padding: 30rpx;
+    border-radius: 16rpx;
+    /* background-color: rgba(227, 227, 227, 0.89); */
+    color: rgba(16, 16, 16, 1);
+    font-size: 28rpx;
+    text-align: center;
+    font-family: Roboto;
+}
+
+.jm-card-menu text {
+    margin-top: 20rpx;
+    height: 40rpx;
+    line-height: 40rpx;
+    color: rgb(62, 66, 72);
+    font-size: 28rpx;
+    text-align: center;
+    text-align: center;
+}

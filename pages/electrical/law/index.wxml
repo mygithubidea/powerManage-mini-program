@@ -1,0 +1,117 @@
+<wxs module="utils" src="/utils/utils.wxs"></wxs>
+<view class="container bg-white margin-top">
+    <view class="jm-header">
+        <view class="flex">
+            <view class="left" bind:tap="BackPage">
+                <t-icon size="20" bind:tap="onBack" aria-role="button" aria-label="返回" name="chevron-left" class="custom-capsule__icon" />
+                <text>返回</text>
+            </view>
+            <view class="content">
+                法律法规
+            </view>
+            <view class="right"></view>
+        </view>
+    </view>
+
+    <scroll-view scroll-x enable-flex class="bg-white nav">
+        <view class="flex text-center">
+            <view wx:if="{{showMenu[0]}}" class="{{'cu-item flex-sub ' + (0==TabCur?'text-blue cur':'')}}" bind:tap="tabSelect" data-id="0">
+                法律
+            </view>
+            <view wx:if="{{showMenu[1]}}" class="{{'cu-item flex-sub ' + (1==TabCur?'text-blue cur':'')}}" bind:tap="tabSelect" data-id="1">
+                标准
+            </view>
+            <view wx:if="{{showMenu[2]}}" class="{{'cu-item flex-sub ' + (2==TabCur?'text-blue cur':'')}}" bind:tap="tabSelect" data-id="2">
+                规程
+            </view>
+        </view>
+    </scroll-view>
+    <page-container show="{{showpopup}}" position="bottom" border-radius="10px 10px 0 0">
+        <view class="pop-box">
+            <view class="title">点击下载</view>
+            <view class="download content">
+                <view wx:for="{{downloadUrl}}" wx:for-item="url" wx:key="index">
+                    <view bind:tap="downloadFile" data-downloadurl="{{url}}">
+                        {{url}}
+                        {{getFileName(url)}}
+                    </view>
+                </view>
+            </view>
+        </view>
+    </page-container>
+    <view wx:if="{{TabCur==0 && showMenu[TabCur]}}">
+        <scroll-view scroll-y class="list-box" bindscrolltolower="nextPage" refresher-enabled bindrefresherrefresh="resetQuery" refresher-triggered="{{refreshFlag}}">
+            <view>
+                <view class="infoNoData" wx:if="{{dataList0.length == 0}}">
+                    <view>
+                        <view>暂时没有数据</view>
+                    </view>
+                </view>
+                <view class="list-item" wx:for="{{dataList0}}" wx:for-index="index" wx:for-item="item" wx:key="index">
+                    <!-- <view class="jm-formitem">
+                        <text>序号</text>
+                        <text>{{item.ordinal|| ""}}</text>
+                    </view> -->
+                    <view class="jm-formitem" bind:tap="openDialog" data-url="{{item.annex}}">
+                        <text>文件名称</text>
+                        <text>{{item.name|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>发布时间</text>
+                        <text>{{utils.formatDate(item.released)|| ""}}</text>
+                    </view>
+                </view>
+            </view>
+        </scroll-view>
+    </view>
+    <view wx:if="{{TabCur==1 && showMenu[TabCur]}}">
+        <scroll-view scroll-y class="list-box" bindscrolltolower="nextPage" refresher-enabled bindrefresherrefresh="resetQuery" refresher-triggered="{{refreshFlag}}">
+            <view>
+                <view class="infoNoData" wx:if="{{dataList1.length == 0}}">
+                    <view>
+                        <view>暂时没有数据</view>
+                    </view>
+                </view>
+                <view class="list-item" wx:for="{{dataList1}}" wx:for-index="index" wx:for-item="item" wx:key="index">
+                    <!-- <view class="jm-formitem">
+                        <text>序号</text>
+                        <text>{{item.ordinal|| ""}}</text>
+                    </view> -->
+                    <view class="jm-formitem" bind:tap="openDialog" data-url="{{item.annex}}">
+                        <text>文件名称</text>
+                        <text>{{item.name|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>发布时间</text>
+                        <text>{{utils.formatDate(item.released)|| ""}}</text>
+                    </view>
+                </view>
+            </view>
+        </scroll-view>
+    </view>
+    <view wx:if="{{TabCur==2 && showMenu[TabCur]}}">
+        <scroll-view scroll-y class="list-box" bindscrolltolower="nextPage" refresher-enabled bindrefresherrefresh="resetQuery" refresher-triggered="{{refreshFlag}}">
+            <view>
+                <view class="infoNoData" wx:if="{{dataList2.length == 0}}">
+                    <view>
+                        <view>暂时没有数据</view>
+                    </view>
+                </view>
+                <view class="list-item" wx:for="{{dataList2}}" wx:for-index="index" wx:for-item="item" wx:key="index">
+                    <!-- <view class="jm-formitem">
+                        <text>序号</text>
+                        <text>{{item.ordinal|| ""}}</text>
+                    </view> -->
+                    <view class="jm-formitem" bind:tap="openDialog" data-url="{{item.annex}}">
+                        <text>文件名称</text>
+                        <text>{{item.name|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>发布时间</text>
+                        <text>{{utils.formatDate(item.released)|| ""}}</text>
+                    </view>
+                </view>
+            </view>
+        </scroll-view>
+    </view>
+</view>

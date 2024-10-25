@@ -1,0 +1,41 @@
+{
+    "entryPagePath": "pages/login/login",
+    "pages": [
+        "pages/login/login",
+        "pages/home/index",
+        "pages/electrical/law/index",
+        "pages/electrical/managementSystem/index",
+        "pages/electrical/notice/index",
+        "pages/electrical/secConference/index",
+        "pages/electrical/secConference/add",
+        "pages/electrical/secTraining/index",
+        "pages/electrical/secTraining/add",
+        "pages/electrical/secPromotion/index",
+        "pages/electrical/secPromotion/add",
+        "pages/electrical/contingencyManagement/index",
+        "pages/electrical/contingencyManagement/add",
+        "pages/electrical/securityInvestment/index",
+        "pages/electrical/responsibilityLetter/index",
+        "pages/electrical/responsibilityLetter/add",
+        "pages/electrical/other/index",
+        "pages/electrical/other/add",
+        "pages/electrical/securityInspectionRecords/index",
+        "pages/electrical/securityInspectionRecords/add",
+        "pages/electrical/reportingOfHiddenDangers/index",
+        "pages/electrical/reportingOfHiddenDangers/add",
+        "pages/electrical/rectificationNotice/index",
+        "pages/electrical/rectificationNotice/add"
+    ],
+    "usingComponents": {
+        "sign": "./pages/components/sign",
+        "t-icon": "tdesign-miniprogram/icon/icon"
+    },
+    "window": {
+        "backgroundTextStyle": "light",
+        "navigationBarBackgroundColor": "#f6f6f6",
+        "backgroundColor": "#f6f6f6",
+        "navigationBarTitleText": "珙县电力",
+        "navigationBarTextStyle": "black"
+    },
+    "sitemapLocation": "sitemap.json"
+}

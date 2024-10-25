@@ -1,0 +1,140 @@
+<view>
+    <view class="jm-header">
+        <view class="flex">
+            <view class="left" bind:tap="BackPage">
+                <t-icon size="20" bind:tap="onBack" aria-role="button" aria-label="返回" name="chevron-left" class="custom-capsule__icon" />
+                <text>返回</text>
+            </view>
+            <view class="content">
+                {{readonly ? '':'新建'}}安全培训记录台账
+            </view>
+            <view class="right"></view>
+        </view>
+    </view>
+
+    <view class="jm-container bg-white margin-top">
+
+        <view class="{{'jm-form' + (readonly?' readonly':'')}}">
+
+            <view class="jm-form-title">
+                基本信息
+            </view>
+            <!-- <view class="jm-formitem2" wx:if="{{readonly}}">
+                <text>序号</text>
+                <input disabled="{{readonly}}" model:value="{{formData.ordinal}}" bind:change="changeForm" data-key="ordinal" type="number" placeholder="请输入" />
+            </view> -->
+            <view class="jm-formitem2">
+                <text>单位</text>
+                <!-- <input disabled="{{readonly}}" model:value="{{formData.unit}}" bind:change="changeForm" data-key="unit" placeholder="请输入" /> -->
+                <picker disabled="{{readonly}}" mode="selector" bind:change="changeFormSelect" data-key="unit" range="{{unitSelectList}}">
+                    <view class="picker">{{formData.unit || "请选择"}}</view>
+                </picker>
+            </view>
+            <view class="jm-formitem2">
+                <text>培训日期</text>
+                <picker disabled="{{readonly}}" mode="date" bind:change="changeForm" data-key="date0" :start="new Date().toDateString()">
+                    <view class="picker">{{formData.date0 || "请选择日期"}}</view>
+                </picker>
+            </view>
+            <!-- <view class="jm-formitem2">
+                <text>培训时间</text>
+                <picker disabled="{{readonly}}" mode="time" bind:change="changeForm" data-key="date1">
+                    <view class="picker">{{formData.date1 || "请选择时间"}}</view>
+                </picker>
+            </view> -->
+            <view class="jm-formitem2">
+                <text>培训内容</text>
+                <view class="right-form">
+                    <input disabled="{{readonly}}" model:value="{{formData.trainingContent}}" bind:change="changeForm" data-key="trainingContent" placeholder="请输入" />
+                </view>
+            </view>
+            <view class="jm-formitem2" style="height:auto">
+                <text>培训地点</text>
+                <view class="right-form">
+                    <input disabled="{{readonly}}" model:value="{{formData.trainingPlace}}" bind:change="changeForm" data-key="trainingPlace" placeholder="请输入" />
+                </view>
+                <!-- <text class="right-text" bind:tap="chooseLocation">{{formData.trainingPlace || '获取定位'}}</text> -->
+            </view>
+            <view class="jm-formitem2">
+                <text>培训类型</text>
+                <view>
+                    <checkbox disabled="{{readonly}}" checked="{{formData.trainingType == 1}}" bind:tap="checkerChange" data-index="{{1}}">理论</checkbox>
+                    <checkbox disabled="{{readonly}}" checked="{{formData.trainingType == 2}}" bind:tap="checkerChange" data-index="{{2}}">实操</checkbox>
+                </view>
+            </view>
+            <view class="jm-formitem2">
+                <text>授课人</text>
+                <view class="right-form">
+                    <input disabled="{{readonly}}" model:value="{{formData.instructors}}" bind:change="changeForm" data-key="instructors" placeholder="请输入" />
+                </view>
+            </view>
+            <view class="jm-formitem2">
+                <text>参会人数</text>
+                <view class="right-form">
+                    <input disabled="{{readonly}}" model:value="{{formData.trainingNumber}}" bind:change="changeForm" data-key="trainingNumber" type="number" placeholder="请输入" />
+                </view>
+            </view>
+            <!-- <view class="jm-formitem2 flex-wrap">
+                <text>培训内容</text>
+                <view>
+                    <textarea disabled="{{readonly}}" value="{{formData.trainingContent}}" bind:blur="changeForm" data-key="trainingContent" />
+                </view>
+            </view> -->
+            <view class="jm-formitem2 flex-wrap">
+                <text>培训课件</text>
+                <view wx:if="{{!readonly}}">
+                    <button class="upload-btn" bind:tap="chooseFile" data-filekey="trainingCoursewareList">选择文件</button>
+                </view>
+                <view class="jm-fileList">
+                    <view wx:for="{{formData.trainingCoursewareList}}" wx:for-index="index" wx:for-item="item" wx:key="index" class="jm-file">
+                        <span bind:tap="downloadFile" data-downloadurl="{{item.url}}">{{item.name}}</span>
+                        <t-icon wx:if="{{!readonly}}" size="20" class="t-icon-close" bind:tap="removeFile" data-filekey="trainingCoursewareList" data-index="{{index}}" />
+                    </view>
+                </view>
+            </view>
+            <view class="jm-formitem2 flex-wrap">
+                <text>培训照片</text>
+                <view class="jm-imageList">
+                    <view wx:for="{{formData.trainingPhotosList}}" wx:for-index="index" wx:for-item="item" wx:key="index" class="jm-image">
+                        <image src="{{item.url}}" bind:tap="downloadFile" data-downloadurl="{{item.url}}"/>
+                        <t-icon wx:if="{{!readonly}}" size="20" class="t-icon-close" bind:tap="removeFile" data-filekey="trainingPhotosList" data-index="{{index}}" />
+                    </view>
+                    <view wx:if="{{!readonly}}">
+                        <button class="upload-btn" bind:tap="chooseImage" data-imagekey="trainingPhotosList">+</button>
+                    </view>
+                </view>
+            </view>
+            <view class="jm-formitem2 flex-wrap">
+                <text>签到表</text>
+                <view class="jm-imageList">
+                    <view wx:for="{{formData.signInSheetList}}" wx:for-index="index" wx:for-item="item" wx:key="index" class="jm-image">
+                        <image src="{{item.url}}" bind:tap="downloadFile" data-downloadurl="{{item.url}}"/>
+                        <t-icon wx:if="{{!readonly}}" size="20" class="t-icon-close" bind:tap="removeFile" data-filekey="signInSheetList" data-index="{{index}}" />
+                    </view>
+                    <view wx:if="{{!readonly}}">
+                        <button class="upload-btn" bind:tap="chooseImage" data-imagekey="signInSheetList">+</button>
+                    </view>
+                </view>
+            </view>
+            <view class="jm-formitem2 flex-wrap">
+                <text>培训记录</text>
+                <view wx:if="{{!readonly}}">
+                    <button class="upload-btn" bind:tap="chooseFile" data-filekey="trainingRecordsList">选择文件</button>
+                </view>
+                <view class="jm-fileList">
+                    <view wx:for="{{formData.trainingRecordsList}}" wx:for-index="index" wx:for-item="item" wx:key="index" class="jm-file">
+                        <span bind:tap="downloadFile" data-downloadurl="{{item.url}}">{{item.name}}</span>
+                        <t-icon wx:if="{{!readonly}}" size="20" class="t-icon-close" bind:tap="removeFile" data-filekey="trainingRecordsList" data-index="{{index}}" />
+                    </view>
+                </view>
+            </view>
+
+
+        </view>
+
+        <view class="btn-group" style="padding-bottom: 40rpx;">
+            <button plain primary bind:tap="BackPage">返回</button>
+            <button wx:if="{{!readonly}}" class="primary" bind:tap="saveData">确认</button>
+        </view>
+    </view>
+</view>

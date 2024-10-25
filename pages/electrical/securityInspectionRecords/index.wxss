@@ -1,0 +1,12 @@
+.jm-formitem text:first-child {
+    width: 210rpx;
+}
+.fix-button {
+    position: absolute;
+    top: 180rpx;
+    right: 16rpx;
+    width: 56rpx;
+}
+.nav {
+    width: calc(100% - 90rpx);
+}

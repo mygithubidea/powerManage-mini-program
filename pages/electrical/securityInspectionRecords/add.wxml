@@ -1,0 +1,164 @@
+<view>
+    <view class="jm-header">
+        <view class="flex">
+            <view class="left" bind:tap="BackPage">
+                <t-icon size="20" bind:tap="onBack" aria-role="button" aria-label="返回" name="chevron-left" class="custom-capsule__icon" />
+                <text>返回</text>
+            </view>
+            <view class="content">
+                {{readonly ? '':'新建'}}检查记录
+            </view>
+            <view class="right"></view>
+        </view>
+    </view>
+
+    <!-- <view wx:if="{{showPop}}" class="jm-popup">
+        <view class="content-area"> -->
+    <page-container show="{{showPop}}" position="bottom" border-radius="10px 10px 0 0">
+        <view class="pop-box">
+            <view class="pop-head">
+                <text bind:tap="closePop">取消</text>
+                <text bind:tap="confirmPop" style="color: #33bb33;">确定</text>
+            </view>
+            <view>
+                <checkbox-group class="checkbox-group" bind:change="checkChange">
+                    <label class="checkbox" wx:for="{{WirList}}"  wx:for-index="index" wx:for-item="item" wx:key="index">
+                        <checkbox value="{{item.value}}" checked="{{item.checked}}">{{item.name}}</checkbox>
+                    </label>
+                </checkbox-group>
+            </view>
+        </view>
+    </page-container>
+    <!-- </view> -->
+    <view class="jm-container bg-white margin-top">
+        <view class="{{'jm-form' + (readonly?' readonly':'')}}">
+            <view class="jm-form-title">
+                基本信息
+            </view>
+            <!-- <view class="jm-formitem2" wx:if="{{readonly}}">
+                <text>序号</text>
+                <input disabled="{{readonly}}" model:value="{{formData.ordinal}}" bind:change="changeForm" data-key="ordinal" type="number" placeholder="请输入" />
+            </view> -->
+            <view class="jm-formitem2">
+                <text>带队领导</text>
+                <input disabled="{{readonly}}" model:value="{{formData.teamLeader}}" bind:change="changeForm" data-key="teamLeader" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2 flex-wrap">
+                <text>被检查单位</text>
+                <text bind:tap="openMultSelect" data-key="inspectedUnit" placeholder="请选择">{{formData.inspectedUnit || '请选择'}}</text>
+                <!-- <input disabled="{{readonly}}" model:value="{{formData.inspectedUnit}}" bind:change="changeForm" data-key="inspectedUnit" placeholder="请输入" /> -->
+            </view>
+            <view class="jm-formitem2">
+                <text>检查日期</text>
+                <picker disabled="{{readonly}}" mode="date" bind:change="changeForm" data-key="date0" :start="new Date().toDateString()">
+                    <view class="picker">{{formData.date0 || "请选择日期"}}</view>
+                </picker>
+            </view>
+            <!-- <view class="jm-formitem2">
+                <text>检查时间</text>
+                <picker disabled="{{readonly}}" mode="time" bind:change="changeForm" data-key="date1">
+                    <view class="picker">{{formData.date1 || "请选择时间"}}</view>
+                </picker>
+            </view> -->
+            <view class="jm-formitem2">
+                <text style="width: 200rpx;">检查类别及区域</text>
+                <input disabled="{{readonly}}" model:value="{{formData.inspectionCategory}}" bind:change="changeForm" data-key="inspectionCategory" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2 flex-wrap">
+                <text>检查部门</text>
+                <!-- <picker disabled="{{readonly}}" mode="selector" bind:change="bindMultiPickerChange" 
+                    data-key="organizationList" value="{{formData.organizationList}}" range="{{WirList}}"
+                >
+                    <view class="picker">
+                        <view class="picker">{{formData.organization || '请选择'}}</view>
+                    </view>
+                </picker> -->
+                <!-- <input disabled model:value="{{formData.organization}}" bind:tap="openMultSelect" data-key="organization" placeholder="请选择" /> -->
+                <text bind:tap="openMultSelect" data-key="organization" placeholder="请选择">{{formData.organization || '请选择'}}</text>
+            </view>
+            
+            <view class="jm-formitem2">
+                <text>检查人员</text>
+                <input disabled="{{readonly}}" model:value="{{formData.inspector}}" bind:change="changeForm" data-key="inspector" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2 flex-wrap">
+                <text>检查情况及存在问题</text>
+                <view>
+                    <textarea style="height: 320rpx;" disabled="{{readonly}}" value="{{formData.inspectionStatus}}" bind:blur="changeForm" data-key="inspectionStatus" />
+                </view>
+                <!-- <input disabled="{{readonly}}" model:value="{{formData.inspectionStatus}}" bind:change="changeForm" data-key="inspectionStatus" placeholder="请输入" /> -->
+            </view>
+            <!-- <view class="jm-formitem2">
+                <text>存在问题</text>
+                <input disabled="{{readonly}}" model:value="{{formData.issuesFound}}" bind:change="changeForm" data-key="issuesFound" placeholder="请输入" />
+            </view> -->
+            <view class="jm-formitem2 flex-wrap">
+                <text>整改要求</text>
+                <view>
+                    <textarea disabled="{{readonly}}" value="{{formData.rectificationRequirements}}" bind:blur="changeForm" data-key="rectificationRequirements" />
+                </view>
+            </view>
+            <sign readonly="{{readonly}}" title="检查人员（签字）" bind:setSign="signChange" data-signkey="inspectorSignatureList">
+                <view class="jm-imageList">
+                    <view wx:for="{{formData.inspectorSignatureList}}" wx:for-index="index" wx:for-item="item" wx:key="index" class="jm-image">
+                        <image src="{{item.url}}" bind:tap="downloadFile" data-downloadurl="{{item.url}}" />
+                        <t-icon wx:if="{{!readonly}}" size="20" class="t-icon-close" bind:tap="removeFile" data-filekey="inspectorSignatureList" data-index="{{index}}" />
+                    </view>
+                </view>
+            </sign>
+            <sign readonly="{{readonly}}" title="被检查单位签字" bind:setSign="signChange" data-signkey="inspectedUnitSignatureList">
+                <view class="jm-imageList">
+                    <view wx:for="{{formData.inspectedUnitSignatureList}}" wx:for-index="index" wx:for-item="item" wx:key="index" class="jm-image">
+                        <image src="{{item.url}}" bind:tap="downloadFile" data-downloadurl="{{item.url}}" />
+                        <t-icon wx:if="{{!readonly}}" size="20" class="t-icon-close" bind:tap="removeFile" data-filekey="inspectedUnitSignatureList" data-index="{{index}}" />
+                    </view>
+                </view>
+            </sign>
+            <!-- 
+            <view class="jm-formitem2 flex-wrap">
+                <text>被检查单位签字</text>
+                <view class="jm-imageList">
+                    <view wx:for="{{formData.inspectedUnitSignatureList}}" wx:for-index="index" wx:for-item="item" wx:key="index" class="jm-image">
+                        <image src="{{item.url}}" bind:tap="downloadFile" data-downloadurl="{{item.url}}" />
+                        <t-icon wx:if="{{!readonly}}" size="20" class="t-icon-close" bind:tap="removeFile" data-filekey="inspectedUnitSignatureList" data-index="{{index}}" />
+                    </view>
+                    <view wx:if="{{!readonly}}">
+                        <button class="upload-btn" bind:tap="chooseImage" data-imagekey="inspectedUnitSignatureList">+</button>
+                    </view>
+                </view>
+            </view>
+             -->
+            <view class="jm-formitem2 flex-wrap">
+                <text>照片上传</text>
+                <view class="jm-imageList">
+                    <view wx:for="{{formData.attachmentList}}" wx:for-index="index" wx:for-item="item" wx:key="index" class="jm-image">
+                        <image src="{{item.url}}" bind:tap="downloadFile" data-downloadurl="{{item.url}}" />
+                        <t-icon wx:if="{{!readonly}}" size="20" class="t-icon-close" bind:tap="removeFile" data-filekey="attachmentList" data-index="{{index}}" />
+                    </view>
+                    <view wx:if="{{!readonly}}">
+                        <button class="upload-btn" bind:tap="chooseImage" data-imagekey="attachmentList">+</button>
+                    </view>
+                </view>
+            </view>
+            <view class="jm-formitem2 flex-wrap">
+                <text>整改报告</text>
+                <view wx:if="{{!readonly}}">
+                    <button class="upload-btn" bind:tap="chooseFile" data-filekey="rectificationReportList">选择文件</button>
+                </view>
+                <view class="jm-fileList">
+                    <view wx:for="{{formData.rectificationReportList}}" wx:for-index="index" wx:for-item="item" wx:key="index" class="jm-file">
+                        <span bind:tap="downloadFile" data-downloadurl="{{item.url}}">{{item.name}}</span>
+                        <t-icon wx:if="{{!readonly}}" size="20" class="t-icon-close" bind:tap="removeFile" data-filekey="rectificationReportList" data-index="{{index}}" />
+                    </view>
+                </view>
+            </view>
+        </view>
+
+        <view class="btn-group" style="padding-bottom: 40rpx;">
+            <button plain primary bind:tap="BackPage">返回</button>
+            <button wx:if="{{!readonly}}" class="primary" bind:tap="saveData" data-draft="true">保存</button>
+            <button wx:if="{{!readonly}}" class="primary" bind:tap="saveData">确认</button>
+            <button wx:else class="primary" bind:tap="exportFile">生成Word</button>
+        </view>
+    </view>
+</view>

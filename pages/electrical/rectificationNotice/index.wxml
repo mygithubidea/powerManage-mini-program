@@ -1,0 +1,94 @@
+<view class="container bg-white margin-top">
+    <view class="jm-header">
+        <view class="flex">
+            <view class="left" bind:tap="BackPage">
+                <t-icon size="20" bind:tap="onBack" aria-role="button" aria-label="返回" name="chevron-left" class="custom-capsule__icon" />
+                <text>返回</text>
+            </view>
+            <view class="content">
+                整改通知
+            </view>
+            <view class="right"></view>
+        </view>
+    </view>
+
+    <scroll-view scroll-x enable-flex class="bg-white nav">
+        <view class="flex text-center">
+            <view wx:if="{{showMenu[0]}}" class="{{'cu-item flex-sub ' + (0==TabCur?'text-blue cur':'')}}" bind:tap="tabSelect" data-id="0">
+                公司级
+            </view>
+            <view wx:if="{{showMenu[1]}}" class="{{'cu-item flex-sub ' + (1==TabCur?'text-blue cur':'')}}" bind:tap="tabSelect" data-id="1">
+                所站级
+            </view>
+            <view wx:if="{{showBtn[TabCur]}}" class="fix-button" bind:tap="gotoAdd">
+                <text class="t-icon-add-circle t-icon" style="font-size: 60rpx;line-height: 90rpx;color: #0066FF;"></text>
+            </view>
+        </view>
+    </scroll-view>
+    <view wx:if="{{TabCur==0}}">
+        <scroll-view scroll-y class="list-box" bindscrolltolower="nextPage" refresher-enabled bindrefresherrefresh="resetQuery" refresher-triggered="{{refreshFlag}}">
+            <view>
+                <view class="infoNoData" wx:if="{{dataList0.length == 0}}">
+                    <view>
+                        <view>暂时没有数据</view>
+                    </view>
+                </view>
+                <view class="list-item" wx:for="{{dataList0}}" wx:for-index="index" wx:for-item="item" wx:key="index" bind:tap="openDialog" data-id="{{item.id}}">
+                    <!-- <view class="jm-formitem">
+                        <text>序号</text>
+                        <text>{{item.ordinal|| ""}}</text>
+                    </view> -->
+                    <view class="jm-formitem">
+                        <text>检查单位</text>
+                        <text>{{item.inspectionUnit|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>用户户名</text>
+                        <text>{{item.username|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>检查时间</text>
+                        <text>{{item.inspectionTime|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>隐患情况</text>
+                        <text>{{item.hazardDescription|| ""}}</text>
+                    </view>
+                </view>
+            </view>
+        </scroll-view>
+    </view>
+    <view wx:if="{{TabCur==1}}">
+        <scroll-view scroll-y class="list-box" bindscrolltolower="nextPage" refresher-enabled bindrefresherrefresh="resetQuery" refresher-triggered="{{refreshFlag}}">
+            <view>
+                <view class="infoNoData" wx:if="{{dataList1.length == 0}}">
+                    <view>
+                        <view>暂时没有数据</view>
+                    </view>
+                </view>
+                <view class="list-item" wx:for="{{dataList1}}" wx:for-index="index" wx:for-item="item" wx:key="index" bind:tap="openDialog" data-id="{{item.id}}">
+                    <!-- <view class="jm-formitem">
+                        <text>序号</text>
+                        <text>{{item.ordinal|| ""}}</text>
+                    </view> -->
+                    <view class="jm-formitem">
+                        <text>检查单位</text>
+                        <text>{{item.inspectionUnit|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>用户户名</text>
+                        <text>{{item.username|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>检查时间</text>
+                        <text>{{item.inspectionTime|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>隐患情况</text>
+                        <text>{{item.hazardDescription|| ""}}</text>
+                    </view>
+                </view>
+            </view>
+        </scroll-view>
+    </view>
+</view>

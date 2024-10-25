@@ -1,0 +1,4 @@
+/* pages/electrical/rectificationNotice/add.wxss */
+.btn-group button {
+    width: 240rpx;   
+}

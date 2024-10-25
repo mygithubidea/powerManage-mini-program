@@ -1,0 +1,224 @@
+page {
+    background: #fff;
+}
+
+.sign-area {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #fff;
+    z-index: 2;
+}
+
+.title {
+    margin: 140rpx 0 20rpx;
+}
+
+.container {
+    width: 95%;
+    position: absolute;
+    height: 95%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    border-radius: 5px;
+}
+
+.handCenter {
+    height: calc(100% - 420rpx);
+}
+
+.canvas {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #aaa;
+    box-sizing: border-box;
+}
+
+.tips {
+    height: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #aaa;
+}
+
+.btn-group {
+    margin-top: 40rpx;
+}
+
+.addBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 18%;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: #fff;
+    z-index: 100;
+}
+
+.addBtn .txt {
+    text-align: center;
+    width: 90%;
+    font-size: 13px;
+    border-radius: 100px;
+    background: #0097fe;
+    color: #fff;
+    box-sizing: border-box;
+    margin: 0 10px;
+    padding: 10px;
+    z-index: 100;
+}
+
+.jm-formitem2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 80rpx;
+    line-height: 80rpx;
+    border-bottom: 2rpx solid rgba(232, 232, 232, 1);
+}
+
+.jm-formitem2.flex-wrap {
+    height: inherit;
+    padding-bottom: 16rpx;
+}
+.jm-formitem.flex-wrap {
+    height: inherit;
+    padding-bottom: 16rpx;
+}
+
+.jm-formitem2 textarea {
+    width: 680rpx;
+    height: 152rpx;
+    line-height: 40rpx;
+    color: rgba(136, 136, 136, 1);
+    font-size: 28rpx;
+    border: solid 2rpx rgba(232, 232, 232, 1);
+}
+
+.jm-formitem2>text:first-child {
+    /* width: 180rpx; */
+    width: 240rpx;
+    color: rgba(154, 154, 154, 1);
+    font-size: 28rpx;
+}
+
+.jm-formitem2 text.right-text {
+    max-width: 420rpx;
+    font-size: 28rpx;
+    line-height: 1.5;
+}
+
+.jm-formitem2 .right-form {
+    flex: 1;
+    font-size: 28rpx;
+    text-align: right;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.jm-formitem2 input {
+    flex: 1;
+    font-size: 28rpx;
+    text-align: right;
+}
+
+.jm-formitem2 checkbox {
+    font-size: 28rpx;
+    margin-left: 20rpx;
+}
+
+.btn-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.btn-group button {
+    width: 178rpx;
+    height: 60rpx;
+    line-height: 60rpx;
+    border-radius: 8rpx;
+    background-color: rgba(255, 255, 255, 1);
+    color: rgba(22, 132, 252, 1);
+    font-size: 28rpx;
+    text-align: center;
+    border: 2rpx solid rgba(22, 132, 252, 1);
+}
+
+.btn-group button.primary {
+    background-color: rgba(22, 132, 252, 1);
+    color: #ffffff;
+}
+
+
+.nav .cu-item.cur {
+    border-bottom: 4rpx solid;
+}
+
+.nav .cu-item {
+    height: 90rpx;
+    display: inline-block;
+    line-height: 90rpx;
+    margin: 0 10rpx;
+    padding: 0 20rpx;
+}
+
+.text-blue,
+.line-blue,
+.lines-blue {
+    color: #0081ff;
+}
+
+.flex-sub {
+    flex: 1;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+    line-height: 1.5;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.jm-header {
+    padding: 108rpx 0 28rpx;
+    background: #0066FF;
+    color: #ffffff;
+    display: block;
+    position: relative;
+    font-size: 32rpx;
+}
+
+.jm-header .left {
+    display: flex;
+    flex: 1;
+}
+
+.jm-header .right {
+    flex: 1;
+}
+
+.jm-header .content {
+    width: calc(100% - 380rpx);
+    text-align: center;
+}
+
+.jm-container {
+    height: calc(100vh - 230rpx);
+    overflow: auto;
+}

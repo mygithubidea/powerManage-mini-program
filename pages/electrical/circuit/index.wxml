@@ -1,0 +1,158 @@
+<wxs module="utils" src="/utils/utils.wxs"></wxs>
+<view class="container bg-white margin-top">
+    <view class="jm-header">
+        <view class="flex">
+            <view class="left" bind:tap="BackPage">
+                <t-icon size="20" bind:tap="onBack" aria-role="button" aria-label="返回" name="chevron-left" class="custom-capsule__icon" />
+                <text>返回</text>
+            </view>
+            <view class="content">
+                线路巡查
+            </view>
+            <view class="right"></view>
+        </view>
+    </view>
+
+    <scroll-view scroll-x enable-flex class="bg-white nav">
+        <view class="flex text-center">
+            <view wx:if="{{showMenu[0]}}" class="{{'cu-item flex-sub ' + (0==TabCur?'text-blue cur':'')}}" bind:tap="tabSelect" data-id="0">
+                巡查列表
+            </view>
+            <view wx:if="{{showMenu[1]}}" class="{{'cu-item flex-sub ' + (1==TabCur?'text-blue cur':'')}}" bind:tap="tabSelect" data-id="1">
+                缺陷隐患
+            </view>
+            <view wx:if="{{showMenu[2]}}" class="{{'cu-item flex-sub ' + (2==TabCur?'text-blue cur':'')}}" bind:tap="tabSelect" data-id="2">
+                一患一档
+            </view>
+        </view>
+    </scroll-view>
+    <view wx:if="{{TabCur==0}}">
+        <scroll-view scroll-y class="list-box" bindscrolltolower="nextPage" refresher-enabled bindrefresherrefresh="resetQuery" refresher-triggered="{{refreshFlag}}">
+            <view>
+                <view class="infoNoData" wx:if="{{dataList0.length == 0}}">
+                    <view>
+                        <view>暂时没有数据</view>
+                    </view>
+                </view>
+                <view class="list-item" wx:for="{{dataList0}}" wx:for-index="index" wx:for-item="item" wx:key="index" bind:tap="goRecord"
+                    data-linename="{{item.lineName}}" data-polenumber="{{item.poleNumber}}">
+                    <view class="jm-formitem">
+                        <text style="color: #000;width: 100%;">{{item.lineName || "-"}}</text>
+                        <text></text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>杆号</text>
+                        <text>{{item.poleNumber || ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>巡查时间</text>
+                        <text>{{item.inspectionTime || ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>经纬度</text>
+                        <text>{{item.longitudeLatitude || ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>检查人</text>
+                        <text>{{item.inspector || ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>责任人</text>
+                        <text>{{item.responsiblePerson || ""}}</text>
+                    </view>
+                </view>
+            </view>
+        </scroll-view>
+    </view>
+    <view wx:if="{{TabCur==1}}">
+        <scroll-view scroll-y class="list-box" bindscrolltolower="nextPage" refresher-enabled bindrefresherrefresh="resetQuery" refresher-triggered="{{refreshFlag}}">
+            <view>
+                <view class="infoNoData" wx:if="{{dataList1.length == 0}}">
+                    <view>
+                        <view>暂时没有数据</view>
+                    </view>
+                </view>
+                <view class="list-item" wx:for="{{dataList1}}" wx:for-index="index" wx:for-item="item" wx:key="index" data-id="{{item.id}}" bind:tap="viewDefectRisk">
+                    <!-- <view class="jm-formitem">
+                        <text>序号</text>
+                        <text>{{item.ordinal|| ""}}</text>
+                    </view> -->
+                    <view class="jm-formitem">
+                        <text>责任站所</text>
+                        <text>{{item.responsibleStation|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>隐患简述</text>
+                        <text>{{item.defectDescription|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>整改责任人</text>
+                        <text>{{item.rectificationResponsible|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>治理完成日期</text>
+                        <text>{{item.rectificationCompletionDate|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>整改情况</text>
+                        <text>{{item.rectificationStatus|| ""}}</text>
+                    </view>
+                </view>
+            </view>
+        </scroll-view>
+    </view>
+    <view wx:if="{{TabCur==2}}">
+        <scroll-view scroll-y class="list-box" bindscrolltolower="nextPage" refresher-enabled bindrefresherrefresh="resetQuery" refresher-triggered="{{refreshFlag}}">
+            <view>
+                <view class="infoNoData" wx:if="{{dataList2.length == 0}}">
+                    <view>
+                        <view>暂时没有数据</view>
+                    </view>
+                </view>
+                <view class="list-item" wx:for="{{dataList2}}" wx:for-index="index" wx:for-item="item" wx:key="index" bind:tap="goYHYD" data-id="{{item.id}}">
+                    <view class="jm-formitem">
+                        <text>安全隐患内容</text>
+                        <text>{{item.safetyDefectContent|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>发现时间</text>
+                        <text>{{item.discoveryTime|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>责任人</text>
+                        <text>{{item.responsiblePerson|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>完成时间</text>
+                        <text>{{item.completionTime|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem flex-wrap">
+                        <text>整改前</text>
+                        <!-- <text>{{utils.getFileName(item.beforeRectificationPhoto)|| ""}}</text> -->
+                        <view class="jm-imageList">
+                            <view wx:for="{{item.beforeRectificationPhotoList}}" wx:for-index="index" wx:for-item="url" wx:key="index" class="jm-image">
+                                <image src="{{url}}" />
+                            </view>
+                        </view>
+                    </view>
+                    <view class="jm-formitem flex-wrap">
+                        <text>整改中</text>
+                        <view class="jm-imageList">
+                            <view wx:for="{{item.duringRectificationPhotoList}}" wx:for-index="index" wx:for-item="url" wx:key="index" class="jm-image">
+                                <image src="{{url}}" />
+                            </view>
+                        </view>
+                    </view>
+                    <view class="jm-formitem flex-wrap">
+                        <text>整改后</text>
+                        <view class="jm-imageList">
+                            <view wx:for="{{item.afterRectificationPhotoList}}" wx:for-index="index" wx:for-item="url" wx:key="index" class="jm-image">
+                                <image src="{{url}}" />
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+        </scroll-view>
+    </view>
+</view>

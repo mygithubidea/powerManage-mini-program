@@ -1,0 +1,140 @@
+<view>
+    <view class="jm-header">
+        <view class="flex">
+            <view class="left" bind:tap="BackPage">
+                <t-icon size="20" bind:tap="onBack" aria-role="button" aria-label="返回" name="chevron-left" class="custom-capsule__icon" />
+                <text>返回</text>
+            </view>
+            <view class="content">
+                {{readonly ? '':'新建'}}一患一档详情
+            </view>
+            <view class="right"></view>
+        </view>
+    </view>
+
+    <view class="jm-container bg-white margin-top">
+
+        <view class="{{'jm-form' + (readonly?' readonly':'')}}">
+
+            <view class="jm-form-title">
+                基本信息
+            </view>
+            <view class="jm-formitem2">
+                <text>安全隐患内容</text>
+                <text class="right-text">{{formData.safetyDefectContent || ""}}</text>
+            </view>
+            <view class="jm-formitem2">
+                <text>风险等级</text>
+                <input disabled="{{readonly}}" model:value="{{formData.riskLevel}}" bind:change="changeForm" data-key="riskLevel" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2">
+                <text>隐患单位</text>
+                <text class="right-text">{{formData.unit || ""}}</text>
+            </view>
+            <view class="jm-formitem2">
+                <text>负责人</text>
+                <text class="right-text">{{formData.responsiblePerson || ""}}</text>
+            </view>
+            <view class="jm-formitem2">
+                <text>验收人</text>
+                <input disabled="{{readonly}}" model:value="{{formData.inspector}}" bind:change="changeForm" data-key="inspector" placeholder="请输入" />
+            </view>
+
+            <view class="jm-formitem2">
+                <text>发现日期</text>
+                <picker disabled="{{readonly}}" mode="date" bind:change="changeForm" data-key="date0">
+                    <view class="picker">{{formData.date0 || "请选择日期"}}</view>
+                </picker>
+            </view>
+            <view class="jm-formitem2">
+                <text>发现时间</text>
+                <!-- <input disabled="{{readonly}}" model:value="{{formData.discoveryTime}}" /> -->
+                <picker disabled="{{readonly}}" mode="time" bind:change="changeForm" data-key="date1">
+                    <view class="picker">{{formData.date1 || "请选择时间"}}</view>
+                </picker>
+            </view>
+            <view class="jm-formitem2">
+                <text>完成日期</text>
+                <picker disabled="{{readonly}}" mode="date" bind:change="changeForm" data-key="date2">
+                    <view class="picker">{{formData.date2 || "请选择日期"}}</view>
+                </picker>
+            </view>
+            <view class="jm-formitem2">
+                <text>完成时间</text>
+                <!-- <input disabled="{{readonly}}" model:value="{{formData.completionTime}}" /> -->
+                <picker disabled="{{readonly}}" mode="time" bind:change="changeForm" data-key="date3">
+                    <view class="picker">{{formData.date3 || "请选择时间"}}</view>
+                </picker>
+            </view>
+            <view class="jm-formitem2">
+                <text>整改时限</text>
+                <input disabled="{{readonly}}" model:value="{{formData.rectificationDeadline}}" bind:change="changeForm" data-key="rectificationDeadline" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2">
+                <text>材料费(万元)</text>
+                <input disabled="{{readonly}}" model:value="{{formData.materialCost}}" bind:change="changeForm" data-key="materialCost" type="number" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2">
+                <text>人工费(万元)</text>
+                <input disabled="{{readonly}}" model:value="{{formData.laborCost}}" bind:change="changeForm" data-key="laborCost" type="number" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2">
+                <text>管控措施</text>
+                <input disabled="{{readonly}}" model:value="{{formData.controlMeasures}}" bind:change="changeForm" data-key="controlMeasures" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2">
+                <text>具体整改措施</text>
+                <input disabled="{{readonly}}" model:value="{{formData.specificRectificationMeasures}}" bind:change="changeForm" data-key="specificRectificationMeasures" placeholder="请输入" />
+            </view>
+
+            <view class="jm-form-title">
+                工作照片
+            </view>
+            <view class="jm-formitem2 flex-wrap">
+                <text class="image-text">整改前</text>
+                <view class="jm-imageList">
+                    <!-- <image src="{{formData.beforeRectificationPhoto}}" mode=""/> -->
+                    <!-- <image src="http://8.137.91.167:9000/file-1/my-file/6T7fUTBZSA5x1e2d43d16021a2f7d251beda2af508e0.png" mode=""/> -->
+                    <view wx:for="{{formData.beforeRectificationPhotoList}}" wx:for-index="index" wx:for-item="item" wx:key="index" class="jm-image">
+                        <image src="{{item.url}}" bind:tap="downloadFile" data-downloadurl="{{item.url}}"/>
+                        <t-icon wx:if="{{!readonly}}" size="20" class="t-icon-close" bind:tap="removeFile" data-filekey="beforeRectificationPhotoList" data-index="{{index}}" />
+                    </view>
+                    <view wx:if="{{!readonly}}">
+                        <button class="upload-btn" bind:tap="chooseImage" data-imagekey="beforeRectificationPhotoList">+</button>
+                    </view>
+                </view>
+            </view>
+            <view wx:if="{{readonly}}" class="jm-formitem2 flex-wrap">
+                <text class="image-text">整改中</text>
+                <view class="jm-imageList">
+                    <view wx:for="{{formData.duringRectificationPhotoList}}" wx:for-index="index" wx:for-item="item" wx:key="index" class="jm-image">
+                        <image src="{{item.url}}" bind:tap="downloadFile" data-downloadurl="{{item.url}}"/>
+                        <t-icon wx:if="{{!readonly}}" size="20" class="t-icon-close" bind:tap="removeFile" data-filekey="duringRectificationPhotoList" data-index="{{index}}" />
+                    </view>
+                    <view wx:if="{{!readonly}}">
+                        <button class="upload-btn" bind:tap="chooseImage" data-imagekey="duringRectificationPhotoList">+</button>
+                    </view>
+                </view>
+            </view>
+            <view wx:if="{{readonly}}" class="jm-formitem2 flex-wrap">
+                <text class="image-text">整改后</text>
+                <view class="jm-imageList">
+                    <view wx:for="{{formData.afterRectificationPhotoList}}" wx:for-index="index" wx:for-item="item" wx:key="index" class="jm-image">
+                        <image src="{{item.url}}" bind:tap="downloadFile" data-downloadurl="{{item.url}}"/>
+                        <t-icon wx:if="{{!readonly}}" size="20" class="t-icon-close" bind:tap="removeFile" data-filekey="afterRectificationPhotoList" data-index="{{index}}" />
+                    </view>
+                    <view wx:if="{{!readonly}}">
+                        <button class="upload-btn" bind:tap="chooseImage" data-imagekey="afterRectificationPhotoList">+</button>
+                    </view>
+                </view>
+            </view>
+            
+
+        </view>
+
+        <view class="btn-group" style="padding-bottom: 40rpx;">
+            <button plain primary bind:tap="BackPage">返回</button>
+            <button wx:if="{{!readonly}}" class="primary" bind:tap="saveData">确认</button>
+        </view>
+    </view>
+</view>

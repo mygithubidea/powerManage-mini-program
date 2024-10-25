@@ -1,0 +1,158 @@
+<view>
+    <view class="jm-header">
+        <view class="flex">
+            <view class="left" bind:tap="BackPage">
+                <t-icon size="20" bind:tap="onBack" aria-role="button" aria-label="返回" name="chevron-left" class="custom-capsule__icon" />
+                <text>返回</text>
+            </view>
+            <view class="content">
+                {{readonly ? '':'修改'}}线路巡检记录
+            </view>
+            <view class="right"></view>
+        </view>
+    </view>
+
+    <view class="jm-container bg-white margin-top">
+
+        <view class="{{'jm-form' + (readonly?' readonly':'')}}">
+
+            <view class="jm-form-title">
+                基本信息
+            </view>
+            <view class="jm-formitem2">
+                <text>配电变压器名称</text>
+                <input disabled model:value="{{formData.transformerName}}" />
+            </view>
+            <view class="jm-formitem2">
+                <text>管理单位</text>
+                <input disabled="{{readonly}}" model:value="{{formData.managementUnit}}" bind:change="changeForm" data-key="managementUnit" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2">
+                <text>检查人员</text>
+                <view class="right-form">
+                    <input disabled model:value="{{formData.inspector}}" bind:change="changeForm" data-key="inspector" placeholder="请输入" />
+                </view>
+            </view>
+            <view class="jm-formitem2">
+                <text>负责人</text>
+                <view class="right-form">
+                    <input disabled model:value="{{formData.responsiblePerson}}" bind:change="changeForm" data-key="responsiblePerson" placeholder="请输入" />
+                </view>
+            </view>
+            <view class="jm-formitem2">
+                <text>巡查日期</text>
+                <picker disabled="{{readonly}}" mode="date" bind:change="changeForm" data-key="date0" :start="new Date().toDateString()">
+                    <view class="picker">{{formData.date0 || "请选择日期"}}</view>
+                </picker>
+            </view>
+            <!-- <view class="jm-formitem2">
+                <text>巡查时间</text>
+                <picker disabled="{{readonly}}" mode="time" bind:change="changeForm" data-key="date1">
+                    <view class="picker">{{formData.date1 || "请选择时间"}}</view>
+                </picker>
+            </view> -->
+            <view class="jm-formitem2" style="height:auto">
+                <text>经纬度</text>
+                <text class="right-text" bind:tap="getLocation">{{formData.longitudeLatitude || '获取定位'}}
+                </text>
+            </view>
+            
+            <view class="jm-form-title">
+                巡查内容
+            </view>
+            <view class="jm-formitem2">
+                <text>导管状况</text>
+                <view class="right-form">
+                    <switch disabled="{{readonly}}" checked="{{formData.conduit}}" bindchange="changeForm" data-key="conduit"/>
+                    <text bind:tap="gotoAddYhyd" wx:if="{{!formData.conduit}}" class="{{switchDisableKeys.conduit ? 'right-btn disable' : 'right-btn'}}"
+                        data-key="conduit" data-reason="导管状况">新建一患一档</text>
+                </view>
+            </view>
+            <view class="jm-formitem2">
+                <text>避雷器状况</text>
+                <view class="right-form">
+                    <switch disabled="{{readonly}}" checked="{{formData.lightningArrester}}" bindchange="changeForm" data-key="lightningArrester"/>
+                    <text bind:tap="gotoAddYhyd" wx:if="{{!formData.lightningArrester}}" class="{{switchDisableKeys.lightningArrester ? 'right-btn disable' : 'right-btn'}}"
+                        data-key="lightningArrester" data-reason="避雷器状况">新建一患一档</text>
+                </view>
+            </view>
+            <view class="jm-formitem2">
+                <text>熔断器状况</text>
+                <view class="right-form">
+                    <switch disabled="{{readonly}}" checked="{{formData.fuse}}" bindchange="changeForm" data-key="fuse"/>
+                    <text bind:tap="gotoAddYhyd" wx:if="{{!formData.fuse}}" class="{{switchDisableKeys.fuse ? 'right-btn disable' : 'right-btn'}}"
+                        data-key="fuse" data-reason="熔断器状况">新建一患一档</text>
+                </view>
+            </view>
+            <view class="jm-formitem2">
+                <text>接地电阻(Q)</text>
+                <view class="right-form">
+                    <switch disabled="{{readonly}}" checked="{{formData.groundingResistance}}" bindchange="changeForm" data-key="groundingResistance"/>
+                    <text bind:tap="gotoAddYhyd" wx:if="{{!formData.groundingResistance}}" class="{{switchDisableKeys.groundingResistance ? 'right-btn disable' : 'right-btn'}}"
+                        data-key="groundingResistance" data-reason="接地电阻">新建一患一档</text>
+                </view>
+            </view>
+            <view class="jm-formitem2">
+                <text>油位(米)</text>
+                <view class="right-form">
+                <input type="number" disabled="{{readonly}}" model:value="{{formData.oilLevel}}" bind:change="changeForm" data-key="oilLevel" placeholder="请输入" />
+                    <!-- <switch disabled="{{readonly}}" checked="{{formData.oilLevel}}" bindchange="changeForm" data-key="oilLevel"/> -->
+                </view>
+            </view>
+            <view class="jm-formitem2">
+                <text>油色</text>
+                <view class="right-form">
+                    <switch disabled="{{readonly}}" checked="{{formData.oilColor}}" bindchange="changeForm" data-key="oilColor"/>
+                    <text bind:tap="gotoAddYhyd" wx:if="{{!formData.oilColor}}" class="{{switchDisableKeys.oilColor ? 'right-btn disable' : 'right-btn'}}"
+                        data-key="oilColor" data-reason="油色">新建一患一档</text>
+                </view>
+            </view>
+            <view class="jm-formitem2">
+                <text>变台高度(米)</text>
+                <input type="number" disabled="{{readonly}}" model:value="{{formData.platformHeight}}" bind:change="changeForm" data-key="platformHeight" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2">
+                <text>有无安全标识</text>
+                <view class="right-form">
+                    <switch disabled="{{readonly}}" checked="{{formData.safetySignage}}" bindchange="changeForm" data-key="safetySignage"/>
+                    <text bind:tap="gotoAddYhyd" wx:if="{{!formData.safetySignage}}" class="{{switchDisableKeys.safetySignage ? 'right-btn disable' : 'right-btn'}}"
+                        data-key="safetySignage" data-reason="安全标识">新建一患一档</text>
+                </view>
+            </view>
+            <view class="jm-formitem2">
+                <text>障碍情况</text>
+                <view class="right-form">
+                    <switch disabled="{{readonly}}" checked="{{formData.obstacles}}" bindchange="changeForm" data-key="obstacles"/>
+                    <text bind:tap="gotoAddYhyd" wx:if="{{!formData.obstacles}}" class="{{switchDisableKeys.obstacles ? 'right-btn disable' : 'right-btn'}}"
+                        data-key="obstacles" data-reason="障碍情况">新建一患一档</text>
+                </view>
+            </view>
+            <view class="jm-formitem2">
+                <text>隐患类别</text>
+                <input disabled="{{readonly}}" model:value="{{formData.hazardCategory}}" bind:change="changeForm" data-key="hazardCategory" placeholder="请输入" />
+            </view>
+
+            <view class="jm-form-title">
+                工作照片
+            </view>
+            
+            <sign readonly="{{readonly}}" title="工作照片" bind:setSign="signChange" data-signkey="photoList">
+                <view class="jm-imageList">
+                    <view wx:for="{{formData.photoList}}" wx:for-index="index" wx:for-item="item" wx:key="index" class="jm-image">
+                        <image src="{{item.url}}" bind:tap="downloadFile" data-downloadurl="{{item.url}}"/>
+                        <t-icon wx:if="{{!readonly}}" size="20" class="t-icon-close" bind:tap="removeFile" data-filekey="photoList" data-index="{{index}}" />
+                    </view>
+                    <view wx:if="{{!readonly}}">
+                        <button class="upload-btn" bind:tap="chooseImage" data-imagekey="photoList">+</button>
+                    </view>
+                </view>
+            </sign>
+
+        </view>
+
+        <view class="btn-group" style="padding-bottom: 40rpx;">
+            <button plain primary bind:tap="BackPage">返回</button>
+            <button wx:if="{{!readonly}}" class="primary" bind:tap="saveData">确认</button>
+        </view>
+    </view>
+</view>

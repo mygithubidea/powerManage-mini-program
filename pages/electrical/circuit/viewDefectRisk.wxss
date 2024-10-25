@@ -1,0 +1,22 @@
+/* pages/electrical/circuit/viewDefectRisk.wxss */
+.jm-formitem2>text:first-child {
+    width: 260rpx;
+}
+
+.downloadUrl {
+    height: auto;
+}
+
+.url {
+    height: 40rpx;
+    line-height: 40rpx;
+    padding: 10rpx 0;
+}
+
+.url:first-child {
+    padding-top: 20rpx;
+}
+
+.url:last-child {
+    padding-bottom: 20rpx;
+}

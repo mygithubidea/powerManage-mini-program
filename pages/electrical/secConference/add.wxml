@@ -1,0 +1,135 @@
+<view>
+    <view class="jm-header">
+        <view class="flex">
+            <view class="left" bind:tap="BackPage">
+                <t-icon size="20" bind:tap="onBack" aria-role="button" aria-label="返回" name="chevron-left" class="custom-capsule__icon" />
+                <text>返回</text>
+            </view>
+            <view class="content">
+                {{readonly ? '':'新建'}}会议通知记录
+            </view>
+            <view class="right"></view>
+        </view>
+    </view>
+
+    <view class="jm-container bg-white margin-top">
+
+        <view class="{{'jm-form' + (readonly?' readonly':'')}}">
+
+            <view class="jm-form-title">
+                基本信息
+            </view>
+            <!-- <view class="jm-formitem2" wx:if="{{readonly}}">
+                <text>序号</text>
+                <input disabled="{{readonly}}" model:value="{{formData.ordinal}}" bind:change="changeForm" data-key="ordinal" type="number" placeholder="请输入" />
+            </view> -->
+            <view class="jm-formitem2">
+                <text>单位</text>
+                <!-- <input disabled="{{readonly}}" model:value="{{formData.unit}}" bind:change="changeForm" data-key="unit" placeholder="请输入" /> -->
+                <picker disabled="{{readonly}}" mode="selector" bind:change="changeFormSelect" data-key="unit" range="{{unitSelectList}}">
+                    <view class="picker">{{formData.unit || "请选择"}}</view>
+                </picker>
+            </view>
+            <view class="jm-formitem2">
+                <text>会议日期</text>
+                <picker disabled="{{readonly}}" mode="date" bind:change="changeForm" data-key="date0" :start="new Date().toDateString()">
+                    <view class="picker">{{formData.date0 || "请选择日期"}}</view>
+                </picker>
+            </view>
+            <!-- <view class="jm-formitem2">
+                <text>会议时间</text>
+                <picker disabled="{{readonly}}" mode="time" bind:change="changeForm" data-key="date1">
+                    <view class="picker">{{formData.date1 || "请选择时间"}}</view>
+                </picker>
+            </view> -->
+            <view class="jm-formitem2">
+                <text>会议名称</text>
+                <view class="right-form">
+                    <input disabled="{{readonly}}" model:value="{{formData.meetingName}}" bind:change="changeForm" data-key="meetingName" placeholder="请输入" />
+                </view>
+            </view>
+            <view class="jm-formitem2" style="height:auto">
+                <text>会议地点</text>
+                <view class="right-form">
+                    <input disabled="{{readonly}}" model:value="{{formData.meetingPlace}}" bind:change="changeForm" data-key="meetingPlace" placeholder="请输入" />
+                </view>
+                <!-- 
+                <text class="right-text" bind:tap="chooseLocation">{{formData.meetingPlace || '获取定位'}}
+                </text>
+                 -->
+            </view>
+            <view class="jm-formitem2">
+                <text>主持人</text>
+                <view class="right-form">
+                    <input disabled="{{readonly}}" model:value="{{formData.compere}}" bind:change="changeForm" data-key="compere" placeholder="请输入" />
+                </view>
+            </view>
+            <view class="jm-formitem2">
+                <text>记录人</text>
+                <view class="right-form">
+                    <input disabled="{{readonly}}" model:value="{{formData.recorders}}" bind:change="changeForm" data-key="recorders" placeholder="请输入" />
+                </view>
+            </view>
+            <view class="jm-formitem2 flex-wrap">
+                <text>参会人员</text>
+                <view>
+                    <textarea disabled="{{readonly}}" value="{{formData.meetingNumber}}" bind:blur="changeForm" data-key="meetingNumber" />
+                </view>
+                <!-- 
+                <view class="right-form">
+                    <input disabled="{{readonly}}" model:value="{{formData.meetingNumber}}" bind:change="changeForm" data-key="meetingNumber" type="number" placeholder="请输入" />
+                </view>
+                 -->
+            </view>
+            <view class="jm-formitem2 flex-wrap">
+                <text>会议内容</text>
+                <view>
+                    <textarea disabled="{{readonly}}" value="{{formData.meetingContent}}" bind:blur="changeForm" data-key="meetingContent" />
+                </view>
+            </view>
+            <view class="jm-formitem2 flex-wrap">
+                <text>会议通知记录</text>
+                <view wx:if="{{!readonly}}">
+                    <button class="upload-btn" bind:tap="chooseFile" data-filekey="minuteList">选择文件</button>
+                </view>
+                <view class="jm-fileList">
+                    <view wx:for="{{formData.minuteList}}" wx:for-index="index" wx:for-item="item" wx:key="index" class="jm-file">
+                        <span bind:tap="downloadFile" data-downloadurl="{{item.url}}">{{item.name}}</span>
+                        <t-icon wx:if="{{!readonly}}" size="20" class="t-icon-close" bind:tap="removeFile" data-filekey="minuteList" data-index="{{index}}" />
+                    </view>
+                </view>
+            </view>
+            <view class="jm-formitem2 flex-wrap">
+                <text>会议照片</text>
+                <view class="jm-imageList">
+                    <view wx:for="{{formData.meetingPhotosList}}" wx:for-index="index" wx:for-item="item" wx:key="index" class="jm-image">
+                        <image src="{{item.url}}" bind:tap="downloadFile" data-downloadurl="{{item.url}}"/>
+                        <t-icon wx:if="{{!readonly}}" size="20" class="t-icon-close" bind:tap="removeFile" data-filekey="meetingPhotosList" data-index="{{index}}" />
+                    </view>
+                    <view wx:if="{{!readonly}}">
+                        <button class="upload-btn" bind:tap="chooseImage" data-imagekey="meetingPhotosList">+</button>
+                    </view>
+                </view>
+            </view>
+            <view class="jm-formitem2 flex-wrap">
+                <text>签到表</text>
+                <view class="jm-imageList">
+                    <view wx:for="{{formData.signInSheetList}}" wx:for-index="index" wx:for-item="item" wx:key="index" class="jm-image">
+                        <image src="{{item.url}}" bind:tap="downloadFile" data-downloadurl="{{item.url}}"/>
+                        <t-icon wx:if="{{!readonly}}" size="20" class="t-icon-close" bind:tap="removeFile" data-filekey="signInSheetList" data-index="{{index}}" />
+                    </view>
+                    <view wx:if="{{!readonly}}">
+                        <button class="upload-btn" bind:tap="chooseImage" data-imagekey="signInSheetList">+</button>
+                    </view>
+                </view>
+            </view>
+
+
+        </view>
+
+        <view class="btn-group" style="padding-bottom: 40rpx;">
+            <button plain primary bind:tap="BackPage">返回</button>
+            <button wx:if="{{!readonly}}" class="primary" bind:tap="saveData">确认</button>
+        </view>
+    </view>
+</view>

@@ -1,0 +1,126 @@
+<view class="container bg-white margin-top">
+    <view class="jm-header">
+        <view class="flex">
+            <view class="left" bind:tap="BackPage">
+                <t-icon size="20" bind:tap="onBack" aria-role="button" aria-label="返回" name="chevron-left" class="custom-capsule__icon" />
+                <text>返回</text>
+            </view>
+            <view class="content">
+                线路巡查记录
+            </view>
+            <view class="right"></view>
+        </view>
+    </view>
+
+    <scroll-view scroll-x enable-flex class="bg-white nav">
+        <view class="flex text-center">
+            <view class="{{'cu-item flex-sub ' + (0==TabCur?'text-blue cur':'')}}" bind:tap="tabSelect" data-id="0">
+                已巡检
+            </view>
+            <view class="{{'cu-item flex-sub ' + (1==TabCur?'text-blue cur':'')}}" bind:tap="tabSelect" data-id="1">
+                未巡检
+            </view>
+            <!-- <view class="fix-button" bind:tap="gotoAdd">
+                <text class="t-icon-add-circle t-icon" style="font-size: 60rpx;line-height: 90rpx;color: #0066FF;"></text>
+            </view> -->
+        </view>
+    </scroll-view>
+    <view wx:if="{{TabCur==0}}" style="background-color: #eee;">
+        <scroll-view scroll-y class="list-box" bindscrolltolower="nextPage" refresher-enabled bindrefresherrefresh="resetQuery" refresher-triggered="{{refreshFlag}}">
+            <view class="jm-form-title">
+                任务完成状态
+            </view>
+            <view class="jm-progress">
+                <view class="progress-bg">
+                    <view class="bar" style="{{'width: '+percent+'%'}}"></view>
+                    <text class="progress-text">{{completedTaskCount}}/{{totalTaskCount|| ""}}</text>
+                </view>
+            </view>
+            <view class="jm-form-title">
+                巡检记录列表
+            </view>
+            <view>
+                <view class="infoNoData" wx:if="{{dataList0.length == 0}}">
+                    <view>
+                        <view>暂时没有数据</view>
+                    </view>
+                </view>
+                <view class="list-item" wx:for="{{dataList0}}" wx:for-index="index" wx:for-item="item" wx:key="index" bind:tap="openDetail" data-id="{{item.id}}">
+                    <view class="jm-formitem">
+                        <text style="color: #000;width: 100%;">{{item.lineName|| ""}}</text>
+                        <text>{{item.poleNumber || ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>单位</text>
+                        <text>{{item.managementUnit || ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>工作负责人</text>
+                        <text>{{item.responsiblePerson|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>工作时间</text>
+                        <text>{{item.inspectionTime || ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>杆号</text>
+                        <text>{{item.poleNumber || ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>巡查状态</text>
+                        <text>{{item.status == 1 ? '已完成' : '未完成'|| ""}}</text>
+                    </view>
+                </view>
+            </view>
+        </scroll-view>
+    </view>
+    <view wx:if="{{TabCur==1}}" style="background-color: #eee;">
+        <scroll-view scroll-y class="list-box" bindscrolltolower="nextPage" refresher-enabled bindrefresherrefresh="resetQuery" refresher-triggered="{{refreshFlag}}">
+            <view class="jm-form-title">
+                任务完成状态
+            </view>
+            <view class="jm-progress">
+                <view class="progress-bg">
+                    <view class="bar" style="{{'width: '+percent+'%'}}"></view>
+                    <text class="progress-text">{{completedTaskCount}}/{{totalTaskCount|| ""}}</text>
+                </view>
+            </view>
+            <view class="jm-form-title">
+                巡检记录列表
+            </view>
+            <view>
+                <view class="infoNoData" wx:if="{{dataList1.length == 0}}">
+                    <view>
+                        <view>暂时没有数据</view>
+                    </view>
+                </view>
+                <view class="list-item" wx:for="{{dataList1}}" wx:for-index="index" wx:for-item="item" wx:key="index" bind:tap="openDialog" data-id="{{item.id}}">
+                    <view class="jm-formitem">
+                        <text style="color: #000;width: 100%;">{{item.lineName|| ""}}</text>
+                        <text>{{item.poleNumber || ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>单位</text>
+                        <text>{{item.managementUnit || ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>工作负责人</text>
+                        <text>{{item.responsiblePerson|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>工作时间</text>
+                        <text>{{item.inspectionTime || ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>杆号</text>
+                        <text>{{item.poleNumber || ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>巡查状态</text>
+                        <text>{{item.status == 1 ? '已完成' : '未完成'|| ""}}</text>
+                    </view>
+                </view>
+            </view>
+        </scroll-view>
+    </view>
+</view>

@@ -1,0 +1,32 @@
+.jm-form-title {
+    padding: 12rpx 20rpx;
+    background: #fff;
+}
+
+.jm-progress {
+    position: relative;
+    padding: 10rpx 20rpx;
+    height: 50rpx;
+    background-color: #fff;
+}
+.jm-progress .progress-bg{
+    position: absolute;
+    width: calc(100% - 40rpx);
+    /* width: 80%; */
+    background-color: #bbb;
+    height: 40rpx;
+    border-radius: 40rpx;
+}
+.jm-progress .bar{
+    max-width: 100%;
+    min-width: 0;
+    background-color: #3894f3;
+    height: 40rpx;
+    border-radius: 40rpx;
+}
+.jm-progress .progress-text{
+    position: absolute;
+    top: 0;
+    right: 10rpx;
+    color: #fff;
+}

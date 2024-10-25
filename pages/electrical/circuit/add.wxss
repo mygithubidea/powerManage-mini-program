@@ -1,0 +1,22 @@
+.jm-form-title {
+    margin: 20rpx 0;
+}
+.jm-formitem2 text:first-child {
+    width: 280rpx;
+    line-height: 1.1;
+}
+
+.readonly .right-btn {
+    display: none;
+}
+.right-btn {
+    padding: 0 12rpx;
+    line-height: 60rpx;
+    background-color: #0066ff;
+    border-radius: 8rpx;
+    color: #fff;
+}
+.right-btn.disable {
+    pointer-events: none;
+    background-color: gray;
+}

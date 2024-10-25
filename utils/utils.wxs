@@ -1,0 +1,19 @@
+var utils ={
+    getFileName: function(url) {
+        var arr = url && url.split('/');
+        if (arr) {
+            return arr[arr.length - 1];
+        }
+        return '';
+    },
+    getImageList: function(str) {
+        return str ? str.split(',') : [];
+    },
+    formatDate: function(str) {
+        return str ? str.slice(0, 10) : '';
+    }
+}
+module.exports = {
+    getFileName: utils.getFileName,
+    formatDate: utils.formatDate,
+}
