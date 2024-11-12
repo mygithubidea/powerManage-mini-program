@@ -1,0 +1,126 @@
+<view>
+    <view class="jm-header">
+        <view class="flex">
+            <view class="left" bind:tap="BackPage">
+                <t-icon size="20" bind:tap="onBack" aria-role="button" aria-label="返回" name="chevron-left" class="custom-capsule__icon" />
+                <text>返回</text>
+            </view>
+            <view class="content" style="font-size: 32rpx;">
+                {{'新建安全工器具领用记录'}}
+            </view>
+            <view class="right"></view>
+        </view>
+    </view>
+
+    <view class="jm-container bg-white margin-top">
+        <view>
+            <view class="jm-form-title">
+                基本信息
+            </view>
+            <view class="jm-formitem2">
+                <text>工作编号</text>
+                <input disabled="{{readonly}}" model:value="{{formData.jobNumber || ''}}" bind:change="changeForm" data-key="jobNumber" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2">
+                <text>领用时间</text>
+                <picker mode="date" disabled="{{readonly}}" value="{{formData.issueTime}}" bindchange="changeFormDate" data-key="issueTime">
+                    <view class="picker">
+                        {{formData.acceptanceTime || '请选择日期'}}
+                    </view>
+                </picker>
+            </view>
+            <view class="jm-formitem2">
+                <text>领用人</text>
+                <input disabled="{{readonly}}" model:value="{{formData.issuePersion || ''}}" bind:change="changeForm" data-key="issuePersion" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2">
+                <text>管理员</text>
+                <input disabled="{{readonly}}" model:value="{{formData.admin || ''}}" bind:change="changeForm" data-key="admin" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2">
+                <text>归还时间</text>
+                <picker mode="date" disabled="{{readonly}}" value="{{formData.revertTime}}" bindchange="changeFormDate" data-key="revertTime">
+                    <view class="picker">
+                        {{formData.revertTime || '请选择日期'}}
+                    </view>
+                </picker>
+            </view>
+            <view class="jm-formitem2">
+                <text>归还人</text>
+                <input disabled="{{readonly}}" model:value="{{formData.revertPersion || ''}}" bind:change="changeForm" data-key="revertPersion" placeholder="请输入" />
+            </view>
+            <view class="jm-formitem2">
+                <text>备注</text>
+                <input disabled="{{readonly}}" model:value="{{formData.note || ''}}" bind:change="changeForm" data-key="note" placeholder="请输入" />
+            </view>
+        </view>
+        <view>
+          <view class="jm-form-title">
+                安全工器具领取
+          </view>
+          <scroll-view scroll-y class="list-box" bindscrolltolower="nextPage" refresher-enabled bindrefresherrefresh="resetQuery" refresher-triggered="{{refreshFlag}}">
+            <view>
+                <view class="infoNoData" wx:if="{{formData.dataList0.length == 0}}">
+                    <view>
+                        <view>暂时没有数据</view>
+                    </view>
+                </view>
+                <view class="list-item" wx:for="{{formData.dataList0}}" wx:for-index="index" wx:for-item="item" wx:key="index"  data-id="{{item.id}}">
+                    <view class="jm-formitem">
+                        <text>工器具名称型号</text>
+                        <text>{{item.toolsNameModel|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>领用数量</text>
+                        <text>{{item.issueQuantity|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>领用编号</text>
+                        <text>{{item.issueNumber|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>归还外观检查</text>
+                        <text>{{item.appearanceInspection|| ""}}</text>
+                    </view>
+                </view>
+            </view>
+        </scroll-view>
+        
+          <view hidden="{{ add_display }}" class="list-item" >
+                    <view class="jm-formitem">
+                      <text>工器具名称型号</text>
+                <input disabled="{{readonly}}" model:value="{{addNewData.toolsNameModel || ''}}" bind:change="changeFormNew" data-key="toolsNameModel" placeholder="请输入" />
+                    </view>
+                    <view class="jm-formitem">
+                      <text>领用数量</text>
+                <input disabled="{{readonly}}" model:value="{{addNewData.issueQuantity || ''}}" bind:change="changeFormNew" data-key="issueQuantity" placeholder="请输入" />
+                    </view>
+                    <view class="jm-formitem">
+                      <text>领用编号</text>
+                <input disabled="{{readonly}}" model:value="{{addNewData.issueNumber || ''}}" bind:change="changeFormNew" data-key="issueNumber" placeholder="请输入" />
+                    </view>
+                    <view class="jm-formitem">
+                      <text>归还外观检查</text>
+                <input disabled="{{readonly}}" model:value="{{addNewData.appearanceInspection || ''}}" bind:change="changeFormNew" data-key="appearanceInspection" placeholder="请输入" />
+                    </view>
+                    <view class="btn-group" style="padding-bottom: 40rpx;">
+                      <button plain primary bind:tap="displayRemoveBlock">取消</button>
+                      <button  class="primary" bind:tap="appendData">确认</button>
+                    </view>
+
+                </view>
+      
+        <view  class="fix-button" >
+                <text bind:tap="display_add_block" class="t-icon-add-rectangle t-icon" style="font-size: 60rpx;line-height: 80rpx;color: #0066FF;"></text>
+            </view>
+        </view>
+
+
+        <view class="btn-group" style="padding-bottom: 40rpx;">
+            <button plain primary bind:tap="BackPage">关闭</button>
+            <button wx:if="{{!readonly}}" class="primary" bind:tap="saveData">确认</button>
+            
+        </view>
+
+    </view>
+</view>

@@ -11,10 +11,11 @@
         }
     },
     "requiredPrivateInfos": ["chooseLocation", "getLocation"],
-    "entryPagePath": "pages/login/login",
+    "entryPagePath": "pages/home/index",
     "pages": [
         "pages/login/login",
         "pages/home/index",
+
         "pages/electrical/law/index",
         "pages/electrical/managementSystem/index",
         "pages/electrical/notice/index",
@@ -31,6 +32,7 @@
         "pages/electrical/responsibilityLetter/add",
         "pages/electrical/other/index",
         "pages/electrical/other/add",
+
         "pages/electrical/securityInspectionRecords/index",
         "pages/electrical/securityInspectionRecords/add",
         "pages/electrical/reportingOfHiddenDangers/index",
@@ -48,7 +50,13 @@
         "pages/electrical/transformer/add",
         "pages/electrical/transformer/record",
         "pages/electrical/transformer/yhyd",
-        "pages/electrical/transformer/viewDefectRisk"
+        "pages/electrical/transformer/viewDefectRisk",
+        
+        "pages/electrical/safetyequipment/index",
+        "pages/electrical/safetyequipment/add",
+        "pages/electrical/operatingvote/index",
+        "pages/electrical/operatingvote/add"
+        
 
         
     ],

@@ -1,0 +1,61 @@
+<view class="container bg-white margin-top">
+    <view class="jm-header">
+        <view class="flex">
+            <view class="left" bind:tap="BackPage">
+                <t-icon size="20" bind:tap="onBack" aria-role="button" aria-label="返回" name="chevron-left" class="custom-capsule__icon" />
+                <text>返回</text>
+            </view>
+            <view class="content" style="font-size: 32rpx;">
+              安全工器具领用记录列表
+            </view>
+            <view class="right"></view>
+        </view>
+    </view>
+
+    <scroll-view scroll-x enable-flex class="bg-white nav">
+        <view class="flex text-center" style="height: 80rpx;">
+            <view class="jm-form-title" style="line-height: 80rpx;font-size: 32;">
+                  安全工器具领取
+            </view>
+            <view  class="fix-button" bind:tap="gotoAdd">
+                <text class="t-icon-add-circle t-icon" style="font-size: 60rpx;line-height: 80rpx;color: #0066FF;"></text>
+            </view>
+        </view>
+    </scroll-view>
+  
+  
+   
+    <view wx:if="{{TabCur==0}}">
+        <scroll-view scroll-y class="list-box" bindscrolltolower="nextPage" refresher-enabled bindrefresherrefresh="resetQuery" refresher-triggered="{{refreshFlag}}">
+            <view>
+                <view class="infoNoData" wx:if="{{dataList0.length == 0}}">
+                    <view>
+                        <view>暂时没有数据</view>
+                    </view>
+                </view>
+                <view class="list-item" wx:for="{{dataList0}}" wx:for-index="index" wx:for-item="item" wx:key="index" bind:tap="openDialog" data-id="{{item.id}}">
+                    <view class="jm-formitem">
+                        <text>领用人</text>
+                        <text>{{item.usePersion|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>管理员</text>
+                        <text>{{item.admin|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>工器具名称型号</text>
+                        <text>{{item.toolsNameModel|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>领用时间</text>
+                        <text>{{item.useTime|| ""}}</text>
+                    </view>
+                    <view class="jm-formitem">
+                        <text>状态</text>
+                        <text>{{item.Status|| ""}}</text>
+                    </view>
+                </view>
+            </view>
+        </scroll-view>
+    </view>
+</view>

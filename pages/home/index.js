@@ -101,6 +101,50 @@ Page({
                 cuIcon: 'square'
             },
         ],
+        patrols: [{
+                title: '电站巡查',
+                name: 'powerStation',
+                cuIcon: 'square'
+            },
+            {
+                title: '线路巡查',
+                name: 'circuit',
+                cuIcon: 'square'
+            },
+            {
+                title: '变台巡查',
+                name: 'transformer',
+                cuIcon: 'square'
+            },
+            {
+                title: '电表巡查',
+                name: 'electricityMeter',
+                cuIcon: 'square'
+            },
+        ],
+      twovoteorders: [{
+                title: '安全器具',
+                name: 'safetyequipment',
+                cuIcon: 'square'
+            },
+            {
+                title: '操作票',
+                name: 'operatingvote',
+                cuIcon: 'square'
+            },
+          //   {
+          //       title: '工作票',
+          //       name: 'rectificationNotice',
+          //       cuIcon: 'square'
+          //   },
+          //   {
+          //     title: '派工单',
+          //     name: 'rectificationNotice',
+          //     cuIcon: 'square'
+          // },
+          ],
+        
+
         data: {
             bulename: '未知',
             connected: false,
@@ -151,10 +195,15 @@ Page({
             ...z,
             isShow: menu.includes(z.name)
         }));
+        const twovoteorderNew = tdata.twovoteorders.map(z => ({
+          ...z,
+          isShow: menu.includes(z.name)
+      }));
         this.setData({
             elements: elementsNew,
             patrols: patrolsNew,
             inspections: inspectionsNew,
+            twovoteorders: twovoteorderNew,
         })
         
         console.log(menu)

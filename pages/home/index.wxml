@@ -74,6 +74,23 @@
     <view class="jm-card-menu">
         <view class="jm-title">
             <image src="/assets/title-icon.png" />
+            <span>两票两单</span>
+        </view>
+        <view class="flex flex-wrap">
+            <view wx:for="{{twovoteorders}}" wx:for-index="index" wx:for-item="item" wx:key="index">
+                <view class="jm-item" wx:if="{{item.isShow}}">
+                    <navigator url="{{'/pages/electrical/'+item.name+'/index'}}">
+                        <image class="jm-icon" src="{{'/assets/'+item.name+'.png'}}" mode="" />
+                        <text>{{item.title}}</text>
+                    </navigator>
+                </view>
+            </view>
+        </view>
+    </view>
+
+    <view class="jm-card-menu">
+        <view class="jm-title">
+            <image src="/assets/title-icon.png" />
             <span>系统</span>
         </view>
         <view class="flex flex-wrap">
