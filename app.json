@@ -10,12 +10,14 @@
             "desc": "选择微信的文件上传"
         }
     },
-    "requiredPrivateInfos": ["chooseLocation", "getLocation"],
+    "requiredPrivateInfos": [
+        "chooseLocation",
+        "getLocation"
+    ],
     "entryPagePath": "pages/home/index",
     "pages": [
         "pages/login/login",
         "pages/home/index",
-
         "pages/electrical/law/index",
         "pages/electrical/managementSystem/index",
         "pages/electrical/notice/index",
@@ -32,33 +34,27 @@
         "pages/electrical/responsibilityLetter/add",
         "pages/electrical/other/index",
         "pages/electrical/other/add",
-
         "pages/electrical/securityInspectionRecords/index",
         "pages/electrical/securityInspectionRecords/add",
         "pages/electrical/reportingOfHiddenDangers/index",
         "pages/electrical/reportingOfHiddenDangers/add",
         "pages/electrical/rectificationNotice/index",
         "pages/electrical/rectificationNotice/add",
-
         "pages/electrical/circuit/index",
         "pages/electrical/circuit/add",
         "pages/electrical/circuit/record",
         "pages/electrical/circuit/yhyd",
         "pages/electrical/circuit/viewDefectRisk",
-
         "pages/electrical/transformer/index",
         "pages/electrical/transformer/add",
         "pages/electrical/transformer/record",
         "pages/electrical/transformer/yhyd",
         "pages/electrical/transformer/viewDefectRisk",
-        
         "pages/electrical/safetyequipment/index",
         "pages/electrical/safetyequipment/add",
         "pages/electrical/operatingvote/index",
-        "pages/electrical/operatingvote/add"
-        
-
-        
+        "pages/electrical/operatingvote/add",
+        "pages/electrical/aaa/aaa"
     ],
     "usingComponents": {
         "sign": "./pages/components/sign",
