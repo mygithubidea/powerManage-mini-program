@@ -77,7 +77,7 @@
                 </picker>
             </view>
             <view class="jm-formitem2">
-                <text>验收人</text>
+                <text>验收人</text> 
                 <input disabled="{{readonly}}" model:value="{{formData.acceptor || ''}}" bind:change="changeForm" data-key="acceptor" placeholder="请输入" />
             </view>
             <view class="jm-formitem2">
